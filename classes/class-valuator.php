@@ -104,7 +104,7 @@ class Valuator {
 	
 	public function build_database_table () {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'valuator';
+		$table_name = $wpdb->prefix . $this->token;
 		
 		$charset_collate = '';
 
@@ -266,8 +266,24 @@ class Valuator {
 	
 	public function process_step_one() {
 		if ( isset( $_POST['valuator_nonce'] ) && wp_verify_nonce( $_POST['valuator_nonce'], 'valuator_step_one' ) ) {
-			die(var_dump($_POST['address']));
+			global $wpdb;
+			$table_name = $wpdb->prefix . $this->token;
+			
+			$address = sanitize_text_field($_POST['address']);
+			$unit = sanitize_text_field($_POST['unit']);
+			
+			$wpdb->query( $wpdb->prepare( 
+				"INSERT INTO $table_name
+				 ( address, address2, created_at, updated_at )
+				 VALUES ( %s, %s, NOW(), NOW() )", 
+			  array(
+					$address, 
+					$unit
+				) 
+			) );
 		}
+		
+		return true;
 	}
 
 }
