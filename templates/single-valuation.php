@@ -37,13 +37,15 @@ if( has_post_thumbnail( $id )
 				<h4 style="text-align: center;" class="landing-title"><?php echo $title; ?></h4>
 				<h3 style="text-align: center;"><?php echo $content; ?></h3>
 
-				<form method="POST" action="" accept-charset="UTF-8">
+				<form id="step-one">
 					<div class="form-group">
 						<input class="form-control" required="required" placeholder="Enter Your Address" name="address" type="text" id="address">
 					</div>
 					<div class="form-group">
 						<input class="form-control" placeholder="Unit #" name="unit" type="text" id="unit">
 					</div>
+					<input name="action" type="hidden" value="valuator_step_one" />
+					<?php wp_nonce_field( 'valuator_step_one', 'valuator_nonce' ); ?>
 					<input class="btn btn-primary btn-lg btn-block" type="submit" value="GET THE VALUE">
 				</form>
 			</div>

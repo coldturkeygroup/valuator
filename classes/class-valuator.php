@@ -29,6 +29,10 @@ class Valuator {
 		// Use built-in templates for landing pages
 		add_action( 'template_redirect' , array( $this , 'page_templates' ) , 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		
+		// Handle form submissions
+		add_action( 'wp_ajax_valuator_step_one', array( $this, 'process_step_one' ) );
+		add_action( 'wp_ajax_nopriv_valuator_step_one', array( $this, 'process_step_one' ) );
 
 		if ( is_admin() ) {
 
@@ -49,6 +53,7 @@ class Valuator {
 
 	public function rewrite_flush() {
 		$this->register_post_type();
+		$this->build_database_table();
 		flush_rewrite_rules();
 	}
 
@@ -95,6 +100,39 @@ class Valuator {
 		);
 
 		register_post_type( $this->token, $args );
+	}
+	
+	public function build_database_table () {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'valuator';
+		
+		$charset_collate = '';
+
+		if ( ! empty( $wpdb->charset ) ) {
+		  $charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
+		}
+		
+		if ( ! empty( $wpdb->collate ) ) {
+		  $charset_collate .= " COLLATE {$wpdb->collate}";
+		}
+		
+		$sql = "CREATE TABLE `$table_name` (
+							`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+							`first_name` varchar(255) DEFAULT NULL,
+							`last_name` varchar(255) DEFAULT NULL,
+							`email` varchar(255) DEFAULT NULL,
+							`address` varchar(255) NOT NULL,
+							`address2` varchar(255) DEFAULT NULL,
+							`phone` varchar(20) DEFAULT NULL,
+							`reason` varchar(255) DEFAULT NULL,
+							`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+							`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+							PRIMARY KEY (`id`),
+							UNIQUE KEY `users_email_unique` (`email`)
+						) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
 	}
 
 	public function register_custom_columns ( $column_name, $id ) {
@@ -185,7 +223,12 @@ class Valuator {
 		wp_register_script( 'valuator-js', esc_url( $this->assets_url . 'js/scripts.js' ), array());
 		wp_enqueue_script( 'google-places' );
 		wp_enqueue_script( 'valuator-js' );
-
+		
+		$localize = array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' )
+		);
+		wp_localize_script('valuator-js', 'Valuator', $localize);
+		
 	}
 	
 	public function page_templates() {
@@ -219,6 +262,12 @@ class Valuator {
 
 	    load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
 	    load_plugin_textdomain( $domain, FALSE, dirname( plugin_basename( $this->file ) ) . '/lang/' );
+	}
+	
+	public function process_step_one() {
+		if ( isset( $_POST['valuator_nonce'] ) && wp_verify_nonce( $_POST['valuator_nonce'], 'valuator_step_one' ) ) {
+			die(var_dump($_POST['address']));
+		}
 	}
 
 }
