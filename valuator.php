@@ -19,15 +19,18 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+if ( ! defined( 'VALUATOR_PLUGIN_PATH' ) )
+	define( 'VALUATOR_PLUGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+
 //require_once( 'valuator-functions.php' );
 require_once( 'classes/class-valuator.php' );
 
 global $valuator;
-$valuator = new Valuator( __FILE__ );
+$valuator = new ColdTurkey\Valuator\Valuator( __FILE__ );
 
 if( is_admin() ) {
 	require_once( 'classes/class-valuator-admin.php' );
-	$valuator_admin = new Valuator_Admin( __FILE__ );
+	$valuator_admin = new ColdTurkey\Valuator\Valuator_Admin( __FILE__ );
 }
 
 ?>

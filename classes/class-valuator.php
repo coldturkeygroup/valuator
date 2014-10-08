@@ -1,5 +1,10 @@
-<?php
+<?php namespace ColdTurkey\Valuator;
+	
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
+
+require_once('class-frontdesk.php');
+
+use ColdTurkey\Valuator\FrontDesk as FrontDesk;
 
 class Valuator {
 	private $dir;
@@ -9,6 +14,7 @@ class Valuator {
 	private $template_path;
 	private $token;
 	private $home_url;
+	private $frontdesk;
 
 	public function __construct( $file ) {
 		$this->dir = dirname( $file );
@@ -18,6 +24,7 @@ class Valuator {
 		$this->template_path = trailingslashit( $this->dir ) . 'templates/';
 		$this->home_url = trailingslashit( home_url() );
 		$this->token = 'valuator';
+		$this->frontdesk = new FrontDesk();
 
 		// Handle localisation
 		$this->load_plugin_textdomain();
@@ -41,12 +48,12 @@ class Valuator {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10 );
 			add_filter( 'manage_edit-' . $this->token . '_columns', array( $this, 'register_custom_column_headings' ), 10, 1 );
 			add_action( 'manage_posts_custom_column', array( $this, 'register_custom_columns' ), 10, 2 );
-			add_filter( 'manage_edit-series_columns' , array( $this , 'edit_series_columns' ) );
-      add_filter( 'manage_series_custom_column' , array( $this , 'add_series_columns' ) , 1 , 3 );
+			// Create FrontDesk Campaigns for pages
+			add_action('publish_valuator', array( $this, 'create_frontdesk_campaign' ) );
 
 		}
 
-		// Fluch rewrite rules on plugin activation
+		// Flush rewrite rules on plugin activation
 		register_activation_hook( $file, array( $this, 'rewrite_flush' ) );
 
 	}
@@ -264,7 +271,16 @@ class Valuator {
 	    load_plugin_textdomain( $domain, FALSE, dirname( plugin_basename( $this->file ) ) . '/lang/' );
 	}
 	
-	public function process_step_one() {
+	public function create_frontdesk_campaign( $post_ID )
+	{
+		$title = get_the_title( $post_ID );
+		$permalink = get_permalink( $post_ID );
+		
+		$this->frontdesk->createCampaign( $title, $permalink );
+	}
+	
+	public function process_step_one() 
+	{
 		if ( isset( $_POST['valuator_nonce'] ) && wp_verify_nonce( $_POST['valuator_nonce'], 'valuator_step_one' ) ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . $this->token;
