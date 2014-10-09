@@ -16,7 +16,13 @@ $('document').ready(function() {
 	});
 	
 	// Google Places address autocomplete
-	$("#address").geocomplete();
+	$("#address").geocomplete({
+  	map: "#map_canvas",
+	  mapOptions: {
+	    mapTypeId: 'hybrid',
+	    disableDefaultUI: true
+	  },
+	});
 	
 	// Step one form submission
 	$('#step-one').submit(function(event) {
@@ -24,9 +30,44 @@ $('document').ready(function() {
       url: Valuator.ajaxurl,
       data: $("#step-one :input").serialize(),
       type: 'POST',
+      dataType: 'json',
       async: true,
       success: function(response) {
-	      alert(response);
+	      $('#property_id').val( response.property_id );
+	      $('#step-one-well').hide('slow');
+	      $('#step-two-well').show('slow');
+	      $('.valuation-page').css('padding-top', '4%');
+	      
+	      setTimeout(function() {
+					google.maps.event.trigger($("#map_canvas")[0], 'resize');
+					$("#address").geocomplete("find", $('#address').val());
+					
+					setTimeout(function() {
+						var map = $("#address").geocomplete("map");
+						map.setZoom(19);
+					}, 500);
+				}, 500);
+	    },
+	    error: function(response) {
+		    alert('failed');
+	    }
+		});
+		
+		event.preventDefault();
+	});
+	
+	// Step two form submission
+	$('#step-two').submit(function(event) {
+		$.ajax({
+      url: Valuator.ajaxurl,
+      data: $("#step-two :input").serialize(),
+      type: 'POST',
+      dataType: 'json',
+      async: true,
+      success: function(response) {
+	      $('#step-two-well').hide('slow');
+	      $('#step-three-well').show('slow');
+	      
 	    },
 	    error: function(response) {
 		    alert('failed');

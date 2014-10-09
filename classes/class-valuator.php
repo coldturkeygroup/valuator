@@ -3,8 +3,10 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
 require_once('class-frontdesk.php');
+require_once('class-zillow.php');
 
-use ColdTurkey\Valuator\FrontDesk as FrontDesk;
+use ColdTurkey\Valuator\FrontDesk;
+use ColdTurkey\Valuator\Zillow; 
 
 class Valuator {
 	private $dir;
@@ -15,6 +17,7 @@ class Valuator {
 	private $token;
 	private $home_url;
 	private $frontdesk;
+	private $zillow;
 
 	public function __construct( $file ) {
 		$this->dir = dirname( $file );
@@ -25,6 +28,10 @@ class Valuator {
 		$this->home_url = trailingslashit( home_url() );
 		$this->token = 'valuator';
 		$this->frontdesk = new FrontDesk();
+		$this->zillow = new Zillow();
+		
+		global $wpdb;
+		$this->table_name = $wpdb->prefix . $this->token;
 
 		// Handle localisation
 		$this->load_plugin_textdomain();
@@ -40,6 +47,10 @@ class Valuator {
 		// Handle form submissions
 		add_action( 'wp_ajax_valuator_step_one', array( $this, 'process_step_one' ) );
 		add_action( 'wp_ajax_nopriv_valuator_step_one', array( $this, 'process_step_one' ) );
+		add_action( 'wp_ajax_valuator_step_two', array( $this, 'process_step_two' ) );
+		add_action( 'wp_ajax_nopriv_valuator_step_two', array( $this, 'process_step_two' ) );
+		add_action( 'wp_ajax_valuator_step_three', array( $this, 'process_step_three' ) );
+		add_action( 'wp_ajax_nopriv_valuator_step_three', array( $this, 'process_step_three' ) );
 
 		if ( is_admin() ) {
 
@@ -283,23 +294,52 @@ class Valuator {
 	{
 		if ( isset( $_POST['valuator_nonce'] ) && wp_verify_nonce( $_POST['valuator_nonce'], 'valuator_step_one' ) ) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . $this->token;
 			
 			$address = sanitize_text_field($_POST['address']);
-			$unit = sanitize_text_field($_POST['unit']);
+			$unit = sanitize_text_field($_POST['address_2']);
 			
 			$wpdb->query( $wpdb->prepare( 
-				"INSERT INTO $table_name
+				'INSERT INTO ' . $this->table_name . '
 				 ( address, address2, created_at, updated_at )
-				 VALUES ( %s, %s, NOW(), NOW() )", 
+				 VALUES ( %s, %s, NOW(), NOW() )', 
 			  array(
 					$address, 
 					$unit
 				) 
 			) );
+			
+			echo json_encode( array( 'property_id' => $wpdb->insert_id ) );
+			die();
 		}
+	}
+	
+	public function process_step_two()
+	{
+		global $wpdb;
+		$property_id = sanitize_text_field($_POST['property_id']);
+		$first_name = sanitize_text_field($_POST['first_name']);
+		$last_name = sanitize_text_field($_POST['last_name']);
+		$email = sanitize_text_field($_POST['email']);
 		
-		return true;
+		// Get the property data saved from step one
+		$property = $wpdb->get_row('SELECT address FROM ' . $this->table_name . ' WHERE id = \'' . $property_id . '\' ORDER BY id DESC LIMIT 0,1');
+		
+		// Get the Zestimate data
+		$zestimate = $this->zillow->getZestimate( $property->address );
+		
+		$wpdb->query( $wpdb->prepare( 
+			'UPDATE ' . $this->table_name . '
+			 SET first_name = %s, last_name = %s, email = %s
+			 WHERE id = \'' . $property_id . '\'', 
+		  array(
+				$first_name,
+				$last_name,
+				$email
+			) 
+		) );
+		
+		echo json_encode( $zestimate );
+		die();
 	}
 
 }

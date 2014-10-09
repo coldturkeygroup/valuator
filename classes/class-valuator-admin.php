@@ -30,9 +30,6 @@ class Valuator_Admin {
 		// Load scripts for settings page
 		add_action( 'admin_enqueue_scripts' , array( $this, 'enqueue_admin_scripts' ) , 10 );
 
-		// Mark date on which feed redirection was activated
-		add_action( 'update_option' , array( $this, 'mark_feed_redirect_date' ) , 10 , 3 );
-
 		// Display notices in the WP admin
 		add_action( 'admin_notices', array( $this, 'admin_notices' ), 10 );
 		add_action( 'admin_init', array( $this, 'admin_notice_actions'), 1 );
