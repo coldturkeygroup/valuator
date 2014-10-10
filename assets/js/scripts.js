@@ -76,6 +76,11 @@ $('document').ready(function() {
 	      $('.high').text(response.high);
 	      $('.valuation-address').text(response.address);
 	      $('.page-media').html(response.media);
+	      if(typeof response.text != 'undefined'){
+		      $('.page-text').html(response.text);
+		    } else {
+			    $('.page-text').remove();
+		    }
 	      
 	      // Populate the step three form
 	      $('#first_name_copy').val( $('#first_name').val() );

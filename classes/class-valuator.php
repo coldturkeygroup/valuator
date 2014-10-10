@@ -249,6 +249,13 @@ class Valuator {
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
 				}
+				elseif( $k == 'media_text' ) {
+					$rows = '8';
+					$data = stripslashes( $data );
+					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><textarea style="width:100%" name="' . esc_attr( $k ) . '" id="media_text" rows="' . $rows . '">' . esc_textarea( $data ) . '</textarea>' . "\n";
+					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
+					$html .= '</td><tr/>' . "\n";
+				}
 				else
 				{
 					$default_color = '';
@@ -347,11 +354,19 @@ class Valuator {
 		$fields = array();
 
 		$fields['media_file'] = array(
-		    'name' => __( 'Media file:' , 'valuator' ),
-		    'description' => __( 'If using an image on the final opt-in page, upload it here. If using a YouTube video (recommended), paste the link to the video here instead.' , 'valuator' ),
-		    'type' => 'url',
-		    'default' => '',
-		    'section' => 'info'
+	    'name' => __( 'Media file:' , 'valuator' ),
+	    'description' => __( 'If using an image on the final opt-in page, upload it here. If using a YouTube video (recommended), paste the link to the video here instead.' , 'valuator' ),
+	    'type' => 'url',
+	    'default' => '',
+	    'section' => 'info'
+		);
+		
+		$fields['media_text'] = array(
+	    'name' => __( 'Opt-In Text:' , 'valuator' ),
+	    'description' => __( 'If using an image on the final opt-in page, enter the block of text that will be displayed under it. If using a video, no text will be displayed.' , 'valuator' ),
+	    'type' => 'text',
+	    'default' => '',
+	    'section' => 'info'
 		);
 		
 		$fields['primary_color'] = array(
@@ -389,7 +404,7 @@ class Valuator {
 			$file = get_post_meta( $pageID, 'media_file', true );
 			
 			if (preg_match('/(\.jpg|\.png|\.bmp|\.gif)$/', $file)) {
-				return '<img src="' . $file . '" style="margin-left:auto;margin-right:auto;display:block;" class="img-responsive img-thumbnail">';
+				return '<img src="' . $file . '" style="margin-left:auto;margin-right:auto;margin-bottom:0px;display:block;" class="img-responsive img-thumbnail">';
 			} elseif (preg_match('/(youtube|youtu.be|vimeo)/', $file)) {
 				$video = $this->prepare_video( $file, true );
 				
@@ -499,6 +514,11 @@ class Valuator {
 		
 		// Add the media file to the response
 		$zestimate['media'] = $this->get_media_file( $page_id );
+		
+		// Add the media text to the response if required
+		if( strpos($zestimate['media'],'<img') !== false ) {
+			$zestimate['text'] = get_post_meta( $page_id, 'media_text', true );
+		}
 		
 		// Create the prospect on FrontDesk
 		$frontdesk_id = $this->frontdesk->createProspect( array(

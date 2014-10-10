@@ -154,6 +154,10 @@ if( $hover_color != null ) {
 					</div>
 				</div>
 				
+				<div class="row">
+					<div class="col-xs-10 col-xs-offset-1 page-text"></div>
+				</div>
+				
 				<form id="step-three">
 					<div class="row">
 						<div class="col-xs-12 col-sm-6">

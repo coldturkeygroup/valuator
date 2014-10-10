@@ -80,6 +80,9 @@ html {
 			color: #fff; }
 	.valuation-page .page-media {
 		margin-bottom: 15px; }
+	.valuation-page .page-text {
+		color: #fff;
+		margin-bottom: 15px; }
 
 #map_canvas {
 	margin-top: 5px;
