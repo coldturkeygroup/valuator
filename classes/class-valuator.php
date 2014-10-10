@@ -53,7 +53,8 @@ class Valuator {
 		add_action( 'wp_ajax_nopriv_valuator_step_three', array( $this, 'process_step_three' ) );
 
 		if ( is_admin() ) {
-
+			add_action( 'admin_menu', array( $this, 'meta_box_setup' ), 20 );
+			add_action( 'save_post', array( $this, 'meta_box_save' ) );
 			add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ), 10 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10 );
@@ -61,7 +62,6 @@ class Valuator {
 			add_action( 'manage_posts_custom_column', array( $this, 'register_custom_columns' ), 10, 2 );
 			// Create FrontDesk Campaigns for pages
 			add_action('publish_valuator', array( $this, 'create_frontdesk_campaign' ) );
-
 		}
 
 		// Flush rewrite rules on plugin activation
@@ -216,19 +216,112 @@ class Valuator {
 
 	  return $messages;
 	}
+	
+	public function meta_box_setup () {
+		add_meta_box( 'valuation-data', __( 'Valuation Page Details' , 'valuator' ), array( $this, 'meta_box_content' ), $this->token, 'normal', 'high' );
+
+		do_action( 'valuator_meta_boxes' );
+	}
+
+	public function meta_box_content() {
+		global $post_id;
+		$fields = get_post_custom( $post_id );
+		$field_data = $this->get_custom_fields_settings();
+
+		$html = '';
+
+		$html .= '<input type="hidden" name="valuator_' . $this->token . '_nonce" id="valuator_' . $this->token . '_nonce" value="' . wp_create_nonce( plugin_basename( $this->dir ) ) . '" />';
+
+		if ( 0 < count( $field_data ) ) {
+			$html .= '<table class="form-table">' . "\n";
+			$html .= '<tbody>' . "\n";
+
+			$html .= '<input id="valuator_post_id" type="hidden" value="'. $post_id . '" />';
+
+			foreach ( $field_data as $k => $v ) {
+				$data = $v['default'];
+				if ( isset( $fields[$k] ) && isset( $fields[$k][0] ) ) {
+					$data = $fields[$k][0];
+				}
+
+				if( $k == 'media_file' ) {
+					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><input type="button" class="button" id="upload_media_file_button" value="'. __( 'Upload Image' , 'valuator' ) . '" data-uploader_title="Choose an image" data-uploader_button_text="Insert image file" /><input name="' . esc_attr( $k ) . '" type="text" id="upload_media_file" class="regular-text" value="' . esc_attr( $data ) . '" />' . "\n";
+					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
+					$html .= '</td><tr/>' . "\n";
+				}
+				else
+				{
+					$default_color = '';
+					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td>';
+					$html .= '<input name="' . esc_attr( $k ) . '" id="primary_color" class="valuator-color"  type="text" value="' . esc_attr( $data ) . '"' . $default_color .' />';
+					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
+					$html .= '</td><tr/>' . "\n";
+				}
+				
+				$html .= '</td><tr/>' . "\n";
+			}
+
+			$html .= '</tbody>' . "\n";
+			$html .= '</table>' . "\n";
+		}
+
+		echo $html;
+	}
+
+	public function meta_box_save( $post_id ) {
+		global $post, $messages;
+
+		// Verify
+		if ( ( get_post_type() != $this->token ) || ! wp_verify_nonce( $_POST['valuator_' . $this->token . '_nonce'], plugin_basename( $this->dir ) ) ) {
+			return $post_id;
+		}
+
+		if ( 'page' == $_POST['post_type'] ) {
+			if ( ! current_user_can( 'edit_page', $post_id ) ) {
+				return $post_id;
+			}
+		} else {
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				return $post_id;
+			}
+		}
+
+		$field_data = $this->get_custom_fields_settings();
+		$fields = array_keys( $field_data );
+
+		foreach ( $fields as $f ) {
+
+			if( isset( $_POST[$f] ) ) {
+				${$f} = strip_tags( trim( $_POST[$f] ) );
+			}
+
+			// Escape the URLs.
+			if ( 'url' == $field_data[$f]['type'] ) {
+				${$f} = esc_url( ${$f} );
+			}
+
+			if ( ${$f} == '' ) {
+				delete_post_meta( $post_id , $f , get_post_meta( $post_id , $f , true ) );
+			} else {
+				update_post_meta( $post_id , $f , ${$f} );
+			}
+		}
+
+	}
 
 	public function enqueue_admin_styles() {
 
 		// Admin CSS
 		wp_register_style( 'valuator-admin', esc_url( $this->assets_url . 'css/admin.css' ), array(), '1.0.0' );
 		wp_enqueue_style( 'valuator-admin' );
+		wp_enqueue_style( 'wp-color-picker' );
 
 	}
 
 	public function enqueue_admin_scripts() {
 
 		// Admin JS
-		wp_register_script( 'valuator-admin', esc_url( $this->assets_url . 'js/admin.js' ), array( 'jquery' ), '1.0.0' );
+		wp_register_script( 'valuator-admin', esc_url( $this->assets_url . 'js/admin.js' ), array( 'jquery', 'wp-color-picker' ), '1.0.0' );
 		wp_enqueue_script( 'valuator-admin' );
 
 	}
@@ -250,6 +343,36 @@ class Valuator {
 		
 	}
 	
+	public function get_custom_fields_settings() {
+		$fields = array();
+
+		$fields['media_file'] = array(
+		    'name' => __( 'Media file:' , 'valuator' ),
+		    'description' => __( 'If using an image on the final opt-in page, upload it here. If using a YouTube video (recommended), paste the link to the video here instead.' , 'valuator' ),
+		    'type' => 'url',
+		    'default' => '',
+		    'section' => 'info'
+		);
+		
+		$fields['primary_color'] = array(
+			'name' => __('Primary Color', 'valuator'),
+			'description' => __('Change the primary color of the valuation page.', 'valuator'),
+			'type' => 'color',
+			'default' => '',
+			'section' => 'info' 
+		);
+		
+		$fields['hover_color'] = array(
+			'name' => __('Hover Color', 'valuator'),
+			'description' => __('Change the button hover color of the valuation page.', 'valuator'),
+			'type' => 'color',
+			'default' => '',
+			'section' => 'info' 
+		);
+
+		return apply_filters( 'valuator_valuation_fields', $fields );
+	}
+	
 	public function page_templates() {
 
 		// Single home valuation page template
@@ -259,15 +382,59 @@ class Valuator {
 		}
 
 	}
-
-	public function register_image_sizes() {
-		if ( function_exists( 'add_image_size' ) ) {
-			add_image_size( 'podcast-thumbnail', 200, 9999 ); // 200 pixels wide (and unlimited height)
+	
+	public function get_media_file( $pageID ) {
+		
+		if( $pageID ) {
+			$file = get_post_meta( $pageID, 'media_file', true );
+			
+			if (preg_match('/(\.jpg|\.png|\.bmp|\.gif)$/', $file)) {
+				return '<img src="' . $file . '" style="margin-left:auto;margin-right:auto;display:block;" class="img-responsive img-thumbnail">';
+			} elseif (preg_match('/(youtube|youtu.be|vimeo)/', $file)) {
+				$video = $this->prepare_video( $file, true );
+				
+				return '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="' . $video . '"></iframe></div>';
+			}
 		}
-	}
 
-	public function ensure_post_thumbnails_support() {
-		if ( ! current_theme_supports( 'post-thumbnails' ) ) { add_theme_support( 'post-thumbnails' ); }
+		return false;
+
+	}
+	
+	public function prepare_video( $url, $autoplay = true )
+	{
+		if ( strpos( $url, 'youtube-nocookie.com' ) !== false || strpos( $url, 'player.vimeo.com' ) !== false )
+			return $url;
+		
+		if ( $autoplay == false
+			? $v_autoplay = ''
+			: $v_autoplay = '?autoplay=1'
+		) ;
+		if ( $autoplay == false
+			? $autoplay = ''
+			: $autoplay = '&autoplay=1'
+		) ;
+		
+		if ( strpos( $url, '&' ) !== false )
+			$url = substr( $url, 0, strpos( $url, "&" ) );
+		if ( strpos( $url, '#' ) !== false )
+			$url = substr( $url, 0, strpos( $url, "#" ) );
+
+		if ( strpos( $url, 'youtube' ) !== false ) {
+			$video_id = substr( strrchr( $url, '=' ), 1 );
+
+			return '//www.youtube-nocookie.com/embed/' . $video_id . '?rel=0&autohide=1&fs=0&showinfo=0' . $autoplay;
+		} else if ( strpos( $url, 'youtu.be' ) !== false ) {
+			if ( strpos( $url, '?' ) !== false )
+				$url = substr( $url, 0, strpos( $url, "?" ) );
+			$video_id = substr( strrchr( $url, '/' ), 1 );
+
+			return '//www.youtube-nocookie.com/embed/' . $video_id . '?rel=0&autohide=1&fs=0&showinfo=0' . $autoplay;
+		} else if ( strpos( $url, 'vimeo' ) !== false ) {
+			$video_id = substr( strrchr( $url, '/' ), 1 );
+
+			return '//player.vimeo.com/video/' . $video_id . $v_autoplay;
+		}
 	}
 
 	public function load_localisation() {
@@ -317,6 +484,7 @@ class Valuator {
 	public function process_step_two()
 	{
 		global $wpdb;
+		$page_id = sanitize_text_field($_POST['page_id']);
 		$property_id = sanitize_text_field($_POST['property_id']);
 		$first_name = sanitize_text_field($_POST['first_name']);
 		$last_name = sanitize_text_field($_POST['last_name']);
@@ -328,6 +496,9 @@ class Valuator {
 		
 		// Get the Zestimate data
 		$zestimate = $this->zillow->getZestimate( $property->address );
+		
+		// Add the media file to the response
+		$zestimate['media'] = $this->get_media_file( $page_id );
 		
 		// Create the prospect on FrontDesk
 		$frontdesk_id = $this->frontdesk->createProspect( array(

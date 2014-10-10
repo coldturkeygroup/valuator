@@ -23,12 +23,51 @@ if( has_post_thumbnail( $id )
 	: $img = ''
 );
 
+// Get the page colors
+$color_setting = get_post_meta( $id , 'primary_color' , true );
+$color_theme = of_get_option('primary_color');
+$hover_setting = get_post_meta( $id , 'hover_color' , true);
+$hover_theme = of_get_option('secondary_color');
+
+if( $color_setting && strlen( $color_setting ) > 0 && $color_setting != '' ) {
+	$primary_color = $color_setting;
+} elseif( $color_theme && strlen( $color_theme ) > 0 && $color_theme != '' ) {
+	$primary_color = $color_theme;
+}
+
+if( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
+	$hover_color = $hover_setting;
+} elseif( $hover_theme && strlen( $hover_theme ) > 0 && $hover_theme != '' ) {
+	$hover_color = $hover_theme;
+}
+
 ?>
 <style>
 .valuation-page {
 	background: url(<?php echo $img[0]; ?>) no-repeat scroll center center;
 	background-size: cover;
 }
+<?php
+if( $primary_color != null ) {
+	echo '
+	.valuation-page .btn-primary {
+		background-color: ' . $primary_color . ' !important;
+		border-color: ' . $primary_color . ' !important; }
+	.valuation-page .valuation-value h4 {
+		color: ' . $primary_color . ' !important; }
+	.valuation-page .valuation-value h4 small {
+		color: ' . $primary_color . ' !important; }
+	';
+}
+if( $hover_color != null ) {
+	echo '
+	.valuation-page .btn-primary:hover,
+	.valuation-page .btn-primary:active {
+		background-color: ' . $hover_color . ' !important;
+		border-color: ' . $hover_color . ' !important; }
+	';
+}
+?>
 </style>
 
 <div id="content" class="valuation-page">
@@ -83,6 +122,7 @@ if( has_post_thumbnail( $id )
 					<div class="form-group">
 						<input class="form-control" required="required" placeholder="Your Email Address" name="email" type="text" id="email">
 					</div>
+					<input name="page_id" type="hidden" value="<?php echo $id; ?>">
 					<input name="permalink" type="hidden" value="<?php echo $permalink; ?>">
 					<input name="property_id" id="property_id" type="hidden" value="">
 					<input name="action" type="hidden" value="valuator_step_two">
@@ -93,23 +133,25 @@ if( has_post_thumbnail( $id )
 			
 			<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" style="display:none;">
 				<div class="row">
-					<div class="col-xs-12 col-sm-4">
-						<h4><small class="low"></small></h4>
+					<div class="col-xs-12 col-sm-3 col-sm-offset-1 col-md-2 col-md-offset-3 valuation-value">
+						<h4 class="range"><small class="low"></small></h4>
 						<p>Low Estimate</p>
 					</div>
-					<div class="col-xs-12 col-sm-4">
+					<div class="col-xs-12 col-sm-3 col-md-2 valuation-value">
 						<h4 class="estimated-value"></h4>
 						<p>Estimated Value</p>
 					</div>
-					<div class="col-xs-12 col-sm-4">
-						<h4><small class="high"></small></h4>
+					<div class="col-xs-12 col-sm-3 col-md-2 valuation-value">
+						<h4 class="range"><small class="high"></small></h4>
 						<p>High Estimate</p>
 					</div>
 				</div>
 				<h3 style="text-align: center;">Valuation for: <span class="valuation-address"></span></h3>
 				
 				<div class="row">
-					
+					<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 page-media">
+						
+					</div>
 				</div>
 				
 				<form id="step-three">

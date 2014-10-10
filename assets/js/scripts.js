@@ -68,6 +68,12 @@ $('document').ready(function() {
 	      $('#step-two-well').hide('slow');
 	      $('#step-three-well').show('slow');
 	      
+	      // Fill in the valuation data
+	      $('.low').text(response.low);
+	      $('.estimated-value').text(response.amount);
+	      $('.high').text(response.high);
+	      $('.valuation-address').text(response.address);
+	      $('.page-media').html(response.media);
 	    },
 	    error: function(response) {
 		    alert('failed');

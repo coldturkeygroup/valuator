@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
-
-	/* ADD/EDIT EPISODE */
+	
+	// Loads the color pickers
+	$('.valuator-color').wpColorPicker();
 
 	// Uploading files
 	var file_frame;
@@ -38,7 +39,7 @@ jQuery(document).ready(function($) {
 		file_frame.open();
 	}
 
-	jQuery('#upload_audio_file_button').click(function( event ){
+	jQuery('#upload_media_file_button').click(function( event ){
 		event.preventDefault();
 		jQuery.fn.ssp_upload_media_file( jQuery(this), false );
 	});

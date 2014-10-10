@@ -66,9 +66,9 @@ class Zillow {
 		$zestimate = $response->response->results->result->zestimate;
 		
 		return [
-			'amount' => (string)$zestimate->amount,
-			'low' => (string)$zestimate->valuationRange->low,
-			'high' => (string)$zestimate->valuationRange->high,
+			'amount' => '$' . number_format((string) $zestimate->amount),
+			'low' => '$' . number_format((string) $zestimate->valuationRange->low),
+			'high' => '$' . number_format((string) $zestimate->valuationRange->high),
 			'address' => $address->street . ', ' . $address->city . ', ' . $address->state . ' ' . $address->zipcode,
 			'street' => (string) $address->street,
 			'city' => (string) $address->city,

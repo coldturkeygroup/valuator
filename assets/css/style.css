@@ -68,6 +68,20 @@ html {
 		.valuation-page .btn-primary:active {
 			background-color: #6ED4FF;
 			border-color: #6ED4FF; }
+	.valuation-page .valuation-value {
+		text-align: center; }
+		.valuation-page .valuation-value h4 {
+			color: #00B4FF;
+			font-size: 40px;
+			margin-bottom: 0px; }
+			.valuation-page .valuation-value h4 small {
+				color: #00B4FF; }
+		.valuation-page .valuation-value .range {
+			margin-top: 7px; }
+		.valuation-page .valuation-value p {
+			color: #fff; }
+	.valuation-page .page-media {
+		margin-bottom: 15px; }
 
 #map_canvas {
 	margin-top: 5px;
@@ -75,3 +89,18 @@ html {
 	width: 100%;
 	height: 300px;
 }
+.embed-responsive .embed-responsive-item,
+.embed-responsive iframe,
+.embed-responsive embed,
+.embed-responsive object {
+	position:absolute;
+	top:0;
+	left:0;
+	bottom:0;
+	height:100%;
+	width:100%;
+	border:0 }
+.embed-responsive .embed-responsive-16by9 {
+	padding-bottom:56.25% }
+.embed-responsive .embed-responsive-4by3 {
+	padding-bottom:75% }
