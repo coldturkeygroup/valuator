@@ -79,9 +79,29 @@ class FrontDesk {
     }
 	}
 	
-	public function updateSubscriber( $id )
+	public function updateProspect( $id, $data )
 	{
-		
+		try
+		{
+			if($this->api_key != null || $this->api_key != '')
+			{
+				$response = $this->guzzle->post($this->api_base . 'subscribers/update/', [
+			    'body' => [
+		        'key' => $this->api_key,
+		        'id' => $id,
+		        'email' => $data['email'],
+		        'phone' => $data['phone']
+			    ]
+				]);
+				
+				return $response->json()['data']['id'];
+			}
+			
+			return null;
+		}
+		catch (RequestException $e) {
+			return null;
+    }
 	}
 	
 	public function destroyCampaign( $id )

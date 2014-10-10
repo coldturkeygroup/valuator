@@ -34,6 +34,7 @@ $('document').ready(function() {
       async: true,
       success: function(response) {
 	      $('#property_id').val( response.property_id );
+	      $('#property_id_complete').val( response.property_id );
 	      $('#step-one-well').hide('slow');
 	      $('#step-two-well').show('slow');
 	      $('.valuation-page').css('padding-top', '4%');
@@ -49,7 +50,7 @@ $('document').ready(function() {
 				}, 500);
 	    },
 	    error: function(response) {
-		    alert('failed');
+		    alert('There was an error. Please try again later.');
 	    }
 		});
 		
@@ -67,6 +68,7 @@ $('document').ready(function() {
       success: function(response) {
 	      $('#step-two-well').hide('slow');
 	      $('#step-three-well').show('slow');
+	      $('.valuation-page').css('padding-top', '10px');
 	      
 	      // Fill in the valuation data
 	      $('.low').text(response.low);
@@ -74,9 +76,41 @@ $('document').ready(function() {
 	      $('.high').text(response.high);
 	      $('.valuation-address').text(response.address);
 	      $('.page-media').html(response.media);
+	      
+	      // Populate the step three form
+	      $('#first_name_copy').val( $('#first_name').val() );
+	      $('#last_name_copy').val( $('#last_name').val() );
+	      $('#email_copy').val( $('#email').val() );
+	      $('#address_copy').val( response.street );
+	      $('#address2_copy').val( $('#address_2').val() );
+	      $('#city_copy').val( response.city );
+	      $('#state_copy').val( response.state );
+	      $('#zip_code_copy').val( response.zip_code );
 	    },
 	    error: function(response) {
-		    alert('failed');
+		    alert('There was an error. Please try again later.');
+	    }
+		});
+		
+		event.preventDefault();
+	});
+	
+	// Step three form submission
+	$('#step-three').submit(function(event) {
+		$.ajax({
+      url: Valuator.ajaxurl,
+      data: $("#step-three :input").serialize(),
+      type: 'POST',
+      dataType: 'json',
+      async: true,
+      success: function(response) {
+	      $('#step-three-well').hide('slow');
+	      $('#step-four-well').show('slow');
+	      $('.page-media').remove();
+	      $('.valuation-page').css('padding-top', '10%');
+	    },
+	    error: function(response) {
+		    alert('There was an error. Please try again later.');
 	    }
 		});
 		

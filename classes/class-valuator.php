@@ -525,6 +525,7 @@ class Valuator {
 			) );
 		}
 		
+		// Update the prospect data
 		$wpdb->query( $wpdb->prepare( 
 			'UPDATE ' . $this->table_name . '
 			 SET first_name = %s, last_name = %s, email = %s, address = %s
@@ -539,6 +540,38 @@ class Valuator {
 		
 		echo json_encode( $zestimate );
 		die();
+	}
+	
+	public function process_step_three()
+	{
+		global $wpdb;
+		$property_id = sanitize_text_field($_POST['property_id']);
+		$phone = sanitize_text_field($_POST['phone']);
+		
+		// Get the property data saved from step two
+		$subscriber = $wpdb->get_row('SELECT frontdesk_id, email FROM ' . $this->table_name . ' WHERE id = \'' . $property_id . '\' ORDER BY id DESC LIMIT 0,1');
+		
+		// Update the FrontDesk prospect if exists
+		if($subscriber->frontdesk_id != null)
+		{
+			$this->frontdesk->updateProspect( $subscriber->frontdesk_id, array(
+				'email' => $subscriber->email,
+				'phone' => $phone
+			) );
+		}
+		
+		// Update the prospect data
+		$wpdb->query( $wpdb->prepare( 
+			'UPDATE ' . $this->table_name . '
+			 SET phone = %s
+			 WHERE id = \'' . $property_id . '\'', 
+		  array(
+				$phone
+			) 
+		) );
+		
+		echo json_encode( array ( 'success' => true ) );
+		die();	
 	}
 
 }

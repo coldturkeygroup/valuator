@@ -76,8 +76,6 @@ html {
 			margin-bottom: 0px; }
 			.valuation-page .valuation-value h4 small {
 				color: #00B4FF; }
-		.valuation-page .valuation-value .range {
-			margin-top: 7px; }
 		.valuation-page .valuation-value p {
 			color: #fff; }
 	.valuation-page .page-media {
@@ -104,3 +102,8 @@ html {
 	padding-bottom:56.25% }
 .embed-responsive .embed-responsive-4by3 {
 	padding-bottom:75% }
+	
+.form-control[disabled], 
+.form-control[readonly], 
+fieldset[disabled] .form-control {
+	background-color: #e8e8e8 !important; }

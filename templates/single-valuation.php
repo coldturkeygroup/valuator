@@ -155,16 +155,69 @@ if( $hover_color != null ) {
 				</div>
 				
 				<form id="step-three">
-					<div class="form-group">
-						<input class="form-control" required="required" placeholder="Enter Your Address" name="address" type="text" id="address">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group">
+								<input class="form-control" readonly="readonly" name="first_name" type="text" id="first_name_copy">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group">
+								<input class="form-control" readonly="readonly" name="last_name" type="text" id="last_name_copy">
+							</div>
+						</div>
 					</div>
-					<div class="form-group">
-						<input class="form-control" placeholder="Unit #" name="unit" type="text" id="unit">
+					<div class="row">
+						<div class="col-xs-12 col-sm-10">
+							<div class="form-group">
+								<input class="form-control" readonly="readonly" name="address" type="text" id="address_copy">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-2">
+							<div class="form-group">
+								<input class="form-control" readonly="readonly" placeholder="Unit #" name="address2" type="text" id="address2_copy">
+							</div>
+						</div>
 					</div>
-					<input name="action" type="hidden" value="valuator_step_three" />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group">
+								<input class="form-control disabled" readonly="readonly" name="city" type="text" id="city_copy">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-3">
+							<div class="form-group">
+								<input class="form-control disabled" readonly="readonly" name="state" type="text" id="state_copy">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-3">
+							<div class="form-group">
+								<input class="form-control disabled" readonly="readonly" name="zip_code" type="text" id="zip_code_copy">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group">
+								<input class="form-control" required="required" placeholder="Your Phone Number" name="phone" type="text" id="phone">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group">
+								<input class="form-control disabled" readonly="readonly" name="email" type="text" id="email_copy">
+							</div>
+						</div>
+					</div>
+					<input name="action" type="hidden" value="valuator_step_three">
+					<input name="property_id" id="property_id_complete" type="hidden" value="">
 					<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
-					<input class="btn btn-primary btn-lg btn-block" type="submit" value="GET THE VALUE">
+					<input class="btn btn-primary btn-lg btn-block" type="submit" value="GET IT NOW!">
 				</form>
+			</div>
+			
+			<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-four-well" style="display:none;">
+				<h4 style="text-align: center;" class="landing-title">Thank You!</h4>
+				<h3 style="text-align: center;">We're all set.</h3>
 			</div>
 		</div>
 	</div>
