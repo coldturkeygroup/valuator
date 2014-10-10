@@ -14,6 +14,7 @@ get_header();
 the_post();
 $id = get_the_ID();
 $title = get_the_title();
+$permalink = get_permalink();
 $content = wp_strip_all_tags(apply_filters('the_content',get_the_content()));
 
 // Get the background image
@@ -82,6 +83,7 @@ if( has_post_thumbnail( $id )
 					<div class="form-group">
 						<input class="form-control" required="required" placeholder="Your Email Address" name="email" type="text" id="email">
 					</div>
+					<input name="permalink" type="hidden" value="<?php echo $permalink; ?>">
 					<input name="property_id" id="property_id" type="hidden" value="">
 					<input name="action" type="hidden" value="valuator_step_two">
 					<?php wp_nonce_field( 'valuator_step_two', 'valuator_nonce' ); ?>
@@ -90,8 +92,26 @@ if( has_post_thumbnail( $id )
 			</div>
 			
 			<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" style="display:none;">
-				<h4 style="text-align: center;" class="home-values"><small class="low"></small> <span class="amount"></span> <small class="high"></small></h4>
-
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<h4><small class="low"></small></h4>
+						<p>Low Estimate</p>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<h4 class="estimated-value"></h4>
+						<p>Estimated Value</p>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<h4><small class="high"></small></h4>
+						<p>High Estimate</p>
+					</div>
+				</div>
+				<h3 style="text-align: center;">Valuation for: <span class="valuation-address"></span></h3>
+				
+				<div class="row">
+					
+				</div>
+				
 				<form id="step-three">
 					<div class="form-group">
 						<input class="form-control" required="required" placeholder="Enter Your Address" name="address" type="text" id="address">

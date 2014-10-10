@@ -136,6 +136,7 @@ class Valuator {
 		
 		$sql = "CREATE TABLE `$table_name` (
 							`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+							`frontdesk_id` int(10) unsigned DEFAULT NULL
 							`first_name` varchar(255) DEFAULT NULL,
 							`last_name` varchar(255) DEFAULT NULL,
 							`email` varchar(255) DEFAULT NULL,
@@ -320,21 +321,48 @@ class Valuator {
 		$first_name = sanitize_text_field($_POST['first_name']);
 		$last_name = sanitize_text_field($_POST['last_name']);
 		$email = sanitize_text_field($_POST['email']);
+		$source = sanitize_text_field($_POST['permalink']);
 		
 		// Get the property data saved from step one
-		$property = $wpdb->get_row('SELECT address FROM ' . $this->table_name . ' WHERE id = \'' . $property_id . '\' ORDER BY id DESC LIMIT 0,1');
+		$property = $wpdb->get_row('SELECT address, address2 FROM ' . $this->table_name . ' WHERE id = \'' . $property_id . '\' ORDER BY id DESC LIMIT 0,1');
 		
 		// Get the Zestimate data
 		$zestimate = $this->zillow->getZestimate( $property->address );
 		
+		// Create the prospect on FrontDesk
+		$frontdesk_id = $this->frontdesk->createProspect( array(
+			'source' => $source,
+			'first_name' => $first_name,
+			'last_name' => $last_name,
+			'email' => $email,
+			'address' => $zestimate['street'],
+			'address_2' => $property->address2,
+			'city' => $zestimate['city'],
+			'state' => $zestimate['state'],
+			'zip_code' => $zestimate['zip_code']
+		) );
+		
+		if( $frontdesk_id != null )
+		{
+			$wpdb->query( $wpdb->prepare( 
+				'UPDATE ' . $this->table_name . '
+				 SET frontdesk_id = %s
+				 WHERE id = \'' . $property_id . '\'', 
+			  array(
+					$frontdesk_id
+				) 
+			) );
+		}
+		
 		$wpdb->query( $wpdb->prepare( 
 			'UPDATE ' . $this->table_name . '
-			 SET first_name = %s, last_name = %s, email = %s
+			 SET first_name = %s, last_name = %s, email = %s, address = %s
 			 WHERE id = \'' . $property_id . '\'', 
 		  array(
 				$first_name,
 				$last_name,
-				$email
+				$email,
+				(string) $zestimate['address']
 			) 
 		) );
 		

@@ -48,9 +48,35 @@ class FrontDesk {
     }
 	}
 	
-	public function createSubscriber()
+	public function createProspect( $data )
 	{
-		
+		try
+		{
+			if($this->api_key != null || $this->api_key != '')
+			{
+				$response = $this->guzzle->post($this->api_base . 'subscribers/', [
+			    'body' => [
+		        'key' => $this->api_key,
+		        'source' => $data['source'],
+		        'email' => $data['email'],
+		        'first_name' => $data['first_name'],
+		        'last_name' => $data['last_name'],
+						'address' => $data['address'],
+						'address_2' => $data['address_2'],
+						'city' => $data['city'],
+						'state' => $data['state'],
+						'zip_code' => $data['zip_code']
+			    ]
+				]);
+				
+				return $response->json()['data']['id'];
+			}
+			
+			return null;
+		}
+		catch (RequestException $e) {
+			return null;
+    }
 	}
 	
 	public function updateSubscriber( $id )

@@ -66,10 +66,14 @@ class Zillow {
 		$zestimate = $response->response->results->result->zestimate;
 		
 		return [
-			'address' => $address->street . ', ' . $address->city . ', ' . $address->state . ' ' . $address->zipcode,
 			'amount' => (string)$zestimate->amount,
 			'low' => (string)$zestimate->valuationRange->low,
-			'high' => (string)$zestimate->valuationRange->high
+			'high' => (string)$zestimate->valuationRange->high,
+			'address' => $address->street . ', ' . $address->city . ', ' . $address->state . ' ' . $address->zipcode,
+			'street' => (string) $address->street,
+			'city' => (string) $address->city,
+			'state' => (string) $address->state,
+			'zip_code' => (string) $address->zipcode
 		];
 		
 	}
