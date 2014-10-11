@@ -148,35 +148,37 @@ class Valuator {
 	{
 		global $wpdb;
 		$table_name = $wpdb->prefix . $this->token;
-
-		$charset_collate = '';
-
-		if ( ! empty( $wpdb->charset ) ) {
-			$charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
+		
+		if( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) 
+		{
+			$charset_collate = '';
+	
+			if ( ! empty( $wpdb->charset ) ) {
+				$charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
+			}
+	
+			if ( ! empty( $wpdb->collate ) ) {
+				$charset_collate .= " COLLATE {$wpdb->collate}";
+			}
+	
+			$sql = "CREATE TABLE `$table_name` (
+								`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+								`frontdesk_id` int(10) unsigned DEFAULT NULL,
+								`first_name` varchar(255) DEFAULT NULL,
+								`last_name` varchar(255) DEFAULT NULL,
+								`email` varchar(255) DEFAULT NULL,
+								`address` varchar(255) NOT NULL,
+								`address2` varchar(255) DEFAULT NULL,
+								`phone` varchar(20) DEFAULT NULL,
+								`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+								`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+								PRIMARY KEY (`id`),
+								UNIQUE KEY `users_email_unique` (`email`)
+							) $charset_collate;";
+	
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
 		}
-
-		if ( ! empty( $wpdb->collate ) ) {
-			$charset_collate .= " COLLATE {$wpdb->collate}";
-		}
-
-		$sql = "CREATE TABLE `$table_name` (
-							`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-							`frontdesk_id` int(10) unsigned DEFAULT NULL
-							`first_name` varchar(255) DEFAULT NULL,
-							`last_name` varchar(255) DEFAULT NULL,
-							`email` varchar(255) DEFAULT NULL,
-							`address` varchar(255) NOT NULL,
-							`address2` varchar(255) DEFAULT NULL,
-							`phone` varchar(20) DEFAULT NULL,
-							`reason` varchar(255) DEFAULT NULL,
-							`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-							`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-							PRIMARY KEY (`id`),
-							UNIQUE KEY `users_email_unique` (`email`)
-						) $charset_collate;";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
 	}
 
 	/**
