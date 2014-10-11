@@ -42,6 +42,7 @@ class FrontDesk {
 	{
 		try {
 			if ( $this->api_key != null || $this->api_key != '' )
+			{
 				$this->guzzle->post( $this->api_base . 'campaigns/', [
 					'body' => [
 						'key'         => $this->api_key,
@@ -52,7 +53,8 @@ class FrontDesk {
 					]
 				] );
 
-			add_filter( 'redirect_post_location', array( $this, 'add_success_var' ), 99 );
+				add_filter( 'redirect_post_location', array( $this, 'add_success_var' ), 99 );
+			}
 		}
 		catch ( RequestException $e ) {
 			add_filter( 'redirect_post_location', array( $this, 'add_error_var' ), 99 );
