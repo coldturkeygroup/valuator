@@ -9,9 +9,6 @@
  * Requires at least: 4.0
  * Tested up to: 4.0
  *
- * Text Domain: valuator
- * Domain Path: /lang/
- *
  * @package Valuator
  * @author Aaron Huisinga
  * @since 1.0.0
