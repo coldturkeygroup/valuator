@@ -336,7 +336,11 @@ class Valuator {
 	public function enqueue_scripts() {
 		
 		wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/style.css' ), array(), '1.0.0' );
+		wp_register_style( 'roboto', 'http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300' );
+		wp_register_style( 'robo-slab', 'http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' );
 		wp_enqueue_style( 'valuator' );
+		wp_enqueue_style( 'roboto' );
+		wp_enqueue_style( 'roboto-slab' );
 		
 		wp_register_script( 'google-places', 'https://maps.googleapis.com/maps/api/js?libraries=places', array( 'jquery' ));
 		wp_register_script( 'valuator-js', esc_url( $this->assets_url . 'js/scripts.js' ), array());

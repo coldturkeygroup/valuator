@@ -43,9 +43,10 @@ if( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 
 ?>
 <style>
-.valuation-page {
+#page {
 	background: url(<?php echo $img[0]; ?>) no-repeat scroll center center;
 	background-size: cover;
+	background-attachment: fixed;
 }
 <?php
 if( $primary_color != null ) {
@@ -56,6 +57,10 @@ if( $primary_color != null ) {
 	.valuation-page .valuation-value h4 {
 		color: ' . $primary_color . ' !important; }
 	.valuation-page .valuation-value h4 small {
+		color: ' . $primary_color . ' !important; }
+	.valuation-page h3.step-two-subtitle strong {
+		color: ' . $primary_color . ' !important; }
+	.valuation-page h4.thank-you {
 		color: ' . $primary_color . ' !important; }
 	';
 }
@@ -92,13 +97,13 @@ if( $hover_color != null ) {
 					</div>
 					<input name="action" type="hidden" value="valuator_step_one">
 					<?php wp_nonce_field( 'valuator_step_one', 'valuator_nonce' ); ?>
-					<input class="btn btn-primary btn-lg btn-block" type="submit" value="GET THE VALUE">
+					<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get The Value!">
 				</form>
 			</div>
 			
 			<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-two-well" style="display:none;">
 				<h4 style="text-align: center;" class="landing-title">We Found a Valuation for Your Home!</h4>
-				<h3 style="text-align: center;">Where can we send you your <strong>FREE</strong> report?</h3>
+				<h3 style="text-align: center;" class="step-two-subtitle">Where can we send you your <strong>FREE</strong> report?</h3>
 				
 				<div class="row">
 					<div class="col-xs-10 col-xs-offset-1">
@@ -127,26 +132,26 @@ if( $hover_color != null ) {
 					<input name="property_id" id="property_id" type="hidden" value="">
 					<input name="action" type="hidden" value="valuator_step_two">
 					<?php wp_nonce_field( 'valuator_step_two', 'valuator_nonce' ); ?>
-					<input class="btn btn-primary btn-lg btn-block" type="submit" value="GET THE FREE REPORT">
+					<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get The Free Report!">
 				</form>
 			</div>
 			
 			<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" style="display:none;">
 				<div class="row">
-					<div class="col-xs-12 col-sm-3 col-sm-offset-1 col-md-2 col-md-offset-3 valuation-value">
+					<div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-2 valuation-value">
 						<h4 class="range"><small class="low"></small></h4>
 						<p>Low Estimate</p>
 					</div>
-					<div class="col-xs-12 col-sm-3 col-md-2 valuation-value">
+					<div class="col-xs-12 col-sm-4 valuation-value">
 						<h4 class="estimated-value"></h4>
 						<p>Estimated Value</p>
 					</div>
-					<div class="col-xs-12 col-sm-3 col-md-2 valuation-value">
+					<div class="col-xs-12 col-sm-4 col-md-2 valuation-value">
 						<h4 class="range"><small class="high"></small></h4>
 						<p>High Estimate</p>
 					</div>
 				</div>
-				<h3 style="text-align: center;">Valuation for: <span class="valuation-address"></span></h3>
+				<h3 style="text-align: center;" class="step-three-subtitle">Valuation for: <span class="valuation-address"></span></h3>
 				
 				<div class="row">
 					<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 page-media">
@@ -215,13 +220,13 @@ if( $hover_color != null ) {
 					<input name="action" type="hidden" value="valuator_step_three">
 					<input name="property_id" id="property_id_complete" type="hidden" value="">
 					<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
-					<input class="btn btn-primary btn-lg btn-block" type="submit" value="GET IT NOW!">
+					<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get It Now!">
 				</form>
 			</div>
 			
 			<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-four-well" style="display:none;">
-				<h4 style="text-align: center;" class="landing-title">Thank You!</h4>
-				<h3 style="text-align: center;">We're all set.</h3>
+				<h4 style="text-align: center;" class="landing-title thank-you">Thank You!</h4>
+				<h3 style="text-align: center;" class="step-two-subtitle">We're all set.</h3>
 			</div>
 		</div>
 	</div>

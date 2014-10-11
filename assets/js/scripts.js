@@ -37,7 +37,7 @@ $('document').ready(function() {
 	      $('#property_id_complete').val( response.property_id );
 	      $('#step-one-well').hide('slow');
 	      $('#step-two-well').show('slow');
-	      $('.valuation-page').css('padding-top', '4%');
+	      $('.valuation-page').css('padding-top', '0px');
 	      
 	      setTimeout(function() {
 					google.maps.event.trigger($("#map_canvas")[0], 'resize');
@@ -68,7 +68,9 @@ $('document').ready(function() {
       success: function(response) {
 	      $('#step-two-well').hide('slow');
 	      $('#step-three-well').show('slow');
-	      $('.valuation-page').css('padding-top', '10px');
+	      $('.valuation-page').css('padding-top', '0px');
+	      $('.single-valuator #page').css('min-height', '100%');
+	      $('.single-valuator #page').css('height', 'auto');
 	      
 	      // Fill in the valuation data
 	      $('.low').text(response.low);
@@ -113,6 +115,8 @@ $('document').ready(function() {
 	      $('#step-four-well').show('slow');
 	      $('.page-media').remove();
 	      $('.valuation-page').css('padding-top', '10%');
+	      $('.single-valuator #page').css('height', '100%');
+	      $('.single-valuator #page').css('min-height', 'auto');
 	    },
 	    error: function(response) {
 		    alert('There was an error. Please try again later.');

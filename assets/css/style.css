@@ -14,6 +14,7 @@ html {
 	height: 100%; }
 
 .valuation-page {
+	background-color: rgba(0,0,0,0.6);
 	margin-top: 0px !important;
 	padding-top: 7%;
 	height: 100%; }
@@ -21,30 +22,61 @@ html {
 	.valuation-page h4,
 	.valuation-page .h3, 
 	.valuation-page .h4 {
-		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important; }
+		font-family: 'Roboto', arial, sans-serif !important; }
 	.valuation-page .well {
-		background: #222;
-		background: rgba(34,34,34,0.8);
+		background: rgba(31, 51, 64, 0);
+		padding: 30px;
 		border: 0px;
 		border-radius: 9px;
 		-moz-border-radius: 9px;
 		-webkit-border-radius: 9px; }
 	.valuation-page h4 {
-		font-size: 35px;
-		color: #FFF; }
+		font-size: 40px;
+		color: #FFF;
+		font-weight: 500;
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+		-webkit-font-smoothing: antialiased;
+		margin-bottom: 5px; }
+		.valuation-page h4.thank-you {
+			font-size: 60px;
+			margin-bottom: 0px;
+			color: #ec6952; }
 	.valuation-page h3 {
+		text-align: center;
+		line-height: 1.5;
+		font-size: 18px;
 		font-weight: normal;
-		font-size: 25px; }
+		margin-bottom: 20px;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale; }
 	.valuation-page label, 
 	.valuation-page h3 {
-		color: #ADABAB; }
+		color: #fff;
+		-webkit-opacity: 0.7;
+		-moz-opacity: 0.8;
+		opacity: 0.7; }
+		.valuation-page h3.step-two-subtitle {
+			font-size: 23px;
+			margin-bottom: 10px;
+			opacity: 1;
+			-webkit-opacity: 1;
+			-moz-opacity: 1; }
+			.valuation-page h3.step-two-subtitle strong {
+				color: #ec6952; }
+		.valuation-page h3.step-three-subtitle {
+			text-align: center;
+			font-weight: 300;
+			font-size: 27px;
+			-webkit-font-smoothing: antialiased;
+			opacity: 1;
+			-webkit-opacity: 1;
+			-moz-opacity: 1; }
 	.valuation-page input[type="text"].form-control, 
 	.valuation-page input[type="email"].form-control {
-		box-shadow: none;
 		-webkit-box-shadow: none;
 		-moz-box-shadow: none;
-		border: 1px solid #E2E2E2;
-		height: 50px;
+		box-shadow: none;
+		height: 45px;
 		display: block;
 		width: 100%;
 		padding: 6px 12px;
@@ -53,35 +85,59 @@ html {
 		color: #555;
 		background-color: #fff;
 		background-image: none;
+		border: 1px solid #eee;
 		border-radius: 4px;
-		-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-		-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-		transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
+		-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+		-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+		transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }
+		.valuation-page input[type="text"].form-control::-webkit-input-placeholder {
+		  color: #a6a6a6; }
+		.valuation-page input[type="text"].form-control:-moz-placeholder {
+		  color: #a6a6a6; }
+		.valuation-page input[type="text"].form-control::-moz-placeholder {
+		  color: #a6a6a6; }
+		.valuation-page input[type="text"].form-control:-ms-input-placeholder {
+		  color: #a6a6a6; }
+		.valuation-page input[type="text"].form-control:focus {
+		  border-color: #a6a6a6;
+		  -webkit-box-shadow: none;
+		  -moz-box-shadow: none;
+		  box-shadow: none;}
 	.valuation-page .btn-primary {
-		border-radius: 9px;
-		background-color: #00B4FF;
-		padding: 13px 16px;
-		font-size: 17px;
-		font-weight: normal;
-		border-color: #00B4FF; }
+		font-size: 18px;
+		background: #ec6952;
+		border: 2px solid #ec6952;
+		color: #fff;
+		padding: 8px 30px;
+		border-radius: 4px;
+		-webkit-transition: all 0.2s ease-in-out;
+		-moz-transition: all 0.2s ease-in-out;
+		-ms-transition: all 0.2s ease-in-out;
+		-o-transition: all 0.2s ease-in-out;
+		font-weight: bold;
+		font-family: 'Roboto', arial, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale; }
 		.valuation-page .btn-primary:hover,
 		.valuation-page .btn-primary:active {
-			background-color: #6ED4FF;
-			border-color: #6ED4FF; }
+			background: #e9553b;
+			border: 2px solid #e9553b; }
 	.valuation-page .valuation-value {
 		text-align: center; }
 		.valuation-page .valuation-value h4 {
 			color: #00B4FF;
-			font-size: 40px;
+			font-size: 45px;
 			margin-bottom: 0px; }
 			.valuation-page .valuation-value h4 small {
 				color: #00B4FF; }
 		.valuation-page .valuation-value p {
-			color: #fff; }
+			color: #fff;
+			font-size: 17px; }
 	.valuation-page .page-media {
 		margin-bottom: 15px; }
 	.valuation-page .page-text {
 		color: #fff;
+		font-size: 17px;
 		margin-bottom: 15px; }
 
 #map_canvas {
