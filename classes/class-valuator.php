@@ -390,9 +390,6 @@ class Valuator {
 	public function enqueue_admin_styles()
 	{
 
-		// Admin CSS
-		wp_register_style( 'valuator-admin', esc_url( $this->assets_url . 'css/admin.css' ), array(), '1.0.0' );
-		wp_enqueue_style( 'valuator-admin' );
 		wp_enqueue_style( 'wp-color-picker' );
 
 	}
