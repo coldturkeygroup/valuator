@@ -147,5 +147,8 @@ $('document').ready(function() {
 			$('.single-valuator #page').css('height', '100%');
 			$('.single-valuator #page').css('min-height', 'auto');
 		}, 200);
+		setTimeout(function () {
+			$('.thank-you').addClass('animated pulse');
+		}, 1500);
 	};
 });

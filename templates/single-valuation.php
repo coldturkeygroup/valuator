@@ -248,7 +248,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-four-well" style="display:none;">
 					<h4 style="text-align: center;" class="landing-title thank-you">Thank You!</h4>
 
-					<h3 style="text-align: center;" class="step-two-subtitle">We're all set.</h3>
+					<h3 style="text-align: center;font-size: 30px;" class="step-two-subtitle">We're all set.</h3>
 				</div>
 			</div>
 		</div>
