@@ -79,7 +79,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 	<div id="content" class="valuation-page">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-one-well" data-model="stepOne">
+				<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 well well-sm" id="step-one-well" data-model="stepOne">
 					<h4 style="text-align: center;" class="landing-title"><?php echo $title; ?></h4>
 
 					<h3 style="text-align: center;"><?php echo $content; ?></h3>
@@ -104,14 +104,14 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 					</form>
 				</div>
 
-				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-two-well" data-model="stepTwo" style="display:none;">
+				<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 well well-sm" id="step-two-well" data-model="stepTwo" style="display:none;">
 					<h4 style="text-align: center;" class="landing-title">We Found a Valuation for Your Home!</h4>
 
 					<h3 style="text-align: center;" class="step-two-subtitle">Where can we send you your <strong>FREE</strong>
 						report?</h3>
 
 					<div class="row">
-						<div class="col-xs-10 col-xs-offset-1">
+						<div class="col-xs-12 col-sm-10 col-sm-offset-1">
 							<div id="map_canvas"></div>
 						</div>
 					</div>
@@ -168,7 +168,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 							class="valuation-address"></span></h3>
 
 					<div class="row">
-						<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 page-media">
+						<div class="col-xs-12 col-sm-6 col-sm-offset-3 page-media">
 
 						</div>
 					</div>
@@ -179,24 +179,24 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 
 					<form id="step-three" data-remote="true", data-remote-on-success="process">
 						<div class="row">
-							<div class="col-xs-12 col-sm-6">
+							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
 								<div class="form-group">
 									<input class="form-control" readonly="readonly" name="first_name" type="text" id="first_name_copy">
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-6">
+							<div class="col-xs-12 col-sm-5">
 								<div class="form-group">
 									<input class="form-control" readonly="readonly" name="last_name" type="text" id="last_name_copy">
 								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 col-sm-10">
+							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
 								<div class="form-group">
 									<input class="form-control" readonly="readonly" name="address" type="text" id="address_copy">
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-2">
+							<div class="col-xs-12 col-sm-5">
 								<div class="form-group">
 									<input class="form-control" readonly="readonly" placeholder="Unit #" name="address2" type="text"
 									       id="address2_copy">
@@ -204,12 +204,12 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 col-sm-6">
+							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
 								<div class="form-group">
 									<input class="form-control disabled" readonly="readonly" name="city" type="text" id="city_copy">
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-3">
+							<div class="col-xs-12 col-sm-2">
 								<div class="form-group">
 									<input class="form-control disabled" readonly="readonly" name="state" type="text" id="state_copy">
 								</div>
@@ -222,13 +222,13 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 col-sm-6">
+							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
 								<div class="form-group">
 									<input class="form-control" required="required" placeholder="Your Phone Number" name="phone"
 									       type="text" id="phone">
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-6">
+							<div class="col-xs-12 col-sm-5">
 								<div class="form-group">
 									<input class="form-control disabled" readonly="readonly" name="email" type="text" id="email_copy">
 								</div>
@@ -237,7 +237,11 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<input name="action" type="hidden" value="valuator_step_three">
 						<input name="property_id" id="property_id_complete" type="hidden" value="">
 						<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
-						<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get It Now!">
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+								<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get It Now!">
+							</div>
+						</div>
 					</form>
 				</div>
 
