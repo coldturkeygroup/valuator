@@ -82,9 +82,12 @@ $('document').ready(function() {
   stepOne.process = function(form, response) {
     $('#property_id').val( response.property_id );
     $('#property_id_complete').val( response.property_id );
-    $('#step-one-well').hide('slow');
-    $('#step-two-well').show('slow');
-    $('.valuation-page').css('padding-top', '0px');
+    $('#step-one-well').addClass('animated fadeOutLeftBig');
+    setTimeout(function () {
+	    $('#step-one-well').hide();
+	    $('#step-two-well').show().addClass('animated fadeInRightBig');
+	    $('.valuation-page').css('padding-top', '0px');
+	  }, 200);
     
     setTimeout(function() {
 			google.maps.event.trigger($("#map_canvas")[0], 'resize');
@@ -100,11 +103,14 @@ $('document').ready(function() {
 	// Step two form submission
 	window.stepTwo = {};
   stepTwo.process = function(form, response) {
-	  $('#step-two-well').hide('slow');
-    $('#step-three-well').show('slow');
-    $('.valuation-page').css('padding-top', '0px');
-    $('.single-valuator #page').css('min-height', '100%');
-    $('.single-valuator #page').css('height', 'auto');
+	  $('#step-two-well').removeClass('fadeInRightBig').addClass('fadeOutLeftBig');
+	  setTimeout(function () {
+		  $('#step-two-well').hide();
+    	$('#step-three-well').show().addClass('animated fadeInRightBig');
+			$('.valuation-page').css('padding-top', '0px');
+			$('.single-valuator #page').css('min-height', '100%');
+			$('.single-valuator #page').css('height', 'auto');
+		}, 200);
     
     // Fill in the valuation data
     $('.low').text(response.low);
@@ -132,11 +138,14 @@ $('document').ready(function() {
 	// Step three form submission
 	window.stepThree = {};
   stepThree.process = function(form, response) {
-	  $('#step-three-well').hide('slow');
-    $('#step-four-well').show('slow');
-    $('.page-media').remove();
-    $('.valuation-page').css('padding-top', '10%');
-    $('.single-valuator #page').css('height', '100%');
-    $('.single-valuator #page').css('min-height', 'auto');
+	  $('#step-three-well').removeClass('fadeInRightBig').addClass('fadeOutLeftBig');
+	  setTimeout(function () {
+		  $('.page-media').remove();
+	  	$('#step-three-well').hide();
+			$('#step-four-well').show().addClass('animated fadeInRightBig');
+			$('.valuation-page').css('padding-top', '10%');
+			$('.single-valuator #page').css('height', '100%');
+			$('.single-valuator #page').css('min-height', 'auto');
+		}, 200);
 	};
 });
