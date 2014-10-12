@@ -100,7 +100,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						</div>
 						<input name="action" type="hidden" value="valuator_step_one">
 						<?php wp_nonce_field( 'valuator_step_one', 'valuator_nonce' ); ?>
-						<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get The Value!">
+						<input class="btn btn-primary btn-lg btn-block disabled" type="submit" disabled="disabled" value="Get The Value!">
 					</form>
 				</div>
 

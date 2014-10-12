@@ -23,7 +23,9 @@ $('document').ready(function() {
 	    mapTypeId: 'hybrid',
 	    disableDefaultUI: true
 	  },
-	});
+	}).bind("geocode:result", function(event, result){
+    $('#step-one .btn-primary').removeClass('disabled').removeAttr('disabled');
+  });
 	
 	// Simple PubSub
   var o = $({});
