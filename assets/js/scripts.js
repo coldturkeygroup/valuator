@@ -9,6 +9,7 @@
 
 // Application specific scripts
 $('document').ready(function() {
+	// Simple AJAX listeners
 	$(document).bind("ajaxSend", function(){
 		$('.btn-primary').attr('disabled', 'disabled');
 	}).bind("ajaxComplete", function(){
@@ -24,105 +25,118 @@ $('document').ready(function() {
 	  },
 	});
 	
-	// Step one form submission
-	$('#step-one').submit(function(event) {
-		$.ajax({
+	// Simple PubSub
+  var o = $({});
+  $.subscribe = function() { o.on.apply(o, arguments) };
+  $.publish = function() { o.trigger.apply(o, arguments) };
+  
+  // Submit form via AJAX
+  var submitAjax = function(e) {
+	  var form = $(this);
+	  var method = form.find('input[name="_method"]').val() || 'POST';
+	
+	  $.ajax({
+      type: method,
       url: Valuator.ajaxurl,
-      data: $("#step-one :input").serialize(),
-      type: 'POST',
+      data: form.serialize(),
       dataType: 'json',
       async: true,
       success: function(response) {
-	      $('#property_id').val( response.property_id );
-	      $('#property_id_complete').val( response.property_id );
-	      $('#step-one-well').hide('slow');
-	      $('#step-two-well').show('slow');
-	      $('.valuation-page').css('padding-top', '0px');
-	      
-	      setTimeout(function() {
-					google.maps.event.trigger($("#map_canvas")[0], 'resize');
-					$("#address").geocomplete("find", $('#address').val());
-					
-					setTimeout(function() {
-						var map = $("#address").geocomplete("map");
-						map.setZoom(19);
-					}, 500);
-				}, 500);
-	    },
-	    error: function(response) {
-		    alert('There was an error. Please try again later.');
-	    }
-		});
-		
-		event.preventDefault();
-	});
+      	$.publish('ajax.request.success', [form, response]);
+      }
+	  });
+	
+	  e.preventDefault();
+  };
+  
+	// Handle AJAX request callbacks
+  $.subscribe('ajax.request.success', function(e, form, response) {	  
+    triggerRequestCallback.apply(form, [e, $(form).data('remote-on-success'), response]);
+  });
+  
+  // Trigger the registered callback for a click or form submission.
+  var triggerRequestCallback = function(e, method, response) {
+    var that = $(this);
+
+    if ( ! (model = that.closest('*[data-model]').data('model'))) {
+      return;
+    }
+
+    if (typeof window[model] == 'object' && typeof window[model][method] == 'function') {
+        window[model][method](that, response);
+    } else {
+        console.error('Could not call method ' + method + ' on object ' + model);
+    }
+
+    e.preventDefault();
+  }
+  
+  // Dom bindings.
+  $('form[data-remote]').on('submit', submitAjax);
+  $('*[data-click]').on('click', function(e) {
+    triggerRequestCallback.apply(this, [e, $(this).data('click')]);
+  });
+	
+	// Step one form submission
+	window.stepOne = {};
+  stepOne.process = function(form, response) {
+    $('#property_id').val( response.property_id );
+    $('#property_id_complete').val( response.property_id );
+    $('#step-one-well').hide('slow');
+    $('#step-two-well').show('slow');
+    $('.valuation-page').css('padding-top', '0px');
+    
+    setTimeout(function() {
+			google.maps.event.trigger($("#map_canvas")[0], 'resize');
+			$("#address").geocomplete("find", $('#address').val());
+			
+			setTimeout(function() {
+				var map = $("#address").geocomplete("map");
+				map.setZoom(19);
+			}, 500);
+		}, 500);
+  };
 	
 	// Step two form submission
-	$('#step-two').submit(function(event) {
-		$.ajax({
-      url: Valuator.ajaxurl,
-      data: $("#step-two :input").serialize(),
-      type: 'POST',
-      dataType: 'json',
-      async: true,
-      success: function(response) {
-	      $('#step-two-well').hide('slow');
-	      $('#step-three-well').show('slow');
-	      $('.valuation-page').css('padding-top', '0px');
-	      $('.single-valuator #page').css('min-height', '100%');
-	      $('.single-valuator #page').css('height', 'auto');
-	      
-	      // Fill in the valuation data
-	      $('.low').text(response.low);
-	      $('.estimated-value').text(response.amount);
-	      $('.high').text(response.high);
-	      $('.valuation-address').text(response.address);
-	      $('.page-media').html(response.media);
-	      if(typeof response.text != 'undefined'){
-		      $('.page-text').html(response.text);
-		    } else {
-			    $('.page-text').remove();
-		    }
-	      
-	      // Populate the step three form
-	      $('#first_name_copy').val( $('#first_name').val() );
-	      $('#last_name_copy').val( $('#last_name').val() );
-	      $('#email_copy').val( $('#email').val() );
-	      $('#address_copy').val( response.street );
-	      $('#address2_copy').val( $('#address_2').val() );
-	      $('#city_copy').val( response.city );
-	      $('#state_copy').val( response.state );
-	      $('#zip_code_copy').val( response.zip_code );
-	    },
-	    error: function(response) {
-		    alert('There was an error. Please try again later.');
-	    }
-		});
-		
-		event.preventDefault();
-	});
+	window.stepTwo = {};
+  stepTwo.process = function(form, response) {
+	  $('#step-two-well').hide('slow');
+    $('#step-three-well').show('slow');
+    $('.valuation-page').css('padding-top', '0px');
+    $('.single-valuator #page').css('min-height', '100%');
+    $('.single-valuator #page').css('height', 'auto');
+    
+    // Fill in the valuation data
+    $('.low').text(response.low);
+    $('.estimated-value').text(response.amount);
+    $('.high').text(response.high);
+    $('.valuation-address').text(response.address);
+    $('.page-media').html(response.media);
+    if(typeof response.text != 'undefined'){
+      $('.page-text').html(response.text);
+    } else {
+	    $('.page-text').remove();
+    }
+    
+    // Populate the step three form
+    $('#first_name_copy').val( $('#first_name').val() );
+    $('#last_name_copy').val( $('#last_name').val() );
+    $('#email_copy').val( $('#email').val() );
+    $('#address_copy').val( response.street );
+    $('#address2_copy').val( $('#address_2').val() );
+    $('#city_copy').val( response.city );
+    $('#state_copy').val( response.state );
+    $('#zip_code_copy').val( response.zip_code );
+	};
 	
 	// Step three form submission
-	$('#step-three').submit(function(event) {
-		$.ajax({
-      url: Valuator.ajaxurl,
-      data: $("#step-three :input").serialize(),
-      type: 'POST',
-      dataType: 'json',
-      async: true,
-      success: function(response) {
-	      $('#step-three-well').hide('slow');
-	      $('#step-four-well').show('slow');
-	      $('.page-media').remove();
-	      $('.valuation-page').css('padding-top', '10%');
-	      $('.single-valuator #page').css('height', '100%');
-	      $('.single-valuator #page').css('min-height', 'auto');
-	    },
-	    error: function(response) {
-		    alert('There was an error. Please try again later.');
-	    }
-		});
-		
-		event.preventDefault();
-	});
+	window.stepThree = {};
+  stepThree.process = function(form, response) {
+	  $('#step-three-well').hide('slow');
+    $('#step-four-well').show('slow');
+    $('.page-media').remove();
+    $('.valuation-page').css('padding-top', '10%');
+    $('.single-valuator #page').css('height', '100%');
+    $('.single-valuator #page').css('min-height', 'auto');
+	};
 });

@@ -79,12 +79,12 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 	<div id="content" class="valuation-page">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-one-well">
+				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-one-well" data-model="stepOne">
 					<h4 style="text-align: center;" class="landing-title"><?php echo $title; ?></h4>
 
 					<h3 style="text-align: center;"><?php echo $content; ?></h3>
 
-					<form id="step-one">
+					<form id="step-one" data-remote="true", data-remote-on-success="process">
 						<div class="row">
 							<div class="col-xs-12 col-sm-10">
 								<div class="form-group">
@@ -104,7 +104,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 					</form>
 				</div>
 
-				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-two-well" style="display:none;">
+				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-two-well" data-model="stepTwo" style="display:none;">
 					<h4 style="text-align: center;" class="landing-title">We Found a Valuation for Your Home!</h4>
 
 					<h3 style="text-align: center;" class="step-two-subtitle">Where can we send you your <strong>FREE</strong>
@@ -116,7 +116,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						</div>
 					</div>
 
-					<form id="step-two">
+					<form id="step-two" data-remote="true", data-remote-on-success="process">
 						<div class="row">
 							<div class="col-xs-12 col-sm-6">
 								<div class="form-group">
@@ -144,7 +144,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 					</form>
 				</div>
 
-				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" style="display:none;">
+				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" data-model="stepThree" style="display:none;">
 					<div class="row">
 						<div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-2 valuation-value">
 							<h4 class="range">
@@ -177,7 +177,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<div class="col-xs-10 col-xs-offset-1 page-text"></div>
 					</div>
 
-					<form id="step-three">
+					<form id="step-three" data-remote="true", data-remote-on-success="process">
 						<div class="row">
 							<div class="col-xs-12 col-sm-6">
 								<div class="form-group">
