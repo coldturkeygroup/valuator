@@ -187,7 +187,7 @@ class Valuator_Admin {
 	 */
 	public function main_settings()
 	{
-		echo '<p>' . __( 'These are a few simple settings for settings up your home valuation pages.', 'valuator' ) . '</p>';
+		echo '<p>' . __( 'These are a few simple settings for settings up your home valuation pages. <br> <a href="https://www.youtube.com/watch?v=PX_tMffkORg" target="_blank">Watch our video about setting up your API keys.</a>', 'valuator' ) . '</p>';
 	}
 
 	/**
