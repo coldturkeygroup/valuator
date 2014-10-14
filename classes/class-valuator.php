@@ -53,6 +53,7 @@ class Valuator {
 		add_action( 'wp_ajax_nopriv_valuator_step_two', array( $this, 'process_step_two' ) );
 		add_action( 'wp_ajax_valuator_step_three', array( $this, 'process_step_three' ) );
 		add_action( 'wp_ajax_nopriv_valuator_step_three', array( $this, 'process_step_three' ) );
+		add_action( 'admin_post_valuator_remove_leads', array( $this, 'remove_leads' ) );
 
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'meta_box_setup' ), 20 );
@@ -419,8 +420,8 @@ class Valuator {
 	public function enqueue_scripts()
 	{
 
-		wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/style.css' ), array(), '1.0.0' );
-		wp_register_style( 'animate', esc_url( $this->assets_url . 'css/animate.css' ), array(), '1.0.0' );
+		wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/style.css' ), array(), '1.2.0' );
+		wp_register_style( 'animate', esc_url( $this->assets_url . 'css/animate.css' ), array(), '1.2.0' );
 		wp_register_style( 'roboto', 'http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300' );
 		wp_register_style( 'robo-slab', 'http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' );
 		wp_enqueue_style( 'valuator' );
@@ -730,6 +731,24 @@ class Valuator {
 		) );
 
 		echo json_encode( array( 'success' => true ) );
+		die();
+	}
+	
+	public function remove_leads()
+	{
+		global $wpdb;
+		$leads_to_delete = implode(',', $_POST['delete_lead']);
+		
+		// Update the prospect data
+		$wpdb->query( $wpdb->prepare(
+			'DELETE FROM ' . $this->table_name . '
+			 WHERE id IN (%s)',
+			array(
+				$leads_to_delete
+			)
+		) );
+		
+		wp_redirect(  admin_url( 'edit.php?post_type=valuator&page=valuator_leads&deleted=true' ) );
 		die();
 	}
 
