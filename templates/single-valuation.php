@@ -105,9 +105,9 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 				</div>
 
 				<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 well well-sm" id="step-two-well" data-model="stepTwo" style="display:none;">
-					<h4 style="text-align: center;" class="landing-title">We Found a Valuation for Your Home!</h4>
+					<h4 style="text-align: center;" class="landing-title">We've Calculated Your Home's Value!</h4>
 
-					<h3 style="text-align: center;" class="step-two-subtitle">Where can we send you your <strong>FREE</strong>
+					<h3 style="text-align: center;" class="step-two-subtitle">Where can we send your <strong>FREE</strong>
 						report?</h3>
 
 					<div class="row">
@@ -140,7 +140,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<input name="property_id" id="property_id" type="hidden" value="">
 						<input name="action" type="hidden" value="valuator_step_two">
 						<?php wp_nonce_field( 'valuator_step_two', 'valuator_nonce' ); ?>
-						<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get The Free Report!">
+						<input class="btn btn-primary btn-lg btn-block" type="submit" value="Send Me The Report!">
 					</form>
 				</div>
 
@@ -239,7 +239,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
 						<div class="row">
 							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
-								<input class="btn btn-primary btn-lg btn-block" type="submit" value="Get It Now!">
+								<input class="btn btn-primary btn-lg btn-block" type="submit" value="Send Me A Custom Market Report!">
 							</div>
 						</div>
 					</form>
@@ -248,7 +248,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-four-well" style="display:none;">
 					<h4 style="text-align: center;" class="landing-title thank-you">Thank You!</h4>
 
-					<h3 style="text-align: center;font-size: 30px;" class="step-two-subtitle">We're all set.</h3>
+					<h3 style="text-align: center;font-size: 30px;" class="step-two-subtitle">I'll be in touch shortly.</h3>
 				</div>
 			</div>
 		</div>
