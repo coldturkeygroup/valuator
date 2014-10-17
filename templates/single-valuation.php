@@ -145,7 +145,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 				</div>
 
 				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" data-model="stepThree" style="display:none;">
-					<div class="row">
+					<div class="row valuation-result">
 						<div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-2 valuation-value">
 							<h4 class="range">
 								<small class="low"></small>
@@ -164,8 +164,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 							<p>High Estimate</p>
 						</div>
 					</div>
-					<h3 style="text-align: center;" class="step-three-subtitle">Valuation for: <span
-							class="valuation-address"></span></h3>
+					<h3 style="text-align: center;" class="step-three-subtitle">Valuation for: <span class="valuation-address"></span></h3>
 
 					<div class="row">
 						<div class="col-xs-12 col-sm-6 col-sm-offset-3 page-media">

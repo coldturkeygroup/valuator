@@ -46,8 +46,23 @@ class Zillow {
 						'citystatezip' => $address[1]
 					]
 				] );
+				
+				$response = $response->xml();
+				
+				// Check to make sure we have a result
+				if( ! $response->response )
+				{
+					$citystate = explode(', ', $response->request->citystatezip);
+					
+					return [
+						'error' 	 => 'no result',
+						'street'   => (string) $response->request->address,
+						'city'     => (string) $citystate[0],
+						'state'    => (string) $citystate[1]
+					];
+				}
 
-				return $this->formatZestimate( $response->xml() );
+				return $this->formatZestimate( $response );
 			}
 		}
 		catch ( RequestException $e ) {

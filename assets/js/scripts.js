@@ -114,17 +114,27 @@ $('document').ready(function() {
 			$('.single-valuator #page').css('height', 'auto');
 		}, 200);
     
-    // Fill in the valuation data
-    $('.low').text(response.low);
-    $('.estimated-value').text(response.amount);
-    $('.high').text(response.high);
-    $('.valuation-address').text(response.address);
-    $('.page-media').html(response.media);
-    if(typeof response.text != 'undefined'){
-      $('.page-text').html(response.text);
-    } else {
-	    $('.page-text').remove();
+    // Verify that we received a result
+    if(typeof response.error != 'undefined')
+    {
+	    $('.valuation-value').remove();
+	    $('.valuation-result').append('<h4 style="text-align: center;" class="landing-title">Your Home Value Report Will Be Sent Within 48 Hours!</h4>');
     }
+    else
+    {
+	    // Fill in the valuation data
+	    $('.low').text(response.low);
+	    $('.estimated-value').text(response.amount);
+	    $('.high').text(response.high);
+	    $('.valuation-address').text(response.address);
+	    $('.page-media').html(response.media);
+	    if(typeof response.text != 'undefined'){
+	      $('.page-text').html(response.text);
+	    } else {
+		    $('.page-text').remove();
+	    }
+	    $('#zip_code_copy').val( response.zip_code );
+	  }
     
     // Populate the step three form
     $('#first_name_copy').val( $('#first_name').val() );
@@ -134,7 +144,6 @@ $('document').ready(function() {
     $('#address2_copy').val( $('#address_2').val() );
     $('#city_copy').val( response.city );
     $('#state_copy').val( response.state );
-    $('#zip_code_copy').val( response.zip_code );
 	};
 	
 	// Step three form submission

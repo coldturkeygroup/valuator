@@ -653,7 +653,25 @@ class Valuator {
 		if ( strpos( $zestimate['media'], '<img' ) !== false ) {
 			$zestimate['text'] = get_post_meta( $page_id, 'media_text', true );
 		}
-
+		
+		// Verify that the property had a result
+		if ( array_key_exists('error', $zestimate) )
+		{
+			// Update the prospect data
+			$wpdb->query( $wpdb->prepare(
+				'UPDATE ' . $this->table_name . '
+				 SET first_name = %s, last_name = %s, email = %s
+				 WHERE id = \'' . $property_id . '\'',
+				array(
+					$first_name,
+					$last_name,
+					$email
+				)
+			) );
+			
+			return json_encode( $zestimate );
+		}
+		
 		// Create the prospect on FrontDesk
 		$frontdesk_id = $this->frontdesk->createProspect( array(
 			'source'     => $source,
