@@ -209,7 +209,7 @@ class Valuator_Admin {
 		$default_url = $this->home_url . '?post_type=valuations';
 
 		echo '<input id="slug" type="text" name="valuator_slug" value="' . $data . '"/>
-				<label for="slug"><span class="description">' . sprintf( __( 'Provide a custom URL slug for the home valuation pages archive and single home valuation pages. You must re-save your %1$spermalinks%2$s after changing this setting.', 'valuator' ), '<a href="' . esc_attr( 'options-permalink.php' ) . '">', '</a>', '<a href="' . esc_url( $default_url ) . '">' . $default_url . '</a>' ) . '</span></label>';
+				<label for="slug"><span class="description">' . sprintf( __( 'Provide a custom URL slug for the home valuation pages archive and single home valuation pages.', 'valuator' ) ) . '</span></label>';
 	}
 
 	/**
@@ -297,9 +297,12 @@ class Valuator_Admin {
 	public function settings_page()
 	{	
 		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true )
+		{
+			flush_rewrite_rules();
 			echo '<div class="updated">
 	      			<p>Your settings were successfully updated.</p>
 						</div>';
+		}
 		
 		echo '<div class="wrap" id="valuator_settings">
 					<h2>' . __( 'Home Valuator Settings', 'valuator' ) . '</h2>
