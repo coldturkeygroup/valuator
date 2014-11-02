@@ -521,7 +521,7 @@ class Valuator {
 			if ( preg_match( '/(\.jpg|\.png|\.bmp|\.gif)$/', $file ) ) {
 				return '<img src="' . $file . '" style="margin-left:auto;margin-right:auto;margin-bottom:0px;display:block;" class="img-responsive img-thumbnail">';
 			} elseif ( preg_match( '/(youtube|youtu.be|vimeo)/', $file ) ) {
-				$video = $this->prepare_video( $file, true );
+				$video = $this->prepare_video( $file );
 
 				return '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="' . $video . '"></iframe></div>';
 			}
@@ -537,23 +537,13 @@ class Valuator {
 	 * embedded video file.
 	 *
 	 * @param string $url
-	 * @param bool $autoplay
 	 *
 	 * @return string
 	 */
-	public function prepare_video( $url, $autoplay = true )
+	public function prepare_video( $url )
 	{
 		if ( strpos( $url, 'youtube-nocookie.com' ) !== false || strpos( $url, 'player.vimeo.com' ) !== false )
 			return $url;
-
-		if ( $autoplay == false
-			? $v_autoplay = ''
-			: $v_autoplay = '?autoplay=1'
-		) ;
-		if ( $autoplay == false
-			? $autoplay = ''
-			: $autoplay = '&autoplay=1'
-		) ;
 
 		if ( strpos( $url, '&' ) !== false )
 			$url = substr( $url, 0, strpos( $url, "&" ) );
@@ -563,17 +553,17 @@ class Valuator {
 		if ( strpos( $url, 'youtube' ) !== false ) {
 			$video_id = substr( strrchr( $url, '=' ), 1 );
 
-			return '//www.youtube-nocookie.com/embed/' . $video_id . '?rel=0&autohide=1&fs=0&showinfo=0' . $autoplay;
+			return '//www.youtube-nocookie.com/embed/' . $video_id . '?rel=0&autohide=1&fs=0&showinfo=0&autoplay=1';
 		} else if ( strpos( $url, 'youtu.be' ) !== false ) {
 			if ( strpos( $url, '?' ) !== false )
 				$url = substr( $url, 0, strpos( $url, "?" ) );
 			$video_id = substr( strrchr( $url, '/' ), 1 );
 
-			return '//www.youtube-nocookie.com/embed/' . $video_id . '?rel=0&autohide=1&fs=0&showinfo=0' . $autoplay;
+			return '//www.youtube-nocookie.com/embed/' . $video_id . '?rel=0&autohide=1&fs=0&showinfo=0&autoplay=1';
 		} else if ( strpos( $url, 'vimeo' ) !== false ) {
 			$video_id = substr( strrchr( $url, '/' ), 1 );
 
-			return '//player.vimeo.com/video/' . $video_id . $v_autoplay;
+			return '//player.vimeo.com/video/' . $video_id . '?autoplay=1';
 		}
 	}
 
