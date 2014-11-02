@@ -42,6 +42,8 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 }
 
 ?>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
 	<style>
 		#page {
 			background: url(<?php echo $img[0]; ?>) no-repeat scroll center center;
