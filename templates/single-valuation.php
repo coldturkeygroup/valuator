@@ -84,7 +84,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 
 					<h3 style="text-align: center;"><?php echo $content; ?></h3>
 
-					<form id="step-one" data-remote="true", data-remote-on-success="process">
+					<form id="step-one" data-remote="true" data-remote-on-success="process">
 						<div class="row">
 							<div class="col-xs-12 col-sm-10">
 								<div class="form-group">
@@ -116,24 +116,21 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						</div>
 					</div>
 
-					<form id="step-two" data-remote="true", data-remote-on-success="process">
+					<form id="step-two" data-remote="true" data-remote-on-success="process">
 						<div class="row">
 							<div class="col-xs-12 col-sm-6">
 								<div class="form-group">
-									<input class="form-control" required="required" placeholder="Your First Name" name="first_name"
-									       type="text" id="first_name">
+									<input class="form-control" required="required" placeholder="Your First Name" name="first_name" type="text" id="first_name">
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-6">
 								<div class="form-group">
-									<input class="form-control" required="required" placeholder="Your Last Name" name="last_name"
-									       type="text" id="last_name">
+									<input class="form-control" required="required" placeholder="Your Last Name" name="last_name" type="text" id="last_name">
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<input class="form-control" required="required" placeholder="Your Email Address" name="email" type="text"
-							       id="email">
+							<input class="form-control" required="required" placeholder="Your Email Address" name="email" type="text" id="email">
 						</div>
 						<input name="page_id" type="hidden" value="<?php echo $id; ?>">
 						<input name="permalink" type="hidden" value="<?php echo $permalink; ?>">
@@ -176,7 +173,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<div class="col-xs-10 col-xs-offset-1 page-text"></div>
 					</div>
 
-					<form id="step-three" data-remote="true", data-remote-on-success="process">
+					<form id="step-three" data-remote="true" data-remote-on-success="process">
 						<div class="row">
 							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
 								<div class="form-group">
