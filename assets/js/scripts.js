@@ -117,7 +117,7 @@ $('document').ready(function() {
     // Verify that we received a result
     if(typeof response.error != 'undefined')
     {
-	    $('.valuation-value').remove();
+	    $('.valuation-value, .step-three-subtitle').remove();
 	    $('.valuation-result').append('<h4 style="text-align: center;" class="landing-title">Your Home Value Report Will Be Sent Within 48 Hours!</h4>');
     }
     else

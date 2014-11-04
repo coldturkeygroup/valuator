@@ -173,8 +173,7 @@ class Valuator {
 								`phone` varchar(20) DEFAULT NULL,
 								`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 								`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-								PRIMARY KEY (`id`),
-								UNIQUE KEY `users_email_unique` (`email`)
+								PRIMARY KEY (`id`)
 							) $charset_collate;";
 	
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -659,7 +658,8 @@ class Valuator {
 				)
 			) );
 			
-			return json_encode( $zestimate );
+			echo json_encode( $zestimate );
+			die();
 		}
 		
 		// Create the prospect on FrontDesk
@@ -749,11 +749,8 @@ class Valuator {
 		
 		// Update the prospect data
 		$wpdb->query( $wpdb->prepare(
-			'DELETE FROM ' . $this->table_name . '
-			 WHERE id IN (%s)',
-			array(
-				$leads_to_delete
-			)
+			'DELETE FROM `' . $this->table_name . '`
+			 WHERE `id` IN (' . $leads_to_delete . ')'
 		) );
 		
 		wp_redirect(  admin_url( 'edit.php?post_type=valuator&page=valuator_leads&deleted=true' ) );
