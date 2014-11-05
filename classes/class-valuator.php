@@ -37,7 +37,7 @@ class Valuator {
 		$this->zillow        = new Zillow();
 
 		global $wpdb;
-		$this->table_name = $wpdb->prefix . $this->token;
+		$this->table_name = $wpdb->base_prefix . $this->token;
 
 		// Regsiter 'valuator' post type
 		add_action( 'init', array( $this, 'register_post_type' ) );
@@ -148,7 +148,7 @@ class Valuator {
 	public function build_database_table()
 	{
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->token;
+		$table_name = $wpdb->base_prefix . $this->token;
 		
 		if( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) 
 		{
@@ -165,6 +165,7 @@ class Valuator {
 			$sql = "CREATE TABLE `$table_name` (
 								`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 								`frontdesk_id` int(10) unsigned DEFAULT NULL,
+								`blog_id` int(10) unsigned DEFAULT 0,
 								`first_name` varchar(255) DEFAULT NULL,
 								`last_name` varchar(255) DEFAULT NULL,
 								`email` varchar(255) DEFAULT NULL,
@@ -591,15 +592,17 @@ class Valuator {
 	{
 		if ( isset( $_POST['valuator_nonce'] ) && wp_verify_nonce( $_POST['valuator_nonce'], 'valuator_step_one' ) ) {
 			global $wpdb;
+			$blog_id = get_current_blog_id();
 
 			$address = sanitize_text_field( $_POST['address'] );
 			$unit    = sanitize_text_field( $_POST['address_2'] );
 
 			$wpdb->query( $wpdb->prepare(
 				'INSERT INTO ' . $this->table_name . '
-				 ( address, address2, created_at, updated_at )
-				 VALUES ( %s, %s, NOW(), NOW() )',
+				 ( blog_id, address, address2, created_at, updated_at )
+				 VALUES ( %s, %s, %s, NOW(), NOW() )',
 				array(
+					$blog_id,
 					$address,
 					$unit
 				)
@@ -622,6 +625,7 @@ class Valuator {
 	public function process_step_two()
 	{
 		global $wpdb;
+		$blog_id		 = get_current_blog_id();
 		$page_id     = sanitize_text_field( $_POST['page_id'] );
 		$property_id = sanitize_text_field( $_POST['property_id'] );
 		$first_name  = sanitize_text_field( $_POST['first_name'] );
@@ -631,7 +635,7 @@ class Valuator {
 
 		// Get the property data saved from step one
 		$property = $wpdb->get_row( 'SELECT address, address2 FROM ' . $this->table_name . ' WHERE id = \'' . $property_id . '\' ORDER BY id DESC LIMIT 0,1' );
-
+		
 		// Get the Zestimate data
 		$zestimate = $this->zillow->getZestimate( $property->address );
 

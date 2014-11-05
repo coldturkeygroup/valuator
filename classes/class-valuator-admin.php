@@ -327,15 +327,16 @@ class Valuator_Admin {
 	public function leads_page()
 	{
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->token;
+		$blog_id		= get_current_blog_id();
+		$table_name = $wpdb->base_prefix . $this->token;
 		
 		if( isset($_GET['lead_type']) && $_GET['lead_type'] == 'complete' )
 		{
-			$leads = $wpdb->get_results("SELECT DISTINCT * FROM `$table_name` WHERE `phone` is not null ORDER BY `id` DESC");
+			$leads = $wpdb->get_results("SELECT DISTINCT * FROM `$table_name` WHERE `blog_id` = '$blog_id' AND `phone` is not null ORDER BY `id` DESC");
 		}
 		else
 		{
-			$leads = $wpdb->get_results("SELECT DISTINCT * FROM `$table_name` ORDER BY `id` DESC");
+			$leads = $wpdb->get_results("SELECT DISTINCT * FROM `$table_name` WHERE `blog_id` = '$blog_id' ORDER BY `id` DESC");
 		}
 		
 		?>
