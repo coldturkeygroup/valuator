@@ -172,6 +172,7 @@ class Valuator {
 								`address` varchar(255) NOT NULL,
 								`address2` varchar(255) DEFAULT NULL,
 								`phone` varchar(20) DEFAULT NULL,
+								`property_estimate` varchar(20) DEFAULT NULL,
 								`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 								`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 								PRIMARY KEY (`id`)
@@ -653,12 +654,13 @@ class Valuator {
 			// Update the prospect data
 			$wpdb->query( $wpdb->prepare(
 				'UPDATE ' . $this->table_name . '
-				 SET first_name = %s, last_name = %s, email = %s
+				 SET first_name = %s, last_name = %s, email = %s, property_estimate = %s
 				 WHERE id = \'' . $property_id . '\'',
 				array(
 					$first_name,
 					$last_name,
-					$email
+					$email,
+					'No Result'
 				)
 			) );
 			
@@ -693,13 +695,14 @@ class Valuator {
 		// Update the prospect data
 		$wpdb->query( $wpdb->prepare(
 			'UPDATE ' . $this->table_name . '
-			 SET first_name = %s, last_name = %s, email = %s, address = %s
+			 SET first_name = %s, last_name = %s, email = %s, address = %s, property_estimate = %s
 			 WHERE id = \'' . $property_id . '\'',
 			array(
 				$first_name,
 				$last_name,
 				$email,
-				(string) $zestimate['address']
+				(string) $zestimate['address'],
+				(string) $zestimate['amount']
 			)
 		) );
 

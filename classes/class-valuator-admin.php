@@ -367,6 +367,7 @@ class Valuator_Admin {
 		        	<th scope="col" class="manage-column entry_nowrap">Address</th>
 		        	<th scope="col" class="manage-column entry_nowrap" style="width: 4em;">Unit #</th>
 		        	<th scope="col" class="manage-column entry_nowrap">Phone</th>
+		        	<th scope="col" class="manage-column entry_nowrap">Estimated Value</th>
 		        	<th scope="col" class="manage-column entry_nowrap">Submitted</th>
 	        	</tr>	
 	      	</thead>
@@ -391,6 +392,7 @@ class Valuator_Admin {
 				      					<td class="entry_nowrap">'.$lead->address.'</td>
 				      					<td class="entry_nowrap">'.$lead->address2.'</td>
 				      					<td class="entry_nowrap">'.$lead->phone.'</td>
+				      					<td class="entry_nowrap">'.$lead->property_estimate.'</td>
 				      					<td class="entry_nowrap">'.date("M j Y, h:i:a", strtotime($lead->created_at)).'</td>
 				      				</tr>';
 			      	}
@@ -404,6 +406,7 @@ class Valuator_Admin {
 		        	<th scope="col" class="manage-column entry_nowrap">Address</th>
 		        	<th scope="col" class="manage-column entry_nowrap">Unit #</th>
 		        	<th scope="col" class="manage-column entry_nowrap">Phone</th>
+		        	<th scope="col" class="manage-column entry_nowrap">Estimated Value</th>
 		        	<th scope="col" class="manage-column entry_nowrap">Submitted</th>
 	        	</tr>	
 	      	</tfoot>
