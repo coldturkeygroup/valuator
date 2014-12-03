@@ -177,58 +177,9 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 
 					<form id="step-three" data-remote="true" data-remote-on-success="process">
 						<div class="row">
-							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+							<div class="col-xs-8 col-xs-offset-2">
 								<div class="form-group">
-									<input class="form-control" readonly="readonly" name="first_name" type="text" id="first_name_copy">
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-5">
-								<div class="form-group">
-									<input class="form-control" readonly="readonly" name="last_name" type="text" id="last_name_copy">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
-								<div class="form-group">
-									<input class="form-control" readonly="readonly" name="address" type="text" id="address_copy">
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-5">
-								<div class="form-group">
-									<input class="form-control" readonly="readonly" placeholder="Unit #" name="address2" type="text"
-									       id="address2_copy">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
-								<div class="form-group">
-									<input class="form-control disabled" readonly="readonly" name="city" type="text" id="city_copy">
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-2">
-								<div class="form-group">
-									<input class="form-control disabled" readonly="readonly" name="state" type="text" id="state_copy">
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-3">
-								<div class="form-group">
-									<input class="form-control disabled" readonly="readonly" name="zip_code" type="text"
-									       id="zip_code_copy">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-5 col-sm-offset-1">
-								<div class="form-group">
-									<input class="form-control" required="required" placeholder="Your Phone Number" name="phone"
-									       type="text" id="phone">
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-5">
-								<div class="form-group">
-									<input class="form-control disabled" readonly="readonly" name="email" type="text" id="email_copy">
+									<input class="form-control" required="required" placeholder="Your Phone Number" name="phone" type="text" id="phone">
 								</div>
 							</div>
 						</div>
@@ -236,7 +187,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<input name="property_id" id="property_id_complete" type="hidden" value="">
 						<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
 						<div class="row">
-							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+							<div style="margin-bottom:100px" class="col-xs-8 col-xs-offset-2">
 								<input class="btn btn-primary btn-lg btn-block" type="submit" value="Send Me A Custom Market Report!">
 							</div>
 						</div>
