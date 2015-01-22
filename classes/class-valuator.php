@@ -62,9 +62,9 @@ class Valuator {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ), 10 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10 );
 			add_filter( 'manage_edit-' . $this->token . '_columns', array(
-					$this,
-					'register_custom_column_headings'
-				), 10, 1 );
+				$this,
+				'register_custom_column_headings'
+			), 10, 1 );
 			add_action( 'manage_posts_custom_column', array( $this, 'register_custom_columns' ), 10, 2 );
 			// Create FrontDesk Campaigns for pages
 			add_action( 'publish_valuator', array( $this, 'create_frontdesk_campaign' ) );
@@ -149,19 +149,18 @@ class Valuator {
 	{
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . $this->token;
-		
-		if( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) 
-		{
+
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
 			$charset_collate = '';
-	
+
 			if ( ! empty( $wpdb->charset ) ) {
 				$charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
 			}
-	
+
 			if ( ! empty( $wpdb->collate ) ) {
 				$charset_collate .= " COLLATE {$wpdb->collate}";
 			}
-	
+
 			$sql = "CREATE TABLE `$table_name` (
 								`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 								`frontdesk_id` int(10) unsigned DEFAULT NULL,
@@ -177,7 +176,7 @@ class Valuator {
 								`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 								PRIMARY KEY (`id`)
 							) $charset_collate;";
-	
+
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
 		}
@@ -345,6 +344,8 @@ class Valuator {
 	 * the custom fields for our Valuator post type.
 	 *
 	 * @param integer $post_id
+	 *
+	 * @return int
 	 */
 	public function meta_box_save( $post_id )
 	{
@@ -453,8 +454,16 @@ class Valuator {
 	{
 		$fields = array();
 
+		$fields['legal_broker'] = array(
+			'name'        => __( 'Your Legal Broker', 'valuator' ),
+			'description' => __( 'This will be displayed on the bottom of each page.', 'valuator' ),
+			'type'        => 'text',
+			'default'     => '',
+			'section'     => 'info'
+		);
+
 		$fields['media_file'] = array(
-			'name'        => __( 'Media file:', 'valuator' ),
+			'name'        => __( 'Media File', 'valuator' ),
 			'description' => __( 'If using an image on the final opt-in page, upload it here. If using a YouTube video (recommended), paste the link to the video here instead.', 'valuator' ),
 			'type'        => 'url',
 			'default'     => '',
@@ -462,7 +471,7 @@ class Valuator {
 		);
 
 		$fields['media_text'] = array(
-			'name'        => __( 'Opt-In Text:', 'valuator' ),
+			'name'        => __( 'Opt-In Text', 'valuator' ),
 			'description' => __( 'If using an image on the final opt-in page, enter the block of text that will be displayed under it. If using a video, no text will be displayed.', 'valuator' ),
 			'type'        => 'text',
 			'default'     => '',
@@ -626,7 +635,7 @@ class Valuator {
 	public function process_step_two()
 	{
 		global $wpdb;
-		$blog_id		 = get_current_blog_id();
+		$blog_id     = get_current_blog_id();
 		$page_id     = sanitize_text_field( $_POST['page_id'] );
 		$property_id = sanitize_text_field( $_POST['property_id'] );
 		$first_name  = sanitize_text_field( $_POST['first_name'] );
@@ -636,7 +645,7 @@ class Valuator {
 
 		// Get the property data saved from step one
 		$property = $wpdb->get_row( 'SELECT address, address2 FROM ' . $this->table_name . ' WHERE id = \'' . $property_id . '\' ORDER BY id DESC LIMIT 0,1' );
-		
+
 		// Get the Zestimate data
 		$zestimate = $this->zillow->getZestimate( $property->address );
 
@@ -647,10 +656,9 @@ class Valuator {
 		if ( strpos( $zestimate['media'], '<img' ) !== false ) {
 			$zestimate['text'] = get_post_meta( $page_id, 'media_text', true );
 		}
-		
+
 		// Verify that the property had a result
-		if ( array_key_exists('error', $zestimate) )
-		{
+		if ( array_key_exists( 'error', $zestimate ) ) {
 			// Update the prospect data
 			$wpdb->query( $wpdb->prepare(
 				'UPDATE ' . $this->table_name . '
@@ -663,11 +671,11 @@ class Valuator {
 					'No Result'
 				)
 			) );
-			
+
 			echo json_encode( $zestimate );
 			die();
 		}
-		
+
 		// Create the prospect on FrontDesk
 		$frontdesk_id = $this->frontdesk->createProspect( array(
 			'source'     => $source,
@@ -748,19 +756,19 @@ class Valuator {
 		echo json_encode( array( 'success' => true ) );
 		die();
 	}
-	
+
 	public function remove_leads()
 	{
 		global $wpdb;
-		$leads_to_delete = implode(',', $_POST['delete_lead']);
-		
+		$leads_to_delete = implode( ',', $_POST['delete_lead'] );
+
 		// Update the prospect data
 		$wpdb->query( $wpdb->prepare(
 			'DELETE FROM `' . $this->table_name . '`
 			 WHERE `id` IN (' . $leads_to_delete . ')'
 		) );
-		
-		wp_redirect(  admin_url( 'edit.php?post_type=valuator&page=valuator_leads&deleted=true' ) );
+
+		wp_redirect( admin_url( 'edit.php?post_type=valuator&page=valuator_leads&deleted=true' ) );
 		die();
 	}
 

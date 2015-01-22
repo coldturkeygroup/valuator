@@ -140,6 +140,15 @@ html {
 		color: #fff;
 		font-size: 17px;
 		margin-bottom: 15px; }
+	.valuation-page .footer {
+		text-align: center;
+		color: #fff;
+		position: absolute;
+		bottom: 20px;
+		width: 100%;
+		font-weight: 300;
+		font-size: 12px;
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8); }
 
 #map_canvas {
 	margin-top: 5px;

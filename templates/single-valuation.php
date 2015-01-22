@@ -16,12 +16,13 @@ $id        = get_the_ID();
 $title     = get_the_title();
 $permalink = get_permalink();
 $content   = wp_strip_all_tags( apply_filters( 'the_content', get_the_content() ) );
+$broker    = get_post_meta( $id, 'legal_broker', true );
+$phone     = of_get_option( 'phone_number' );
+$img       = '';
 
 // Get the background image
-if ( has_post_thumbnail( $id )
-	? $img = wp_get_attachment_image_src( get_post_thumbnail_id( $id ), 'full' )
-	: $img = ''
-) ;
+if ( has_post_thumbnail( $id ) )
+	$img = wp_get_attachment_image_src( get_post_thumbnail_id( $id ), 'full' );
 
 // Get the page colors
 $color_setting = get_post_meta( $id, 'primary_color', true );
@@ -42,8 +43,8 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 }
 
 ?>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 	<style>
 		#page {
 			background: url(<?php echo $img[0]; ?>) no-repeat scroll center center;
@@ -163,7 +164,8 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 							<p>High Estimate</p>
 						</div>
 					</div>
-					<h3 style="text-align: center;" class="step-three-subtitle">Valuation for: <span class="valuation-address"></span></h3>
+					<h3 style="text-align: center;" class="step-three-subtitle">Valuation for:
+						<span class="valuation-address"></span></h3>
 
 					<div class="row">
 						<div class="col-xs-12 col-sm-6 col-sm-offset-3 page-media">
@@ -201,6 +203,11 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 				</div>
 			</div>
 		</div>
+
+		<div class="footer"><?php echo $broker;
+			if ( $phone != null ) {
+				echo ' &middot; ' . $phone;
+			} ?></div>
 	</div>
 
 <?php get_footer(); ?>
