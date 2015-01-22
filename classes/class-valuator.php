@@ -321,6 +321,11 @@ class Valuator {
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><textarea style="width:100%" name="' . esc_attr( $k ) . '" id="media_text" rows="' . $rows . '">' . esc_textarea( $data ) . '</textarea>' . "\n";
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
+				} elseif ( $k == 'legal_broker' ) {
+					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td>';
+					$html .= '<input style="width:100%" name="' . esc_attr( $k ) . '" id="legal_broker"  type="text" value="' . esc_attr( $data ) . '" />';
+					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
+					$html .= '</td><tr/>' . "\n";
 				} else {
 					$default_color = '';
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td>';
