@@ -66,6 +66,7 @@ class Valuator {
 				'register_custom_column_headings'
 			), 10, 1 );
 			add_action( 'manage_posts_custom_column', array( $this, 'register_custom_columns' ), 10, 2 );
+			add_filter( 'enter_title_here', array( $this, 'change_default_title' ) );
 			// Create FrontDesk Campaigns for pages
 			add_action( 'publish_valuator', array( $this, 'create_frontdesk_campaign' ) );
 		}
@@ -762,6 +763,29 @@ class Valuator {
 		die();
 	}
 
+	/**
+	 * Change the post title placeholder text
+	 * for the custom post editor.
+	 *
+	 * @param $title
+	 *
+	 * @return string
+	 */
+	public function change_default_title( $title )
+	{
+		$screen = get_current_screen();
+
+		if ( 'buyer_quiz' == $screen->post_type ) {
+			$title = 'Enter a Title For Your Home Valuation Page';
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Remove the specified leads from the
+	 * leads table and the database.
+	 */
 	public function remove_leads()
 	{
 		global $wpdb;
