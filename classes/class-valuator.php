@@ -775,7 +775,7 @@ class Valuator {
 	{
 		$screen = get_current_screen();
 
-		if ( 'buyer_quiz' == $screen->post_type ) {
+		if ( 'valuator' == $screen->post_type ) {
 			$title = 'Enter a Title For Your Home Valuation Page';
 		}
 
