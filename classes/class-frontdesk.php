@@ -142,7 +142,7 @@ class FrontDesk {
 	{
 		remove_filter( 'redirect_post_location', array( $this, 'add_success_var' ), 99 );
 
-		return add_query_arg( array( 'frontdesk_success' => true ), $location );
+		return add_query_arg( array( 'valuator_frontdesk_success' => true ), $location );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class FrontDesk {
 	{
 		remove_filter( 'redirect_post_location', array( $this, 'add_error_var' ), 99 );
 
-		return add_query_arg( array( 'frontdesk_error' => true ), $location );
+		return add_query_arg( array( 'valuator_frontdesk_error' => true ), $location );
 	}
 
 	/**
@@ -168,14 +168,14 @@ class FrontDesk {
 	 */
 	public function adminNotices()
 	{
-		if ( isset( $_GET['frontdesk_error'] ) )
+		if ( isset( $_GET['valuator_frontdesk_error'] ) )
 			echo '<div class="error">
 	      			<p>A Campaign with this URL already exists. No new FrontDesk Campaign has been created.</p>
 						</div>';
 
-		if ( isset( $_GET['frontdesk_success'] ) )
+		if ( isset( $_GET['valuator_frontdesk_success'] ) )
 			echo '<div class="updated">
-	      			<p>A Campaign for this page has been successfully setup on FrontDesk!</p>
+	      			<p>A Campaign for this Home Valuation has been successfully setup on FrontDesk!</p>
 						</div>';
 	}
 

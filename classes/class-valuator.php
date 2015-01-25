@@ -2,10 +2,10 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
-require_once( 'class-frontdesk.php' );
-require_once( 'class-zillow.php' );
+// Composer autoloader
+require_once VALUATOR_PLUGIN_PATH . 'assets/vendor/autoload.php';
 
-use ColdTurkey\Valuator\FrontDesk;
+use ColdTurkey\Valuator\FrontDesk as FrontDesk_Valuator;
 use ColdTurkey\Valuator\Zillow;
 
 class Valuator {
@@ -33,7 +33,7 @@ class Valuator {
 		$this->template_path = trailingslashit( $this->dir ) . 'templates/';
 		$this->home_url      = trailingslashit( home_url() );
 		$this->token         = 'valuator';
-		$this->frontdesk     = new FrontDesk();
+		$this->frontdesk     = new FrontDesk_Valuator();
 		$this->zillow        = new Zillow();
 
 		global $wpdb;
@@ -588,9 +588,14 @@ class Valuator {
 	 * for a defined Valuator created page.
 	 *
 	 * @param integer $post_ID
+	 *
+	 * @return bool
 	 */
 	public function create_frontdesk_campaign( $post_ID )
 	{
+		if ( get_post_type( $post_ID ) != 'valuator' )
+			return false;
+		
 		$title     = get_the_title( $post_ID );
 		$permalink = get_permalink( $post_ID );
 
