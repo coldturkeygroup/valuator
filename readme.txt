@@ -1,9 +1,9 @@
-=== Seriously Simple Podcasting ===
+=== Platform Home Valuator ===
 Contributors: Aaron Huisinga
 Tags: zillow, real estate, valuation, home valuation
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 1.5.1
+Tested up to: 4.1
+Stable tag: 1.6
 
 Simple real estate lead generation through home valuation landing pages powered by Zillow.
 
@@ -22,4 +22,3 @@ Installing "Valuator" can be done either by searching for "Valuator" via the "Pl
 1. Download the plugin via WordPress.org
 1. Upload the ZIP file through the 'Plugins > Add New > Upload' screen in your WordPress dashboard
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Customise the plugin from the 'Podcast > Settings' page

@@ -135,6 +135,41 @@ $('document').ready(function() {
 	    }
 	    $('#zip_code_copy').val( response.zip_code );
 	  }
+	  
+	  // Facebook events
+	  var retargeting = $('#retargeting').val(),
+        conversion = $('#conversion').val();
+    if (retargeting != '') {
+      (function () {
+        var _fbq = window._fbq || (window._fbq = []);
+        if (!_fbq.loaded) {
+          var fbds = document.createElement('script');
+          fbds.async = true;
+          fbds.src = '//connect.facebook.net/en_US/fbds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(fbds, s);
+          _fbq.loaded = true;
+        }
+        _fbq.push(['addPixelId', retargeting]);
+      })();
+      window._fbq = window._fbq || [];
+      window._fbq.push(['track', 'PixelInitialized', {}]);
+    }
+    if (conversion != '') {
+      (function () {
+        var _fbq = window._fbq || (window._fbq = []);
+        if (!_fbq.loaded) {
+          var fbds = document.createElement('script');
+          fbds.async = true;
+          fbds.src = '//connect.facebook.net/en_US/fbds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(fbds, s);
+          _fbq.loaded = true;
+        }
+      })();
+      window._fbq = window._fbq || [];
+      window._fbq.push(['track', conversion, {'value': '0.00', 'currency': 'USD'}]);
+    }
     
     // Populate the step three form
     $('#first_name_copy').val( $('#first_name').val() );

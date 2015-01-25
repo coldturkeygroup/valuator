@@ -12,13 +12,15 @@ global $valuator, $wp_query;
 
 get_header();
 the_post();
-$id        = get_the_ID();
-$title     = get_the_title();
-$permalink = get_permalink();
-$content   = wp_strip_all_tags( apply_filters( 'the_content', get_the_content() ) );
-$broker    = get_post_meta( $id, 'legal_broker', true );
-$phone     = of_get_option( 'phone_number' );
-$img       = '';
+$id        	 = get_the_ID();
+$title     	 = get_the_title();
+$permalink 	 = get_permalink();
+$content   	 = wp_strip_all_tags( apply_filters( 'the_content', get_the_content() ) );
+$broker    	 = get_post_meta( $id, 'legal_broker', true );
+$retargeting = get_post_meta( $id, 'retargeting', true );
+$conversion  = get_post_meta( $id, 'conversion', true );
+$phone     	 = of_get_option( 'phone_number' );
+$img       	 = '';
 
 // Get the background image
 if ( has_post_thumbnail( $id ) )
@@ -203,6 +205,16 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 				</div>
 			</div>
 		</div>
+		
+		<?php
+		if ( $retargeting != null ) {
+			echo '<input type="hidden" id="retargeting" value="' . $retargeting . '">';
+		}
+
+		if ( $conversion != null ) {
+			echo '<input type="hidden" id="conversion" value="' . $conversion . '">';
+		}
+		?>
 
 		<div class="footer"><?php echo $broker;
 			if ( $phone != null ) {

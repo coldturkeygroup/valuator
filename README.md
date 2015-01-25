@@ -1,4 +1,4 @@
-# WordPress Homes Valuator
+# WordPress Home Valuator
 
 ## Introduction
 

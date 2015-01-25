@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 // Composer autoloader
 require_once VALUATOR_PLUGIN_PATH . 'assets/vendor/autoload.php';
 
-use ColdTurkey\Valuator\FrontDesk as FrontDesk_Valuator;
+use ColdTurkey\Valuator\FrontDesk;
 use ColdTurkey\Valuator\Zillow;
 
 class Valuator {
@@ -33,7 +33,7 @@ class Valuator {
 		$this->template_path = trailingslashit( $this->dir ) . 'templates/';
 		$this->home_url      = trailingslashit( home_url() );
 		$this->token         = 'valuator';
-		$this->frontdesk     = new FrontDesk_Valuator();
+		$this->frontdesk     = new FrontDesk();
 		$this->zillow        = new Zillow();
 
 		global $wpdb;
@@ -322,9 +322,9 @@ class Valuator {
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><textarea style="width:100%" name="' . esc_attr( $k ) . '" id="media_text" rows="' . $rows . '">' . esc_textarea( $data ) . '</textarea>' . "\n";
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
-				} elseif ( $k == 'legal_broker' ) {
+				} elseif ( $k == 'legal_broker' || $k == 'retargeting' || $k == 'conversion' ) {
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td>';
-					$html .= '<input style="width:100%" name="' . esc_attr( $k ) . '" id="legal_broker"  type="text" value="' . esc_attr( $data ) . '" />';
+					$html .= '<input style="width:100%" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '"  type="text" value="' . esc_attr( $data ) . '" />';
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
 				} else {
@@ -468,6 +468,22 @@ class Valuator {
 			'section'     => 'info'
 		);
 
+		$fields['retargeting'] = array(
+			'name'        => __( 'Retargeting (optional)', 'valuator' ),
+			'description' => __( 'Facebook retargeting pixel to help track performance of your ad (optional).', 'valuator' ),
+			'type'        => 'text',
+			'default'     => '',
+			'section'     => 'info'
+		);
+
+		$fields['conversion'] = array(
+			'name'        => __( 'Conversion Tracking (optional)', 'valuator' ),
+			'description' => __( 'Facebook conversion tracking pixel to help track performance of your ad (optional).', 'valuator' ),
+			'type'        => 'text',
+			'default'     => '',
+			'section'     => 'info'
+		);
+
 		$fields['media_file'] = array(
 			'name'        => __( 'Media File', 'valuator' ),
 			'description' => __( 'If using an image on the final opt-in page, upload it here. If using a YouTube video (recommended), paste the link to the video here instead.', 'valuator' ),
@@ -595,7 +611,7 @@ class Valuator {
 	{
 		if ( get_post_type( $post_ID ) != 'valuator' )
 			return false;
-		
+
 		$title     = get_the_title( $post_ID );
 		$permalink = get_permalink( $post_ID );
 
