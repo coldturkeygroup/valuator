@@ -39,7 +39,7 @@ class Valuator {
 		global $wpdb;
 		$this->table_name = $wpdb->base_prefix . $this->token;
 
-		// Regsiter 'valuator' post type
+		// Register 'valuator' post type
 		add_action( 'init', array( $this, 'register_post_type' ) );
 
 		// Use built-in templates for landing pages
@@ -307,7 +307,8 @@ class Valuator {
 			$html .= '<input id="valuator_post_id" type="hidden" value="' . $post_id . '" />';
 
 			foreach ( $field_data as $k => $v ) {
-				$data = $v['default'];
+				$data        = $v['default'];
+				$placeholder = $v['placeholder'];
 				if ( isset( $fields[ $k ] ) && isset( $fields[ $k ][0] ) ) {
 					$data = $fields[ $k ][0];
 				}
@@ -322,9 +323,9 @@ class Valuator {
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><textarea style="width:100%" name="' . esc_attr( $k ) . '" id="media_text" rows="' . $rows . '">' . esc_textarea( $data ) . '</textarea>' . "\n";
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
-				} elseif ( $k == 'legal_broker' || $k == 'retargeting' || $k == 'conversion' ) {
+				} elseif ( $k == 'legal_broker' || $k == 'retargeting' || $k == 'conversion' || $k == 'offer' || $k == 'call_to_action' ) {
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td>';
-					$html .= '<input style="width:100%" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '"  type="text" value="' . esc_attr( $data ) . '" />';
+					$html .= '<input style="width:100%" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '" placeholder="' . esc_attr( $placeholder ) . '"  type="text" value="' . esc_attr( $data ) . '" />';
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
 				} else {
@@ -463,6 +464,25 @@ class Valuator {
 		$fields['legal_broker'] = array(
 			'name'        => __( 'Your Legal Broker', 'valuator' ),
 			'description' => __( 'This will be displayed on the bottom of each page.', 'valuator' ),
+			'placeholder' => '',
+			'type'        => 'text',
+			'default'     => '',
+			'section'     => 'info'
+		);
+
+		$fields['offer'] = array(
+			'name'        => __( 'Offer', 'valuator' ),
+			'description' => __( 'The offer for users to incentivize them to give you their contact information upon completion of the home valuation.', 'valuator' ),
+			'placeholder' => __( 'Ex: Awesome. Just tell me where to mail your free report!', 'valuator' ),
+			'type'        => 'text',
+			'default'     => '',
+			'section'     => 'info'
+		);
+
+		$fields['call_to_action'] = array(
+			'name'        => __( 'Call To Action', 'valuator' ),
+			'description' => __( 'The call to action for users after they have received their home\'s value.', 'valuator' ),
+			'placeholder' => __( 'Ex: Yes, Send Me The Free Report!', 'valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
@@ -471,6 +491,7 @@ class Valuator {
 		$fields['retargeting'] = array(
 			'name'        => __( 'Retargeting (optional)', 'valuator' ),
 			'description' => __( 'Facebook retargeting pixel to help track performance of your ad (optional).', 'valuator' ),
+			'placeholder' => __( 'Ex: 4123423454', 'valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
@@ -479,6 +500,7 @@ class Valuator {
 		$fields['conversion'] = array(
 			'name'        => __( 'Conversion Tracking (optional)', 'valuator' ),
 			'description' => __( 'Facebook conversion tracking pixel to help track performance of your ad (optional).', 'valuator' ),
+			'placeholder' => __( 'Ex: 170432123454', 'valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
@@ -495,6 +517,7 @@ class Valuator {
 		$fields['media_text'] = array(
 			'name'        => __( 'Opt-In Text', 'valuator' ),
 			'description' => __( 'If using an image on the final opt-in page, enter the block of text that will be displayed under it. If using a video, no text will be displayed.', 'valuator' ),
+			'placeholder' => '',
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
@@ -503,6 +526,7 @@ class Valuator {
 		$fields['primary_color'] = array(
 			'name'        => __( 'Primary Color', 'valuator' ),
 			'description' => __( 'Change the primary color of the valuation page.', 'valuator' ),
+			'placeholder' => '',
 			'type'        => 'color',
 			'default'     => '',
 			'section'     => 'info'
@@ -511,6 +535,7 @@ class Valuator {
 		$fields['hover_color'] = array(
 			'name'        => __( 'Hover Color', 'valuator' ),
 			'description' => __( 'Change the button hover color of the valuation page.', 'valuator' ),
+			'placeholder' => '',
 			'type'        => 'color',
 			'default'     => '',
 			'section'     => 'info'

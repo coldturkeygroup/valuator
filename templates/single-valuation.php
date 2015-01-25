@@ -12,15 +12,17 @@ global $valuator, $wp_query;
 
 get_header();
 the_post();
-$id        	 = get_the_ID();
-$title     	 = get_the_title();
-$permalink 	 = get_permalink();
-$content   	 = wp_strip_all_tags( apply_filters( 'the_content', get_the_content() ) );
-$broker    	 = get_post_meta( $id, 'legal_broker', true );
-$retargeting = get_post_meta( $id, 'retargeting', true );
-$conversion  = get_post_meta( $id, 'conversion', true );
-$phone     	 = of_get_option( 'phone_number' );
-$img       	 = '';
+$id             = get_the_ID();
+$title          = get_the_title();
+$permalink      = get_permalink();
+$content        = wp_strip_all_tags( apply_filters( 'the_content', get_the_content() ) );
+$broker         = get_post_meta( $id, 'legal_broker', true );
+$retargeting    = get_post_meta( $id, 'retargeting', true );
+$conversion     = get_post_meta( $id, 'conversion', true );
+$offer          = get_post_meta( $id, 'offer', true );
+$call_to_action = get_post_meta( $id, 'call_to_action', true );
+$phone          = of_get_option( 'phone_number' );
+$img            = '';
 
 // Get the background image
 if ( has_post_thumbnail( $id ) )
@@ -146,7 +148,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 					</form>
 				</div>
 
-				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" data-model="stepThree" style="display:none;">
+				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-three-well" style="display:none;">
 					<div class="row valuation-result">
 						<div class="col-xs-12 col-sm-4 col-md-2 col-md-offset-2 valuation-value">
 							<h4 class="range">
@@ -166,7 +168,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 							<p>High Estimate</p>
 						</div>
 					</div>
-					<h3 style="text-align: center;" class="step-three-subtitle">Valuation for:
+					<h3 style="text-align: center;margin-bottom: 30px;margin-top: 20px;" class="step-three-subtitle">Valuation for:
 						<span class="valuation-address"></span></h3>
 
 					<div class="row">
@@ -179,23 +181,11 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<div class="col-xs-10 col-xs-offset-1 page-text"></div>
 					</div>
 
-					<form id="step-three" data-remote="true" data-remote-on-success="process">
-						<div class="row">
-							<div class="col-xs-8 col-xs-offset-2">
-								<div class="form-group">
-									<input class="form-control" required="required" placeholder="Your Phone Number" name="phone" type="text" id="phone">
-								</div>
-							</div>
+					<div class="row">
+						<div style="margin-bottom:100px" class="col-xs-8 col-xs-offset-2">
+							<button class="btn btn-primary btn-lg btn-offer" id="get-offer"><?php echo $call_to_action; ?></button>
 						</div>
-						<input name="action" type="hidden" value="valuator_step_three">
-						<input name="property_id" id="property_id_complete" type="hidden" value="">
-						<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
-						<div class="row">
-							<div style="margin-bottom:100px" class="col-xs-8 col-xs-offset-2">
-								<input class="btn btn-primary btn-lg btn-block" type="submit" value="Send Me A Custom Market Report!">
-							</div>
-						</div>
-					</form>
+					</div>
 				</div>
 
 				<div class="col-xs-10 col-xs-offset-1 well well-sm" id="step-four-well" style="display:none;">
@@ -205,7 +195,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 				</div>
 			</div>
 		</div>
-		
+
 		<?php
 		if ( $retargeting != null ) {
 			echo '<input type="hidden" id="retargeting" value="' . $retargeting . '">';
@@ -216,10 +206,122 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 		}
 		?>
 
-		<div class="footer"><?php echo $broker;
+		<div class="footer">
+			<?php echo $broker;
 			if ( $phone != null ) {
 				echo ' &middot; ' . $phone;
-			} ?></div>
+			}
+			?>
+		</div>
+
+		<div class="modal fade" id="valuator-offer" tabindex="-1" role="dialog" aria-labelledby="valuator-label" aria-hidden="true" data-model="stepThree">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<h3 style="color: #333;font-size: 20px;"><?php echo $offer; ?></h3>
+
+						<form id="step-three" data-remote="true" data-remote-on-success="process">
+							<div class="form-group">
+								<label for="first_name_3" class="control-label sr-only">First Name</label>
+								<input type="text" name="first_name_3" id="first_name_3" class="form-control disabled" disabled="disabled" placeholder="First Name">
+							</div>
+							<div class="form-group">
+								<label for="last_name_3" class="control-label sr-only">Last Name</label>
+								<input type="text" name="last_name_3" id="last_name_3" class="form-control disabled" disabled="disabled" required="required" placeholder="Last Name">
+							</div>
+							<div class="form-group">
+								<label for="address" class="control-label sr-only">Address</label>
+								<input type="text" name="address" id="address" class="form-control" required="required" placeholder="Address">
+							</div>
+							<div class="form-group">
+								<label for="address_2" class="control-label sr-only">Address Line 2</label>
+								<input type="text" name="address_2" id="address_2" class="form-control" placeholder="Address Line 2">
+							</div>
+							<div class="form-group">
+								<label for="city" class="control-label sr-only">City</label>
+								<input type="text" name="city" id="city" class="form-control" required="required" placeholder="City">
+							</div>
+							<div class="form-group">
+								<label for="state" class="control-label sr-only">State</label>
+								<select name="state" id="state" class="form-control" required="required">
+									<option value="">Please select your state...</option>
+									<option value="AL">Alabama</option>
+									<option value="AK">Alaska</option>
+									<option value="AZ">Arizona</option>
+									<option value="AR">Arkansas</option>
+									<option value="CA">California</option>
+									<option value="CO">Colorado</option>
+									<option value="CT">Connecticut</option>
+									<option value="DE">Delaware</option>
+									<option value="DC">District Of Columbia</option>
+									<option value="FL">Florida</option>
+									<option value="GA">Georgia</option>
+									<option value="HI">Hawaii</option>
+									<option value="ID">Idaho</option>
+									<option value="IL">Illinois</option>
+									<option value="IN">Indiana</option>
+									<option value="IA">Iowa</option>
+									<option value="KS">Kansas</option>
+									<option value="KY">Kentucky</option>
+									<option value="LA">Louisiana</option>
+									<option value="ME">Maine</option>
+									<option value="MD">Maryland</option>
+									<option value="MA">Massachusetts</option>
+									<option value="MI">Michigan</option>
+									<option value="MN">Minnesota</option>
+									<option value="MS">Mississippi</option>
+									<option value="MO">Missouri</option>
+									<option value="MT">Montana</option>
+									<option value="NE">Nebraska</option>
+									<option value="NV">Nevada</option>
+									<option value="NH">New Hampshire</option>
+									<option value="NJ">New Jersey</option>
+									<option value="NM">New Mexico</option>
+									<option value="NY">New York</option>
+									<option value="NC">North Carolina</option>
+									<option value="ND">North Dakota</option>
+									<option value="OH">Ohio</option>
+									<option value="OK">Oklahoma</option>
+									<option value="OR">Oregon</option>
+									<option value="PA">Pennsylvania</option>
+									<option value="RI">Rhode Island</option>
+									<option value="SC">South Carolina</option>
+									<option value="SD">South Dakota</option>
+									<option value="TN">Tennessee</option>
+									<option value="TX">Texas</option>
+									<option value="UT">Utah</option>
+									<option value="VT">Vermont</option>
+									<option value="VA">Virginia</option>
+									<option value="WA">Washington</option>
+									<option value="WV">West Virginia</option>
+									<option value="WI">Wisconsin</option>
+									<option value="WY">Wyoming</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="zip_code" class="control-label sr-only">ZIP Code</label>
+								<input type="text" name="zip_code" id="zip_code" class="form-control" required="required" placeholder="ZIP Code">
+							</div>
+							<div class="form-group">
+								<label for="email_3" class="control-label sr-only">Email Address</label>
+								<input type="text" name="email_3" id="email_3" class="form-control disabled" disabled="disabled" placeholder="Email Address">
+							</div>
+							<div class="form-group">
+								<label for="phone" class="control-label sr-only">Phone Number</label>
+								<input type="text" name="phone" id="phone" class="form-control" required="required" placeholder="Phone Number">
+							</div>
+
+							<input name="action" type="hidden" value="valuator_step_three">
+							<input name="property_id" id="property_id_complete" type="hidden" value="">
+							<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
+
+							<input type="submit" class="btn btn-primary btn-lg btn-offer" value="<?php echo $call_to_action; ?>">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 
 <?php get_footer(); ?>

@@ -1,5 +1,5 @@
 html { 
-	margin-top: 0px !important;
+	margin-top: 0 !important;
 	height: 100% !important; }
 
 .single-valuator {
@@ -15,7 +15,7 @@ html {
 
 .valuation-page {
 	background-color: rgba(0,0,0,0.6);
-	margin-top: 0px !important;
+	margin-top: 0 !important;
 	padding-top: 7%;
 	height: 100%;
 	overflow-x: hidden !important; }
@@ -27,7 +27,7 @@ html {
 	.valuation-page .well {
 		background: rgba(31, 51, 64, 0);
 		padding: 30px;
-		border: 0px;
+		border: 0;
 		border-radius: 9px;
 		-moz-border-radius: 9px;
 		-webkit-border-radius: 9px; }
@@ -40,7 +40,7 @@ html {
 		margin-bottom: 5px; }
 		.valuation-page h4.thank-you {
 			font-size: 70px;
-			margin-bottom: 0px;
+			margin-bottom: 0;
 			color: #ec6952; }
 	.valuation-page h3 {
 		text-align: center;
@@ -84,8 +84,7 @@ html {
 		font-size: 14px;
 		line-height: 1.42857143;
 		color: #555;
-		background-color: #fff;
-		background-image: none;
+		background: #fff none;
 		border: 1px solid #eee;
 		border-radius: 4px;
 		-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
@@ -113,12 +112,16 @@ html {
 		border-radius: 4px;
 		-webkit-transition: all 0.2s ease-in-out;
 		-moz-transition: all 0.2s ease-in-out;
-		-ms-transition: all 0.2s ease-in-out;
 		-o-transition: all 0.2s ease-in-out;
 		font-weight: bold;
 		font-family: 'Roboto', arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale; }
+		.valuation-page .btn-primary.btn-offer {
+			display: block;
+			margin: 0 auto;
+			font-size: 22px;
+			padding: 15px 23px; }
 		.valuation-page .btn-primary:hover,
 		.valuation-page .btn-primary:active {
 			background: #e9553b;
@@ -128,7 +131,7 @@ html {
 		.valuation-page .valuation-value h4 {
 			color: #00B4FF;
 			font-size: 45px;
-			margin-bottom: 0px; }
+			margin-bottom: 0; }
 			.valuation-page .valuation-value h4 small {
 				color: #00B4FF; }
 		.valuation-page .valuation-value p {
@@ -147,7 +150,7 @@ html {
 		bottom: 20px;
 		width: 100%;
 		font-weight: 300;
-		font-size: 12px;
+		font-size: 10px;
 		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8); }
 
 #map_canvas {

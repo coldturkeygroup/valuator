@@ -15,28 +15,35 @@ $('document').ready(function() {
 	}).bind("ajaxComplete", function(){
 		$('.btn-primary').removeAttr('disabled');
 	});
-	
+
 	// Google Places address autocomplete
 	$("#address").geocomplete({
   	map: "#map_canvas",
 	  mapOptions: {
 	    mapTypeId: 'hybrid',
 	    disableDefaultUI: true
-	  },
+	  }
 	}).bind("geocode:result", function(event, result){
     $('#step-one .btn-primary').removeClass('disabled').removeAttr('disabled');
   });
-	
+
+  // Show offer modal
+  $('#get-offer').click(function () {
+    $('#valuator-offer').modal('show');
+
+    return false;
+  });
+
 	// Simple PubSub
   var o = $({});
   $.subscribe = function() { o.on.apply(o, arguments) };
   $.publish = function() { o.trigger.apply(o, arguments) };
-  
+
   // Submit form via AJAX
   var submitAjax = function(e) {
 	  var form = $(this);
 	  var method = form.find('input[name="_method"]').val() || 'POST';
-	
+
 	  $.ajax({
       type: method,
       url: Valuator.ajaxurl,
@@ -47,15 +54,15 @@ $('document').ready(function() {
       	$.publish('ajax.request.success', [form, response]);
       }
 	  });
-	
+
 	  e.preventDefault();
   };
-  
+
 	// Handle AJAX request callbacks
-  $.subscribe('ajax.request.success', function(e, form, response) {	  
+  $.subscribe('ajax.request.success', function(e, form, response) {
     triggerRequestCallback.apply(form, [e, $(form).data('remote-on-success'), response]);
   });
-  
+
   // Trigger the registered callback for a click or form submission.
   var triggerRequestCallback = function(e, method, response) {
     var that = $(this);
@@ -72,13 +79,13 @@ $('document').ready(function() {
 
     e.preventDefault();
   }
-  
+
   // Dom bindings.
   $('form[data-remote]').on('submit', submitAjax);
   $('*[data-click]').on('click', function(e) {
     triggerRequestCallback.apply(this, [e, $(this).data('click')]);
   });
-	
+
 	// Step one form submission
 	window.stepOne = {};
   stepOne.process = function(form, response) {
@@ -90,18 +97,18 @@ $('document').ready(function() {
 	    $('#step-two-well').show().addClass('animated fadeInRightBig');
 	    $('.valuation-page').css('padding-top', '0px');
 	  }, 200);
-    
+
     setTimeout(function() {
 			google.maps.event.trigger($("#map_canvas")[0], 'resize');
 			$("#address").geocomplete("find", $('#address').val());
-			
+
 			setTimeout(function() {
 				var map = $("#address").geocomplete("map");
 				map.setZoom(19);
 			}, 500);
 		}, 500);
   };
-	
+
 	// Step two form submission
 	window.stepTwo = {};
   stepTwo.process = function(form, response) {
@@ -113,7 +120,7 @@ $('document').ready(function() {
 			$('.single-valuator #page').css('min-height', '100%');
 			$('.single-valuator #page').css('height', 'auto');
 		}, 200);
-    
+
     // Verify that we received a result
     if(typeof response.error != 'undefined')
     {
@@ -135,7 +142,7 @@ $('document').ready(function() {
 	    }
 	    $('#zip_code_copy').val( response.zip_code );
 	  }
-	  
+
 	  // Facebook events
 	  var retargeting = $('#retargeting').val(),
         conversion = $('#conversion').val();
@@ -170,7 +177,7 @@ $('document').ready(function() {
       window._fbq = window._fbq || [];
       window._fbq.push(['track', conversion, {'value': '0.00', 'currency': 'USD'}]);
     }
-    
+
     // Populate the step three form
     $('#first_name_copy').val( $('#first_name').val() );
     $('#last_name_copy').val( $('#last_name').val() );
@@ -179,12 +186,18 @@ $('document').ready(function() {
     $('#address2_copy').val( $('#address_2').val() );
     $('#city_copy').val( response.city );
     $('#state_copy').val( response.state );
+
+    // Populate the offer form
+    $('#first_name_3').val( $('#first_name').val() );
+    $('#last_name_3').val( $('#last_name').val() );
+    $('#email_3').val( $('#email').val() );
 	};
-	
+
 	// Step three form submission
 	window.stepThree = {};
   stepThree.process = function(form, response) {
 	  $('#step-three-well').removeClass('fadeInRightBig').addClass('fadeOutLeftBig');
+    $('#valuator-offer').modal('hide');
 	  setTimeout(function () {
 		  $('.page-media').remove();
 	  	$('#step-three-well').hide();
