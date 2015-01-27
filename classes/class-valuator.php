@@ -428,26 +428,26 @@ class Valuator {
 	 */
 	public function enqueue_scripts()
 	{
+		if ( is_singular( 'valuator' ) ) {
+			wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/style.css' ), array(), '1.2.0' );
+			wp_register_style( 'animate', esc_url( $this->assets_url . 'css/animate.css' ), array(), '1.2.0' );
+			wp_register_style( 'roboto', 'http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300' );
+			wp_register_style( 'robo-slab', 'http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' );
+			wp_enqueue_style( 'valuator' );
+			wp_enqueue_style( 'animate' );
+			wp_enqueue_style( 'roboto' );
+			wp_enqueue_style( 'roboto-slab' );
 
-		wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/style.css' ), array(), '1.2.0' );
-		wp_register_style( 'animate', esc_url( $this->assets_url . 'css/animate.css' ), array(), '1.2.0' );
-		wp_register_style( 'roboto', 'http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300' );
-		wp_register_style( 'robo-slab', 'http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' );
-		wp_enqueue_style( 'valuator' );
-		wp_enqueue_style( 'animate' );
-		wp_enqueue_style( 'roboto' );
-		wp_enqueue_style( 'roboto-slab' );
+			wp_register_script( 'google-places', 'https://maps.googleapis.com/maps/api/js?libraries=places', array( 'jquery' ) );
+			wp_register_script( 'valuator-js', esc_url( $this->assets_url . 'js/scripts.js' ), array() );
+			wp_enqueue_script( 'google-places' );
+			wp_enqueue_script( 'valuator-js' );
 
-		wp_register_script( 'google-places', 'https://maps.googleapis.com/maps/api/js?libraries=places', array( 'jquery' ) );
-		wp_register_script( 'valuator-js', esc_url( $this->assets_url . 'js/scripts.js' ), array() );
-		wp_enqueue_script( 'google-places' );
-		wp_enqueue_script( 'valuator-js' );
-
-		$localize = array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' )
-		);
-		wp_localize_script( 'valuator-js', 'Valuator', $localize );
-
+			$localize = array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' )
+			);
+			wp_localize_script( 'valuator-js', 'Valuator', $localize );
+		}
 	}
 
 	/**
