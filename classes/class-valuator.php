@@ -687,7 +687,6 @@ class Valuator {
 	public function process_step_two()
 	{
 		global $wpdb;
-		$blog_id     = get_current_blog_id();
 		$page_id     = sanitize_text_field( $_POST['page_id'] );
 		$property_id = sanitize_text_field( $_POST['property_id'] );
 		$first_name  = sanitize_text_field( $_POST['first_name'] );

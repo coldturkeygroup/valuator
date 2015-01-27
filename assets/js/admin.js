@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
 		file_frame = wp.media.frames.file_frame = wp.media({
 		  title: jQuery( this ).data( 'uploader_title' ),
 		  button: {
-		    text: jQuery( this ).data( 'uploader_button_text' ),
+		    text: jQuery( this ).data( 'uploader_button_text' )
 		  },
 		  multiple: false
 		});
@@ -37,7 +37,7 @@ jQuery(document).ready(function($) {
 
 		// Finally, open the modal
 		file_frame.open();
-	}
+	};
 
 	jQuery('#upload_media_file_button').click(function( event ){
 		event.preventDefault();
