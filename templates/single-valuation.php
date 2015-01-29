@@ -10,8 +10,6 @@
 
 global $valuator, $wp_query;
 
-get_header();
-the_post();
 $id             = get_the_ID();
 $title          = get_the_title();
 $permalink      = get_permalink();
@@ -47,6 +45,56 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 }
 
 ?>
+	<!DOCTYPE html>
+	<html <?php language_attributes(); ?>>
+	<head>
+		<meta charset="utf-8">
+		<title><?php wp_title('&middot;', true, 'right'); ?></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<?php wp_head(); ?>
+		<style>
+			.single-valuator {
+				background: url(<?php echo $img[0]; ?>) no-repeat scroll center center;
+				background-size: cover;
+				background-attachment: fixed;
+			}
+
+			<?php
+			if( $primary_color != null ) {
+				echo '
+				.valuation-page .btn-primary {
+					background-color: ' . $primary_color . ' !important;
+					border-color: ' . $primary_color . ' !important; }
+				.valuation-page .valuation-value h4 {
+					color: ' . $primary_color . ' !important; }
+				.valuation-page .valuation-value h4 small {
+					color: ' . $primary_color . ' !important; }
+				.valuation-page h3.step-two-subtitle strong {
+					color: ' . $primary_color . ' !important; }
+				.valuation-page h4.thank-you {
+					color: ' . $primary_color . ' !important; }
+				';
+			}
+			if( $hover_color != null ) {
+				echo '
+				.valuation-page .btn-primary:hover,
+				.valuation-page .btn-primary:active {
+					background-color: ' . $hover_color . ' !important;
+					border-color: ' . $hover_color . ' !important; }
+				';
+			}
+			?>
+		</style>
+		<link rel="alternate" type="application/rss+xml" title="<?php echo get_bloginfo('name'); ?> Feed" href="<?php echo esc_url(get_feed_link()); ?>">
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body <?php body_class(); ?>>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 	<style>
@@ -324,4 +372,4 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 
 	</div>
 
-<?php get_footer(); ?>
+<?php wp_footer(); ?>
