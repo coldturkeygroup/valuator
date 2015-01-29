@@ -95,42 +95,6 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 	</head>
 
 	<body <?php body_class(); ?>>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-	<style>
-		#page {
-			background: url(<?php echo $img[0]; ?>) no-repeat scroll center center;
-			background-size: cover;
-			background-attachment: fixed;
-		}
-
-		<?php
-		if( $primary_color != null ) {
-			echo '
-			.valuation-page .btn-primary {
-				background-color: ' . $primary_color . ' !important;
-				border-color: ' . $primary_color . ' !important; }
-			.valuation-page .valuation-value h4 {
-				color: ' . $primary_color . ' !important; }
-			.valuation-page .valuation-value h4 small {
-				color: ' . $primary_color . ' !important; }
-			.valuation-page h3.step-two-subtitle strong {
-				color: ' . $primary_color . ' !important; }
-			.valuation-page h4.thank-you {
-				color: ' . $primary_color . ' !important; }
-			';
-		}
-		if( $hover_color != null ) {
-			echo '
-			.valuation-page .btn-primary:hover,
-			.valuation-page .btn-primary:active {
-				background-color: ' . $hover_color . ' !important;
-				border-color: ' . $hover_color . ' !important; }
-			';
-		}
-		?>
-	</style>
-
 	<div id="content" class="valuation-page">
 		<div class="container-fluid">
 			<div class="row">
