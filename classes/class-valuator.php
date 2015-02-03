@@ -294,7 +294,7 @@ class Valuator {
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><textarea style="width:100%" name="' . esc_attr( $k ) . '" id="media_text" rows="' . $rows . '">' . esc_textarea( $data ) . '</textarea>' . "\n";
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
-				} elseif ( $k == 'legal_broker' || $k == 'retargeting' || $k == 'conversion' || $k == 'offer' || $k == 'call_to_action' ) {
+				} elseif ( $k == 'legal_broker' || $k == 'retargeting' || $k == 'conversion' || $k == 'offer' || $k == 'call_to_action' || $k == 'submit_offer' ) {
 					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td>';
 					$html .= '<input style="width:100%" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '" placeholder="' . esc_attr( $placeholder ) . '"  type="text" value="' . esc_attr( $data ) . '" />';
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
@@ -441,6 +441,15 @@ class Valuator {
 			'section'     => 'info'
 		);
 
+		$fields['call_to_action'] = array(
+			'name'        => __( 'Call To Action Button', 'pf_valuator' ),
+			'description' => __( 'The call to action for users after they have received their home\'s value.', 'pf_valuator' ),
+			'placeholder' => __( 'Ex: Yes, Send Me The Free Report!', 'pf_valuator' ),
+			'type'        => 'text',
+			'default'     => '',
+			'section'     => 'info'
+		);
+
 		$fields['offer'] = array(
 			'name'        => __( 'Offer', 'pf_valuator' ),
 			'description' => __( 'The offer for users to incentivize them to give you their contact information upon completion of the home valuation.', 'pf_valuator' ),
@@ -450,10 +459,10 @@ class Valuator {
 			'section'     => 'info'
 		);
 
-		$fields['call_to_action'] = array(
-			'name'        => __( 'Call To Action', 'pf_valuator' ),
-			'description' => __( 'The call to action for users after they have received their home\'s value.', 'pf_valuator' ),
-			'placeholder' => __( 'Ex: Yes, Send Me The Free Report!', 'pf_valuator' ),
+		$fields['submit_offer'] = array(
+			'name'        => __( 'Submit Button', 'pf_valuator' ),
+			'description' => __( 'The button users will click to confirm they would like to redeem your offer.', 'pf_valuator' ),
+			'placeholder' => __( 'Ex: Yes! Send Me The Report!', 'pf_valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
