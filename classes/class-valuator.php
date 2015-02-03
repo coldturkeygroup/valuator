@@ -65,7 +65,6 @@ class Valuator {
 				$this,
 				'register_custom_column_headings'
 			), 10, 1 );
-			add_action( 'manage_posts_custom_column', array( $this, 'register_custom_columns' ), 10, 2 );
 			add_filter( 'enter_title_here', array( $this, 'change_default_title' ) );
 			// Create FrontDesk Campaigns for pages
 			add_action( 'publish_pf_valuator', array( $this, 'create_frontdesk_campaign' ) );
@@ -184,30 +183,6 @@ class Valuator {
 	}
 
 	/**
-	 * Register the custom columns that are displayed
-	 * in the All Pages view for our custom post type.
-	 *
-	 * @param string $column_name
-	 * @param integer $id
-	 */
-	public function register_custom_columns( $column_name, $id )
-	{
-		switch ( $column_name ) {
-
-			case 'permalink':
-				$link  = get_post_permalink( $id );
-				$value = '<a href="' . $link . '">' . $link . '</a>';
-
-				echo $value;
-				break;
-
-			default:
-				break;
-
-		}
-	}
-
-	/**
 	 * Register the headings for our defined custom columns
 	 *
 	 * @param array $defaults
@@ -219,10 +194,6 @@ class Valuator {
 		$new_columns = array( 'permalink' => __( 'Link', 'pf_valuator' ) );
 
 		$last_item = '';
-
-		if ( isset( $defaults['date'] ) ) {
-			unset( $defaults['date'] );
-		}
 
 		if ( count( $defaults ) > 2 ) {
 			$last_item = array_slice( $defaults, - 1 );
