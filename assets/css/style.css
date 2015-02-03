@@ -2,15 +2,15 @@ html {
 	margin-top: 0 !important;
 	height: 100% !important; }
 
-.single-valuator {
+.single-pf_valuator {
 	height: 100% !important; }
 
-.single-valuator #page #header,
-.single-valuator hr,
-.single-valuator #footer {
+.single-pf_valuator #page #header,
+.single-pf_valuator hr,
+.single-pf_valuator #footer {
 	display: none; }
 
-.single-valuator #page {
+.single-pf_valuator #page {
 	height: 100%; }
 
 .valuation-page {

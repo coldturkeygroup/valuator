@@ -22,7 +22,7 @@ class Valuator_Admin {
 		$this->assets_dir = trailingslashit( $this->dir ) . 'assets';
 		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $file ) ) );
 		$this->home_url   = trailingslashit( home_url() );
-		$this->token      = 'valuator';
+		$this->token      = 'pf_valuator';
 
 		// Register podcast settings
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -48,9 +48,9 @@ class Valuator_Admin {
 	 */
 	public function add_menu_item()
 	{		
-		add_submenu_page( 'edit.php?post_type=valuator', 'Leads', 'Leads', 'manage_options', "valuator_leads", array($this, 'leads_page'));
+		add_submenu_page( 'edit.php?post_type=pf_valuator', 'Leads', 'Leads', 'manage_options', "pf_valuator_leads", array($this, 'leads_page'));
 		
-		add_submenu_page( 'edit.php?post_type=valuator', 'Home Valuation Settings', 'Settings', 'manage_options', 'valuator_settings', array(
+		add_submenu_page( 'edit.php?post_type=pf_valuator', 'Home Valuation Settings', 'Settings', 'manage_options', 'pf_valuator_settings', array(
 				$this,
 				'settings_page'
 			) );
@@ -66,7 +66,7 @@ class Valuator_Admin {
 	 */
 	public function add_settings_link( $links )
 	{
-		$settings_link = '<a href="edit.php?post_type=valuator&page=valuator_settings">Settings</a>';
+		$settings_link = '<a href="edit.php?post_type=pf_valuator&page=pf_valuator_settings">Settings</a>';
 		array_push( $links, $settings_link );
 
 		return $links;
@@ -100,14 +100,14 @@ class Valuator_Admin {
 	{
 		global $current_user, $wp_version;
 		$user_id            = $current_user->ID;
-		$zillow_key         = get_option( 'valuator_zillow_key' );
-		$hide_zillow_notice = get_user_meta( $user_id, 'valuator_hide_zillow_notice', true );
+		$zillow_key         = get_option( 'pf_valuator_zillow_key' );
+		$hide_zillow_notice = get_user_meta( $user_id, 'pf_valuator_hide_zillow_notice', true );
 
 		// Version notice
 		if ( $wp_version < 3.5 ) {
 			?>
 			<div class="error">
-				<p><?php printf( __( '%1$sHome Valuator%2$s requires WordPress 3.5 or above in order to function correctly. You are running v%3$s - please update now.', 'valuator' ), '<strong>', '</strong>', $wp_version ); ?></p>
+				<p><?php printf( __( '%1$sHome Valuator%2$s requires WordPress 3.5 or above in order to function correctly. You are running v%3$s - please update now.', 'pf_valuator' ), '<strong>', '</strong>', $wp_version ); ?></p>
 			</div>
 		<?php
 		}
@@ -116,7 +116,7 @@ class Valuator_Admin {
 		if ( ( $zillow_key == null || $zillow_key == '' ) && ! $hide_zillow_notice ) {
 			?>
 			<div class="error">
-				<p><?php printf( __( '%1$sHome Valuator%2$s requires you to enter your Zillow API key. Without it, we will be unable to provide values for any homes. Enter the key on the %3$ssettings page%4$s. %5$sHide this notice%6$s', 'valuator' ), '<strong>', '</strong>', '<a href="edit.php?post_type=valuator&page=valuator_settings">', '</a>', '<em><a href="' . add_query_arg( 'valuator_hide_notice', 'zillow' ) . '">', '</a></em>' ); ?></p>
+				<p><?php printf( __( '%1$sHome Valuator%2$s requires you to enter your Zillow API key. Without it, we will be unable to provide values for any homes. Enter the key on the %3$ssettings page%4$s. %5$sHide this notice%6$s', 'pf_valuator' ), '<strong>', '</strong>', '<a href="edit.php?post_type=pf_valuator&page=pf_valuator_settings">', '</a>', '<em><a href="' . add_query_arg( 'pf_valuator_hide_notice', 'zillow' ) . '">', '</a></em>' ); ?></p>
 			</div>
 		<?php
 		}
@@ -129,13 +129,13 @@ class Valuator_Admin {
 	 */
 	public function admin_notice_actions()
 	{
-		if ( isset( $_GET['valuator_hide_notice'] ) ) {
+		if ( isset( $_GET['pf_valuator_hide_notice'] ) ) {
 			global $current_user;
 			$user_id = $current_user->ID;
 
-			switch ( esc_attr( $_GET['valuator_hide_notice'] ) ) {
+			switch ( esc_attr( $_GET['pf_valuator_hide_notice'] ) ) {
 				case 'zillow':
-					add_user_meta( $user_id, 'valuator_hide_zillow_notice', true );
+					add_user_meta( $user_id, 'pf_valuator_hide_zillow_notice', true );
 					break;
 			}
 
@@ -151,32 +151,32 @@ class Valuator_Admin {
 	{
 
 		// Add settings section
-		add_settings_section( 'customize', __( 'Basic Settings', 'valuator' ), array(
+		add_settings_section( 'customize', __( 'Basic Settings', 'pf_valuator' ), array(
 				$this,
 				'main_settings'
-			), 'valuator' );
+			), 'pf_valuator' );
 
 		// Add settings fields
-		add_settings_field( 'valuator_slug', __( 'URL slug for home valuation pages:', 'valuator' ), array(
+		add_settings_field( 'pf_valuator_slug', __( 'URL slug for home valuation pages:', 'pf_valuator' ), array(
 				$this,
 				'slug_field'
-			), 'valuator', 'customize' );
-		add_settings_field( 'valuator_zillow_key', __( 'Zillow API key:', 'valuator' ), array(
+			), 'pf_valuator', 'customize' );
+		add_settings_field( 'pf_valuator_zillow_key', __( 'Zillow API key:', 'pf_valuator' ), array(
 				$this,
 				'zillow_key_field'
-			), 'valuator', 'customize' );
-		add_settings_field( 'valuator_frontdesk_key', __( 'FrontDesk API key:', 'valuator' ), array(
+			), 'pf_valuator', 'customize' );
+		add_settings_field( 'pf_valuator_frontdesk_key', __( 'FrontDesk API key:', 'pf_valuator' ), array(
 				$this,
 				'frontdesk_key_field'
-			), 'valuator', 'customize' );
+			), 'pf_valuator', 'customize' );
 
 		// Register settings fields
-		register_setting( 'valuator', 'valuator_slug', array( $this, 'validate_slug' ) );
-		register_setting( 'valuator', 'valuator_zillow_key' );
-		register_setting( 'valuator', 'valuator_frontdesk_key' );
+		register_setting( 'pf_valuator', 'pf_valuator_slug', array( $this, 'validate_slug' ) );
+		register_setting( 'pf_valuator', 'pf_valuator_zillow_key' );
+		register_setting( 'pf_valuator', 'pf_valuator_frontdesk_key' );
 
 		// Allow plugins to add more settings fields
-		do_action( 'valuator_settings_fields' );
+		do_action( 'pf_valuator_settings_fields' );
 
 	}
 
@@ -187,7 +187,7 @@ class Valuator_Admin {
 	 */
 	public function main_settings()
 	{
-		echo '<p>' . __( 'These are a few simple settings for setting up your home valuation pages. <br> <a href="https://www.youtube.com/watch?v=eTOaHOoPY_Q" target="_blank">Watch our video about setting up your API keys.</a>', 'valuator' ) . '</p>';
+		echo '<p>' . __( 'These are a few simple settings for setting up your home valuation pages. <br> <a href="https://www.youtube.com/watch?v=eTOaHOoPY_Q" target="_blank">Watch our video about setting up your API keys.</a>', 'pf_valuator' ) . '</p>';
 	}
 
 	/**
@@ -199,17 +199,17 @@ class Valuator_Admin {
 	public function slug_field()
 	{
 
-		$option = get_option( 'valuator_slug' );
+		$option = get_option( 'pf_valuator_slug' );
 
-		$data = 'valuator';
+		$data = 'pf_valuator';
 		if ( $option && strlen( $option ) > 0 && $option != '' ) {
 			$data = $option;
 		}
 
 		$default_url = $this->home_url . '?post_type=valuations';
 
-		echo '<input id="slug" type="text" name="valuator_slug" value="' . $data . '"/>
-				<label for="slug"><span class="description">' . sprintf( __( 'Provide a custom URL slug for the home valuation pages archive and single home valuation pages.', 'valuator' ) ) . '</span></label>';
+		echo '<input id="slug" type="text" name="pf_valuator_slug" value="' . $data . '"/>
+				<label for="slug"><span class="description">' . sprintf( __( 'Provide a custom URL slug for the home valuation pages archive and single home valuation pages.', 'pf_valuator' ) ) . '</span></label>';
 	}
 
 	/**
@@ -237,15 +237,15 @@ class Valuator_Admin {
 	public function zillow_key_field()
 	{
 
-		$option = get_option( 'valuator_zillow_key' );
+		$option = get_option( 'pf_valuator_zillow_key' );
 
 		$data = '';
 		if ( $option && strlen( $option ) > 0 && $option != '' ) {
 			$data = $option;
 		}
 
-		echo '<input id="zillow_key" type="text" name="valuator_zillow_key" value="' . $data . '"/>
-					<label for="zillow_key"><span class="description">' . __( 'Enter your API key generated by Zillow. To sign up for an API key, visit <a href="https://www.zillow.com/webservice/Registration.htm" target="_blank">https://www.zillow.com/webservice/Registration.htm</a> to get started.', 'valuator' ) . '</span></label>';
+		echo '<input id="zillow_key" type="text" name="pf_valuator_zillow_key" value="' . $data . '"/>
+					<label for="zillow_key"><span class="description">' . __( 'Enter your API key generated by Zillow. To sign up for an API key, visit <a href="https://www.zillow.com/webservice/Registration.htm" target="_blank">https://www.zillow.com/webservice/Registration.htm</a> to get started.', 'pf_valuator' ) . '</span></label>';
 
 	}
 
@@ -257,15 +257,15 @@ class Valuator_Admin {
 	public function frontdesk_key_field()
 	{
 
-		$option = get_option( 'valuator_frontdesk_key' );
+		$option = get_option( 'pf_valuator_frontdesk_key' );
 
 		$data = '';
 		if ( $option && strlen( $option ) > 0 && $option != '' ) {
 			$data = $option;
 		}
 
-		echo '<input id="frontdesk_key" type="text" name="valuator_frontdesk_key" value="' . $data . '"/>
-					<label for="frontdesk_key"><span class="description">' . __( 'Enter your API key generated by FrontDesk. To access your API key, visit <a href="https://tryfrontdesk.com/account/api" target="_blank">https://tryfrontdesk.com/account/api</a>.', 'valuator' ) . '</span></label>';
+		echo '<input id="frontdesk_key" type="text" name="pf_valuator_frontdesk_key" value="' . $data . '"/>
+					<label for="frontdesk_key"><span class="description">' . __( 'Enter your API key generated by FrontDesk. To access your API key, visit <a href="https://tryfrontdesk.com/account/api" target="_blank">https://tryfrontdesk.com/account/api</a>.', 'pf_valuator' ) . '</span></label>';
 
 	}
 
@@ -273,19 +273,19 @@ class Valuator_Admin {
 	 * Define the basic Valuator URL
 	 *
 	 */
-	public function valuator_url()
+	public function pf_valuator_url()
 	{
 
-		$valuator_url = $this->home_url;
+		$pf_valuator_url = $this->home_url;
 
-		$slug = get_option( 'valuator_slug' );
+		$slug = get_option( 'pf_valuator_slug' );
 		if ( $slug && strlen( $slug ) > 0 && $slug != '' ) {
-			$valuator_url .= $slug;
+			$pf_valuator_url .= $slug;
 		} else {
-			$valuator_url .= '?post_type=valuator';
+			$pf_valuator_url .= '?post_type=pf_valuator';
 		}
 
-		echo '<a href="' . esc_url( $valuator_url ) . '" target="_blank">' . $valuator_url . '</a>';
+		echo '<a href="' . esc_url( $pf_valuator_url ) . '" target="_blank">' . $pf_valuator_url . '</a>';
 
 	}
 
@@ -304,16 +304,16 @@ class Valuator_Admin {
 						</div>';
 		}
 		
-		echo '<div class="wrap" id="valuator_settings">
-					<h2>' . __( 'Home Valuator Settings', 'valuator' ) . '</h2>
+		echo '<div class="wrap" id="pf_valuator_settings">
+					<h2>' . __( 'Home Valuator Settings', 'pf_valuator' ) . '</h2>
 					<form method="post" action="options.php" enctype="multipart/form-data">
 						<div class="clear"></div>';
 
-		settings_fields( 'valuator' );
-		do_settings_sections( 'valuator' );
+		settings_fields( 'pf_valuator' );
+		do_settings_sections( 'pf_valuator' );
 
 		echo '<p class="submit">
-							<input name="Submit" type="submit" class="button-primary" value="' . esc_attr( __( 'Save Settings', 'valuator' ) ) . '" />
+							<input name="Submit" type="submit" class="button-primary" value="' . esc_attr( __( 'Save Settings', 'pf_valuator' ) ) . '" />
 						</p>
 					</form>
 			  </div>';
@@ -340,7 +340,7 @@ class Valuator_Admin {
 		}
 		
 		?>
-		<div class="wrap" id="valuator_leads">
+		<div class="wrap" id="pf_valuator_leads">
 			<h2>Home Valuator Leads</h2>
 			
 			<?php
@@ -351,13 +351,13 @@ class Valuator_Admin {
 			?>
 			
 			<ul id="settings-sections" class="subsubsub hide-if-no-js" style="margin-bottom:15px;">
-				<li><a class="tab all <? if( ! isset($_GET['lead_type'])) { echo 'current'; } ?>" href="edit.php?post_type=valuator&page=valuator_leads">All Leads</a> |</li>
-				<li><a class="tab <? if(isset($_GET['lead_type'])) { echo 'current'; } ?>" href="edit.php?post_type=valuator&page=valuator_leads&lead_type=complete">Complete Leads</a></li>
+				<li><a class="tab all <? if( ! isset($_GET['lead_type'])) { echo 'current'; } ?>" href="edit.php?post_type=pf_valuator&page=pf_valuator_leads">All Leads</a> |</li>
+				<li><a class="tab <? if(isset($_GET['lead_type'])) { echo 'current'; } ?>" href="edit.php?post_type=pf_valuator&page=pf_valuator_leads&lead_type=complete">Complete Leads</a></li>
 			</ul>
 			
 			<form id="leads_form" method="post" action="admin-post.php">
-				<input type="hidden" name="action" value="valuator_remove_leads">
-        <?php wp_nonce_field( 'valuator_remove_leads' ); ?>
+				<input type="hidden" name="action" value="pf_valuator_remove_leads">
+        <?php wp_nonce_field( 'pf_valuator_remove_leads' ); ?>
 				<table class="widefat fixed" style="margin-bottom:5px" cellspacing="0">
 	      	<thead>
 	        	<tr>

@@ -21,8 +21,8 @@ if ( ! defined( 'VALUATOR_PLUGIN_PATH' ) )
 
 require_once( 'classes/class-valuator.php' );
 
-global $valuator;
-$valuator = new ColdTurkey\Valuator\Valuator( __FILE__ );
+global $pf_valuator;
+$pf_valuator = new ColdTurkey\Valuator\Valuator( __FILE__ );
 
 if ( is_admin() ) {
 	require_once( 'classes/class-valuator-admin.php' );

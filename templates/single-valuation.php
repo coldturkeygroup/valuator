@@ -8,7 +8,7 @@
  * @since      1.0.0
  */
 
-global $valuator, $wp_query;
+global $pf_valuator, $wp_query;
 
 $id             = get_the_ID();
 $title          = get_the_title();
@@ -55,7 +55,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 		<meta name="author" content="">
 		<?php wp_head(); ?>
 		<style>
-			.single-valuator {
+			.single-pf_valuator {
 				background: url(<?php echo $img[0]; ?>) no-repeat scroll center center;
 				background-size: cover;
 				background-attachment: fixed;
@@ -117,8 +117,8 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 								</div>
 							</div>
 						</div>
-						<input name="action" type="hidden" value="valuator_step_one">
-						<?php wp_nonce_field( 'valuator_step_one', 'valuator_nonce' ); ?>
+						<input name="action" type="hidden" value="pf_valuator_step_one">
+						<?php wp_nonce_field( 'pf_valuator_step_one', 'pf_valuator_nonce' ); ?>
 						<input class="btn btn-primary btn-lg btn-block disabled" type="submit" disabled="disabled" value="Get The Value!">
 					</form>
 				</div>
@@ -154,8 +154,8 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 						<input name="page_id" type="hidden" value="<?php echo $id; ?>">
 						<input name="permalink" type="hidden" value="<?php echo $permalink; ?>">
 						<input name="property_id" id="property_id" type="hidden" value="">
-						<input name="action" type="hidden" value="valuator_step_two">
-						<?php wp_nonce_field( 'valuator_step_two', 'valuator_nonce' ); ?>
+						<input name="action" type="hidden" value="pf_valuator_step_two">
+						<?php wp_nonce_field( 'pf_valuator_step_two', 'pf_valuator_nonce' ); ?>
 						<input class="btn btn-primary btn-lg btn-block" type="submit" value="Send Me The Report!">
 					</form>
 				</div>
@@ -323,9 +323,9 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 								<input type="text" name="phone" id="phone" class="form-control" required="required" placeholder="Phone Number">
 							</div>
 
-							<input name="action" type="hidden" value="valuator_step_three">
+							<input name="action" type="hidden" value="pf_valuator_step_three">
 							<input name="property_id" id="property_id_complete" type="hidden" value="">
-							<?php wp_nonce_field( 'valuator_step_three', 'valuator_nonce' ); ?>
+							<?php wp_nonce_field( 'pf_valuator_step_three', 'pf_valuator_nonce' ); ?>
 
 							<input type="submit" class="btn btn-primary btn-lg btn-offer" value="<?php echo $call_to_action; ?>">
 						</form>

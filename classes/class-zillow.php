@@ -20,7 +20,7 @@ class Zillow {
 	 */
 	public function __construct()
 	{
-		$this->api_key  = get_option( 'valuator_zillow_key' );
+		$this->api_key  = get_option( 'pf_valuator_zillow_key' );
 		$this->api_base = 'https://www.zillow.com/webservice/';
 		$this->guzzle   = new Client();
 	}

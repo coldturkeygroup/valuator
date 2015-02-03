@@ -117,8 +117,8 @@ $('document').ready(function() {
 		  $('#step-two-well').hide();
     	$('#step-three-well').show().addClass('animated fadeInRightBig');
 			$('.valuation-page').css('padding-top', '0px');
-			$('.single-valuator #page').css('min-height', '100%');
-			$('.single-valuator #page').css('height', 'auto');
+			$('.single-pf_valuator #page').css('min-height', '100%');
+			$('.single-pf_valuator #page').css('height', 'auto');
 		}, 200);
 
     // Verify that we received a result
@@ -203,8 +203,8 @@ $('document').ready(function() {
 	  	$('#step-three-well').hide();
 			$('#step-four-well').show().addClass('animated fadeInRightBig');
 			$('.valuation-page').css('padding-top', '10%');
-			$('.single-valuator #page').css('height', '100%');
-			$('.single-valuator #page').css('min-height', 'auto');
+			$('.single-pf_valuator #page').css('height', '100%');
+			$('.single-pf_valuator #page').css('min-height', 'auto');
 		}, 200);
 		setTimeout(function () {
 			$('.thank-you').addClass('animated pulse');

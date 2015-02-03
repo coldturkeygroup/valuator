@@ -32,14 +32,14 @@ class Valuator {
 		$this->assets_url    = esc_url( trailingslashit( plugins_url( '/assets/', $file ) ) );
 		$this->template_path = trailingslashit( $this->dir ) . 'templates/';
 		$this->home_url      = trailingslashit( home_url() );
-		$this->token         = 'valuator';
+		$this->token         = 'pf_valuator';
 		$this->frontdesk     = new FrontDesk();
 		$this->zillow        = new Zillow();
 
 		global $wpdb;
 		$this->table_name = $wpdb->base_prefix . $this->token;
 
-		// Register 'valuator' post type
+		// Register 'pf_valuator' post type
 		add_action( 'init', array( $this, 'register_post_type' ) );
 
 		// Use built-in templates for landing pages
@@ -47,13 +47,13 @@ class Valuator {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Handle form submissions
-		add_action( 'wp_ajax_valuator_step_one', array( $this, 'process_step_one' ) );
-		add_action( 'wp_ajax_nopriv_valuator_step_one', array( $this, 'process_step_one' ) );
-		add_action( 'wp_ajax_valuator_step_two', array( $this, 'process_step_two' ) );
-		add_action( 'wp_ajax_nopriv_valuator_step_two', array( $this, 'process_step_two' ) );
-		add_action( 'wp_ajax_valuator_step_three', array( $this, 'process_step_three' ) );
-		add_action( 'wp_ajax_nopriv_valuator_step_three', array( $this, 'process_step_three' ) );
-		add_action( 'admin_post_valuator_remove_leads', array( $this, 'remove_leads' ) );
+		add_action( 'wp_ajax_pf_valuator_step_one', array( $this, 'process_step_one' ) );
+		add_action( 'wp_ajax_nopriv_pf_valuator_step_one', array( $this, 'process_step_one' ) );
+		add_action( 'wp_ajax_pf_valuator_step_two', array( $this, 'process_step_two' ) );
+		add_action( 'wp_ajax_nopriv_pf_valuator_step_two', array( $this, 'process_step_two' ) );
+		add_action( 'wp_ajax_pf_valuator_step_three', array( $this, 'process_step_three' ) );
+		add_action( 'wp_ajax_nopriv_pf_valuator_step_three', array( $this, 'process_step_three' ) );
+		add_action( 'admin_post_pf_valuator_remove_leads', array( $this, 'remove_leads' ) );
 
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'meta_box_setup' ), 20 );
@@ -68,7 +68,7 @@ class Valuator {
 			add_action( 'manage_posts_custom_column', array( $this, 'register_custom_columns' ), 10, 2 );
 			add_filter( 'enter_title_here', array( $this, 'change_default_title' ) );
 			// Create FrontDesk Campaigns for pages
-			add_action( 'publish_valuator', array( $this, 'create_frontdesk_campaign' ) );
+			add_action( 'publish_pf_valuator', array( $this, 'create_frontdesk_campaign' ) );
 		}
 
 		// Flush rewrite rules on plugin activation
@@ -97,24 +97,24 @@ class Valuator {
 	{
 
 		$labels = array(
-			'name'               => _x( 'Home Valuations', 'post type general name', 'valuator' ),
-			'singular_name'      => _x( 'Home Valuation', 'post type singular name', 'valuator' ),
-			'add_new'            => _x( 'Add New', $this->token, 'valuator' ),
-			'add_new_item'       => sprintf( __( 'Add New %s', 'valuator' ), __( 'Page', 'valuator' ) ),
-			'edit_item'          => sprintf( __( 'Edit %s', 'valuator' ), __( 'Page', 'valuator' ) ),
-			'new_item'           => sprintf( __( 'New %s', 'valuator' ), __( 'Page', 'valuator' ) ),
-			'all_items'          => sprintf( __( 'All %s', 'valuator' ), __( 'Pages', 'valuator' ) ),
-			'view_item'          => sprintf( __( 'View %s', 'valuator' ), __( 'Page', 'valuator' ) ),
-			'search_items'       => sprintf( __( 'Search %a', 'valuator' ), __( 'Pages', 'valuator' ) ),
-			'not_found'          => sprintf( __( 'No %s Found', 'valuator' ), __( 'Pages', 'valuator' ) ),
-			'not_found_in_trash' => sprintf( __( 'No %s Found In Trash', 'valuator' ), __( 'Pages', 'valuator' ) ),
+			'name'               => _x( 'Home Valuations', 'post type general name', 'pf_valuator' ),
+			'singular_name'      => _x( 'Home Valuation', 'post type singular name', 'pf_valuator' ),
+			'add_new'            => _x( 'Add New', $this->token, 'pf_valuator' ),
+			'add_new_item'       => sprintf( __( 'Add New %s', 'pf_valuator' ), __( 'Page', 'pf_valuator' ) ),
+			'edit_item'          => sprintf( __( 'Edit %s', 'pf_valuator' ), __( 'Page', 'pf_valuator' ) ),
+			'new_item'           => sprintf( __( 'New %s', 'pf_valuator' ), __( 'Page', 'pf_valuator' ) ),
+			'all_items'          => sprintf( __( 'All %s', 'pf_valuator' ), __( 'Valuations', 'pf_valuator' ) ),
+			'view_item'          => sprintf( __( 'View %s', 'pf_valuator' ), __( 'Page', 'pf_valuator' ) ),
+			'search_items'       => sprintf( __( 'Search %a', 'pf_valuator' ), __( 'Pages', 'pf_valuator' ) ),
+			'not_found'          => sprintf( __( 'No %s Found', 'pf_valuator' ), __( 'Pages', 'pf_valuator' ) ),
+			'not_found_in_trash' => sprintf( __( 'No %s Found In Trash', 'pf_valuator' ), __( 'Pages', 'pf_valuator' ) ),
 			'parent_item_colon'  => '',
-			'menu_name'          => __( 'Home Valuations', 'valuator' )
+			'menu_name'          => __( 'Home Valuations', 'pf_valuator' )
 
 		);
 
-		$slug        = __( 'valuations', 'valuator' );
-		$custom_slug = get_option( 'valuator_slug' );
+		$slug        = __( 'valuations', 'pf_valuator' );
+		$custom_slug = get_option( 'pf_valuator_slug' );
 		if ( $custom_slug && strlen( $custom_slug ) > 0 && $custom_slug != '' ) {
 			$slug = $custom_slug;
 		}
@@ -216,7 +216,7 @@ class Valuator {
 	 */
 	public function register_custom_column_headings( $defaults )
 	{
-		$new_columns = array( 'permalink' => __( 'Link', 'valuator' ) );
+		$new_columns = array( 'permalink' => __( 'Link', 'pf_valuator' ) );
 
 		$last_item = '';
 
@@ -256,15 +256,15 @@ class Valuator {
 
 		$messages[ $this->token ] = array(
 			0  => '', // Unused. Messages start at index 1.
-			1  => sprintf( __( 'Page updated. %sView page%s.', 'valuator' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', '</a>' ),
-			4  => __( 'Page updated.', 'valuator' ),
+			1  => sprintf( __( 'Page updated. %sView page%s.', 'pf_valuator' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', '</a>' ),
+			4  => __( 'Page updated.', 'pf_valuator' ),
 			/* translators: %s: date and time of the revision */
-			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Page restored to revision from %s.', 'valuator' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-			6  => sprintf( __( 'Page published. %sView page%s.', 'valuator' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', '</a>' ),
-			7  => __( 'Page saved.', 'valuator' ),
-			8  => sprintf( __( 'Page submitted. %sPreview page%s.', 'valuator' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', '</a>' ),
-			9  => sprintf( __( 'Page scheduled for: %1$s. %2$sPreview page%3$s.', 'valuator' ), '<strong>' . date_i18n( __( 'M j, Y @ G:i', 'valuator' ), strtotime( $post->post_date ) ) . '</strong>', '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">', '</a>' ),
-			10 => sprintf( __( 'Page draft updated. %sPreview page%s.', 'valuator' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', '</a>' ),
+			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Page restored to revision from %s.', 'pf_valuator' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+			6  => sprintf( __( 'Page published. %sView page%s.', 'pf_valuator' ), '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', '</a>' ),
+			7  => __( 'Page saved.', 'pf_valuator' ),
+			8  => sprintf( __( 'Page submitted. %sPreview page%s.', 'pf_valuator' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', '</a>' ),
+			9  => sprintf( __( 'Page scheduled for: %1$s. %2$sPreview page%3$s.', 'pf_valuator' ), '<strong>' . date_i18n( __( 'M j, Y @ G:i', 'pf_valuator' ), strtotime( $post->post_date ) ) . '</strong>', '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">', '</a>' ),
+			10 => sprintf( __( 'Page draft updated. %sPreview page%s.', 'pf_valuator' ), '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', '</a>' ),
 		);
 
 		return $messages;
@@ -277,12 +277,12 @@ class Valuator {
 	 */
 	public function meta_box_setup()
 	{
-		add_meta_box( 'valuation-data', __( 'Valuation Page Details', 'valuator' ), array(
+		add_meta_box( 'valuation-data', __( 'Valuation Page Details', 'pf_valuator' ), array(
 			$this,
 			'meta_box_content'
 		), $this->token, 'normal', 'high' );
 
-		do_action( 'valuator_meta_boxes' );
+		do_action( 'pf_valuator_meta_boxes' );
 	}
 
 	/**
@@ -298,13 +298,13 @@ class Valuator {
 
 		$html = '';
 
-		$html .= '<input type="hidden" name="valuator_' . $this->token . '_nonce" id="valuator_' . $this->token . '_nonce" value="' . wp_create_nonce( plugin_basename( $this->dir ) ) . '" />';
+		$html .= '<input type="hidden" name="pf_valuator_' . $this->token . '_nonce" id="pf_valuator_' . $this->token . '_nonce" value="' . wp_create_nonce( plugin_basename( $this->dir ) ) . '" />';
 
 		if ( 0 < count( $field_data ) ) {
 			$html .= '<table class="form-table">' . "\n";
 			$html .= '<tbody>' . "\n";
 
-			$html .= '<input id="valuator_post_id" type="hidden" value="' . $post_id . '" />';
+			$html .= '<input id="pf_valuator_post_id" type="hidden" value="' . $post_id . '" />';
 
 			foreach ( $field_data as $k => $v ) {
 				$data        = $v['default'];
@@ -314,7 +314,7 @@ class Valuator {
 				}
 
 				if ( $k == 'media_file' ) {
-					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><input type="button" class="button" id="upload_media_file_button" value="' . __( 'Upload Image', 'valuator' ) . '" data-uploader_title="Choose an image" data-uploader_button_text="Insert image file" /><input name="' . esc_attr( $k ) . '" type="text" id="upload_media_file" class="regular-text" value="' . esc_attr( $data ) . '" />' . "\n";
+					$html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr( $k ) . '">' . $v['name'] . '</label></th><td><input type="button" class="button" id="upload_media_file_button" value="' . __( 'Upload Image', 'pf_valuator' ) . '" data-uploader_title="Choose an image" data-uploader_button_text="Insert image file" /><input name="' . esc_attr( $k ) . '" type="text" id="upload_media_file" class="regular-text" value="' . esc_attr( $data ) . '" />' . "\n";
 					$html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
 					$html .= '</td><tr/>' . "\n";
 				} elseif ( $k == 'media_text' ) {
@@ -357,7 +357,7 @@ class Valuator {
 	public function meta_box_save( $post_id )
 	{
 		// Verify
-		if ( ( get_post_type() != $this->token ) || ! wp_verify_nonce( $_POST[ 'valuator_' . $this->token . '_nonce' ], plugin_basename( $this->dir ) ) ) {
+		if ( ( get_post_type() != $this->token ) || ! wp_verify_nonce( $_POST[ 'pf_valuator_' . $this->token . '_nonce' ], plugin_basename( $this->dir ) ) ) {
 			return $post_id;
 		}
 
@@ -428,7 +428,7 @@ class Valuator {
 	 */
 	public function enqueue_scripts()
 	{
-		if ( is_singular( 'valuator' ) ) {
+		if ( is_singular( 'pf_valuator' ) ) {
 			wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/style.css' ), array(), '1.2.0' );
 			wp_register_style( 'animate', esc_url( $this->assets_url . 'css/animate.css' ), array(), '1.2.0' );
 			wp_register_style( 'roboto', 'http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300' );
@@ -462,8 +462,8 @@ class Valuator {
 		$fields = array();
 
 		$fields['legal_broker'] = array(
-			'name'        => __( 'Your Legal Broker', 'valuator' ),
-			'description' => __( 'This will be displayed on the bottom of each page.', 'valuator' ),
+			'name'        => __( 'Your Legal Broker', 'pf_valuator' ),
+			'description' => __( 'This will be displayed on the bottom of each page.', 'pf_valuator' ),
 			'placeholder' => '',
 			'type'        => 'text',
 			'default'     => '',
@@ -471,52 +471,53 @@ class Valuator {
 		);
 
 		$fields['offer'] = array(
-			'name'        => __( 'Offer', 'valuator' ),
-			'description' => __( 'The offer for users to incentivize them to give you their contact information upon completion of the home valuation.', 'valuator' ),
-			'placeholder' => __( 'Ex: Awesome. Just tell me where to mail your free report!', 'valuator' ),
+			'name'        => __( 'Offer', 'pf_valuator' ),
+			'description' => __( 'The offer for users to incentivize them to give you their contact information upon completion of the home valuation.', 'pf_valuator' ),
+			'placeholder' => __( 'Ex: Awesome. Just tell me where to mail your free report!', 'pf_valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
 		);
 
 		$fields['call_to_action'] = array(
-			'name'        => __( 'Call To Action', 'valuator' ),
-			'description' => __( 'The call to action for users after they have received their home\'s value.', 'valuator' ),
-			'placeholder' => __( 'Ex: Yes, Send Me The Free Report!', 'valuator' ),
+			'name'        => __( 'Call To Action', 'pf_valuator' ),
+			'description' => __( 'The call to action for users after they have received their home\'s value.', 'pf_valuator' ),
+			'placeholder' => __( 'Ex: Yes, Send Me The Free Report!', 'pf_valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
 		);
 
 		$fields['retargeting'] = array(
-			'name'        => __( 'Retargeting (optional)', 'valuator' ),
-			'description' => __( 'Facebook retargeting pixel to help track performance of your ad (optional).', 'valuator' ),
-			'placeholder' => __( 'Ex: 4123423454', 'valuator' ),
+			'name'        => __( 'Retargeting (optional)', 'pf_valuator' ),
+			'description' => __( 'Facebook retargeting pixel to help track performance of your ad (optional).', 'pf_valuator' ),
+			'placeholder' => __( 'Ex: 4123423454', 'pf_valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
 		);
 
 		$fields['conversion'] = array(
-			'name'        => __( 'Conversion Tracking (optional)', 'valuator' ),
-			'description' => __( 'Facebook conversion tracking pixel to help track performance of your ad (optional).', 'valuator' ),
-			'placeholder' => __( 'Ex: 170432123454', 'valuator' ),
+			'name'        => __( 'Conversion Tracking (optional)', 'pf_valuator' ),
+			'description' => __( 'Facebook conversion tracking pixel to help track performance of your ad (optional).', 'pf_valuator' ),
+			'placeholder' => __( 'Ex: 170432123454', 'pf_valuator' ),
 			'type'        => 'text',
 			'default'     => '',
 			'section'     => 'info'
 		);
 
 		$fields['media_file'] = array(
-			'name'        => __( 'Media File', 'valuator' ),
-			'description' => __( 'If using an image on the final opt-in page, upload it here. If using a YouTube video (recommended), paste the link to the video here instead.', 'valuator' ),
+			'name'        => __( 'Media File', 'pf_valuator' ),
+			'description' => __( 'If using an image on the final opt-in page, upload it here. If using a YouTube video (recommended), paste the link to the video here instead.', 'pf_valuator' ),
+			'placeholder' => '',
 			'type'        => 'url',
 			'default'     => '',
 			'section'     => 'info'
 		);
 
 		$fields['media_text'] = array(
-			'name'        => __( 'Opt-In Text', 'valuator' ),
-			'description' => __( 'If using an image on the final opt-in page, enter the block of text that will be displayed under it. If using a video, no text will be displayed.', 'valuator' ),
+			'name'        => __( 'Opt-In Text', 'pf_valuator' ),
+			'description' => __( 'If using an image on the final opt-in page, enter the block of text that will be displayed under it. If using a video, no text will be displayed.', 'pf_valuator' ),
 			'placeholder' => '',
 			'type'        => 'text',
 			'default'     => '',
@@ -524,8 +525,8 @@ class Valuator {
 		);
 
 		$fields['primary_color'] = array(
-			'name'        => __( 'Primary Color', 'valuator' ),
-			'description' => __( 'Change the primary color of the valuation page.', 'valuator' ),
+			'name'        => __( 'Primary Color', 'pf_valuator' ),
+			'description' => __( 'Change the primary color of the valuation page.', 'pf_valuator' ),
 			'placeholder' => '',
 			'type'        => 'color',
 			'default'     => '',
@@ -533,15 +534,15 @@ class Valuator {
 		);
 
 		$fields['hover_color'] = array(
-			'name'        => __( 'Hover Color', 'valuator' ),
-			'description' => __( 'Change the button hover color of the valuation page.', 'valuator' ),
+			'name'        => __( 'Hover Color', 'pf_valuator' ),
+			'description' => __( 'Change the button hover color of the valuation page.', 'pf_valuator' ),
 			'placeholder' => '',
 			'type'        => 'color',
 			'default'     => '',
 			'section'     => 'info'
 		);
 
-		return apply_filters( 'valuator_valuation_fields', $fields );
+		return apply_filters( 'pf_valuator_valuation_fields', $fields );
 	}
 
 	/**
@@ -553,7 +554,7 @@ class Valuator {
 	{
 
 		// Single home valuation page template
-		if ( is_single() && get_post_type() == 'valuator' ) {
+		if ( is_single() && get_post_type() == 'pf_valuator' ) {
 			include( $this->template_path . 'single-valuation.php' );
 			exit;
 		}
@@ -634,7 +635,7 @@ class Valuator {
 	 */
 	public function create_frontdesk_campaign( $post_ID )
 	{
-		if ( get_post_type( $post_ID ) != 'valuator' )
+		if ( get_post_type( $post_ID ) != 'pf_valuator' )
 			return false;
 
 		$title     = get_the_title( $post_ID );
@@ -652,7 +653,7 @@ class Valuator {
 	 */
 	public function process_step_one()
 	{
-		if ( isset( $_POST['valuator_nonce'] ) && wp_verify_nonce( $_POST['valuator_nonce'], 'valuator_step_one' ) ) {
+		if ( isset( $_POST['pf_valuator_nonce'] ) && wp_verify_nonce( $_POST['pf_valuator_nonce'], 'pf_valuator_step_one' ) ) {
 			global $wpdb;
 			$blog_id = get_current_blog_id();
 
@@ -820,7 +821,7 @@ class Valuator {
 	{
 		$screen = get_current_screen();
 
-		if ( 'valuator' == $screen->post_type ) {
+		if ( 'pf_valuator' == $screen->post_type ) {
 			$title = 'Enter a Title For Your Home Valuation Page';
 		}
 
@@ -842,7 +843,7 @@ class Valuator {
 			 WHERE `id` IN (' . $leads_to_delete . ')'
 		) );
 
-		wp_redirect( admin_url( 'edit.php?post_type=valuator&page=valuator_leads&deleted=true' ) );
+		wp_redirect( admin_url( 'edit.php?post_type=pf_valuator&page=pf_valuator_leads&deleted=true' ) );
 		die();
 	}
 
