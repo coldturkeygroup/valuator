@@ -28,7 +28,7 @@ class FrontDesk {
 		$this->guzzle      = new Client();
 
 		// Display admin notices when required
-		add_action( 'admin_notices', array( $this, 'adminNotices' ) );
+		add_action( 'admin_notices', [ $this, 'adminNotices' ] );
 	}
 
 	/**
@@ -41,8 +41,7 @@ class FrontDesk {
 	public function createCampaign( $title, $permalink )
 	{
 		try {
-			if ( $this->api_key != null || $this->api_key != '' )
-			{
+			if ( $this->api_key != null || $this->api_key != '' ) {
 				$this->guzzle->post( $this->api_base . 'campaigns/', [
 					'body' => [
 						'key'         => $this->api_key,
@@ -53,11 +52,11 @@ class FrontDesk {
 					]
 				] );
 
-				add_filter( 'redirect_post_location', array( $this, 'add_success_var' ), 99 );
+				add_filter( 'redirect_post_location', [ $this, 'add_success_var' ], 99 );
 			}
 		}
 		catch ( RequestException $e ) {
-			add_filter( 'redirect_post_location', array( $this, 'add_error_var' ), 99 );
+			add_filter( 'redirect_post_location', [ $this, 'add_error_var' ], 99 );
 		}
 	}
 
@@ -140,9 +139,9 @@ class FrontDesk {
 	 */
 	public function add_success_var( $location )
 	{
-		remove_filter( 'redirect_post_location', array( $this, 'add_success_var' ), 99 );
+		remove_filter( 'redirect_post_location', [ $this, 'add_success_var' ], 99 );
 
-		return add_query_arg( array( 'pf_valuator_frontdesk_success' => true ), $location );
+		return add_query_arg( [ 'pf_valuator_frontdesk_success' => true ], $location );
 	}
 
 	/**
@@ -155,9 +154,9 @@ class FrontDesk {
 	 */
 	public function add_error_var( $location )
 	{
-		remove_filter( 'redirect_post_location', array( $this, 'add_error_var' ), 99 );
+		remove_filter( 'redirect_post_location', [ $this, 'add_error_var' ], 99 );
 
-		return add_query_arg( array( 'pf_valuator_frontdesk_error' => true ), $location );
+		return add_query_arg( [ 'pf_valuator_frontdesk_error' => true ], $location );
 	}
 
 	/**

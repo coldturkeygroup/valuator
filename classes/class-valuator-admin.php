@@ -25,20 +25,20 @@ class Valuator_Admin {
 		$this->token      = 'pf_valuator';
 
 		// Register podcast settings
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', [ $this, 'register_settings' ] );
 
 		// Add settings page to menu
-		add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
+		add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
 
 		// Add settings link to plugins page
-		add_filter( 'plugin_action_links_' . plugin_basename( $this->file ), array( $this, 'add_settings_link' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( $this->file ), [ $this, 'add_settings_link' ] );
 
 		// Load scripts for settings page
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 10 );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ], 10 );
 
 		// Display notices in the WP admin
-		add_action( 'admin_notices', array( $this, 'admin_notices' ), 10 );
-		add_action( 'admin_init', array( $this, 'admin_notice_actions' ), 1 );
+		add_action( 'admin_notices', [ $this, 'admin_notices' ], 10 );
+		add_action( 'admin_init', [ $this, 'admin_notice_actions' ], 1 );
 
 	}
 
@@ -47,13 +47,16 @@ class Valuator_Admin {
 	 *
 	 */
 	public function add_menu_item()
-	{		
-		add_submenu_page( 'edit.php?post_type=pf_valuator', 'Leads', 'Leads', 'manage_options', "pf_valuator_leads", array($this, 'leads_page'));
-		
-		add_submenu_page( 'edit.php?post_type=pf_valuator', 'Home Valuation Settings', 'Settings', 'manage_options', 'pf_valuator_settings', array(
-				$this,
-				'settings_page'
-			) );
+	{
+		add_submenu_page( 'edit.php?post_type=pf_valuator', 'Leads', 'Leads', 'manage_options', "pf_valuator_leads", [
+			$this,
+			'leads_page'
+		] );
+
+		add_submenu_page( 'edit.php?post_type=pf_valuator', 'Home Valuation Settings', 'Settings', 'manage_options', 'pf_valuator_settings', [
+			$this,
+			'settings_page'
+		] );
 	}
 
 	/**
@@ -81,7 +84,7 @@ class Valuator_Admin {
 	{
 		global $wp_version;
 		// Admin JS
-		wp_register_script( 'valuator-admin', esc_url( $this->assets_url . 'js/admin.js' ), array( 'jquery' ), '1.7.5' );
+		wp_register_script( 'valuator-admin', esc_url( $this->assets_url . 'js/admin.js' ), [ 'jquery' ], '1.7.5' );
 		wp_enqueue_script( 'valuator-admin' );
 
 		if ( $wp_version >= 3.5 ) {
@@ -151,27 +154,27 @@ class Valuator_Admin {
 	{
 
 		// Add settings section
-		add_settings_section( 'customize', __( 'Basic Settings', 'pf_valuator' ), array(
-				$this,
-				'main_settings'
-			), 'pf_valuator' );
+		add_settings_section( 'customize', __( 'Basic Settings', 'pf_valuator' ), [
+			$this,
+			'main_settings'
+		], 'pf_valuator' );
 
 		// Add settings fields
-		add_settings_field( 'pf_valuator_slug', __( 'URL slug for home valuation pages:', 'pf_valuator' ), array(
-				$this,
-				'slug_field'
-			), 'pf_valuator', 'customize' );
-		add_settings_field( 'pf_valuator_zillow_key', __( 'Zillow API key:', 'pf_valuator' ), array(
-				$this,
-				'zillow_key_field'
-			), 'pf_valuator', 'customize' );
-		add_settings_field( 'pf_valuator_frontdesk_key', __( 'FrontDesk API key:', 'pf_valuator' ), array(
-				$this,
-				'frontdesk_key_field'
-			), 'pf_valuator', 'customize' );
+		add_settings_field( 'pf_valuator_slug', __( 'URL slug for home valuation pages:', 'pf_valuator' ), [
+			$this,
+			'slug_field'
+		], 'pf_valuator', 'customize' );
+		add_settings_field( 'pf_valuator_zillow_key', __( 'Zillow API key:', 'pf_valuator' ), [
+			$this,
+			'zillow_key_field'
+		], 'pf_valuator', 'customize' );
+		add_settings_field( 'pf_valuator_frontdesk_key', __( 'FrontDesk API key:', 'pf_valuator' ), [
+			$this,
+			'frontdesk_key_field'
+		], 'pf_valuator', 'customize' );
 
 		// Register settings fields
-		register_setting( 'pf_valuator', 'pf_valuator_slug', array( $this, 'validate_slug' ) );
+		register_setting( 'pf_valuator', 'pf_valuator_slug', [ $this, 'validate_slug' ] );
 		register_setting( 'pf_valuator', 'pf_valuator_zillow_key' );
 		register_setting( 'pf_valuator', 'pf_valuator_frontdesk_key' );
 
@@ -292,18 +295,17 @@ class Valuator_Admin {
 	/**
 	 * Create the actual HTML structure
 	 * for the Settings page for the plugin
-	 * 
+	 *
 	 */
 	public function settings_page()
-	{	
-		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true )
-		{
+	{
+		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true ) {
 			flush_rewrite_rules();
 			echo '<div class="updated">
 	      			<p>Your settings were successfully updated.</p>
 						</div>';
 		}
-		
+
 		echo '<div class="wrap" id="pf_valuator_settings">
 					<h2>' . __( 'Home Valuator Settings', 'pf_valuator' ) . '</h2>
 					<form method="post" action="options.php" enctype="multipart/form-data">
@@ -318,103 +320,104 @@ class Valuator_Admin {
 					</form>
 			  </div>';
 	}
-	
+
 	/**
 	 * Create the actual HTML structure
 	 * for the Leads page for the plugin
-	 * 
+	 *
 	 */
 	public function leads_page()
 	{
 		global $wpdb;
-		$blog_id		= get_current_blog_id();
+		$blog_id    = get_current_blog_id();
 		$table_name = $wpdb->base_prefix . $this->token;
-		
-		if( isset($_GET['lead_type']) && $_GET['lead_type'] == 'complete' )
-		{
-			$leads = $wpdb->get_results("SELECT DISTINCT * FROM `$table_name` WHERE `blog_id` = '$blog_id' AND `phone` is not null ORDER BY `id` DESC");
+
+		if ( isset( $_GET['lead_type'] ) && $_GET['lead_type'] == 'complete' ) {
+			$leads = $wpdb->get_results( "SELECT DISTINCT * FROM `$table_name` WHERE `blog_id` = '$blog_id' AND `phone` is not null ORDER BY `id` DESC" );
+		} else {
+			$leads = $wpdb->get_results( "SELECT DISTINCT * FROM `$table_name` WHERE `blog_id` = '$blog_id' ORDER BY `id` DESC" );
 		}
-		else
-		{
-			$leads = $wpdb->get_results("SELECT DISTINCT * FROM `$table_name` WHERE `blog_id` = '$blog_id' ORDER BY `id` DESC");
-		}
-		
+
 		?>
 		<div class="wrap" id="pf_valuator_leads">
 			<h2>Home Valuator Leads</h2>
-			
+
 			<?php
-			if ( isset($_GET['deleted']) && $_GET['deleted'] == true )
+			if ( isset( $_GET['deleted'] ) && $_GET['deleted'] == true )
 				echo '<div class="updated">
 	      				<p>The requested leads have been deleted!</p>
 							</div>';
 			?>
-			
+
 			<ul id="settings-sections" class="subsubsub hide-if-no-js" style="margin-bottom:15px;">
-				<li><a class="tab all <? if( ! isset($_GET['lead_type'])) { echo 'current'; } ?>" href="edit.php?post_type=pf_valuator&page=pf_valuator_leads">All Leads</a> |</li>
-				<li><a class="tab <? if(isset($_GET['lead_type'])) { echo 'current'; } ?>" href="edit.php?post_type=pf_valuator&page=pf_valuator_leads&lead_type=complete">Complete Leads</a></li>
+				<li><a class="tab all <? if ( ! isset( $_GET['lead_type'] ) ) {
+						echo 'current';
+					} ?>" href="edit.php?post_type=pf_valuator&page=pf_valuator_leads">All Leads</a> |
+				</li>
+				<li><a class="tab <? if ( isset( $_GET['lead_type'] ) ) {
+						echo 'current';
+					} ?>" href="edit.php?post_type=pf_valuator&page=pf_valuator_leads&lead_type=complete">Complete Leads</a></li>
 			</ul>
-			
+
 			<form id="leads_form" method="post" action="admin-post.php">
 				<input type="hidden" name="action" value="pf_valuator_remove_leads">
-        <?php wp_nonce_field( 'pf_valuator_remove_leads' ); ?>
+				<?php wp_nonce_field( 'pf_valuator_remove_leads' ); ?>
 				<table class="widefat fixed" style="margin-bottom:5px" cellspacing="0">
-	      	<thead>
-	        	<tr>
-		        	<th scope="col" class="manage-column entry_nowrap" style="width: 2.2em;"></th>
-		        	<th scope="col" class="manage-column entry_nowrap">Name</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Email</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Address</th>
-		        	<th scope="col" class="manage-column entry_nowrap" style="width: 4em;">Unit #</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Phone</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Estimated Value</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Submitted</th>
-	        	</tr>	
-	      	</thead>
-	      	<tbody class="user-list">
-		      	<?php
-			      	$i = 0;
-			      	foreach($leads as $lead)
-			      	{
-				      	$name = $lead->first_name;
-				      	if($lead->last_name != null)
-				      		$name .= ' ' . $lead->last_name;
-				      	if($i % 2 === 0
-				      		? $alternate = ''
-				      		: $alternate = 'alternate'
-				      	);
-				      	$i++;
-				      			
-				      	echo '<tr class="author-self status-inherit lead_unread '.$alternate.'" valign="top">
-				      					<td><input type="checkbox" name="delete_lead[]" value="'.$lead->id.'"></td>
-				      					<td class="entry_nowrap">'.$name.'</td>
-				      					<td class="entry_nowrap">'.$lead->email.'</td>
-				      					<td class="entry_nowrap">'.$lead->address.'</td>
-				      					<td class="entry_nowrap">'.$lead->address2.'</td>
-				      					<td class="entry_nowrap">'.$lead->phone.'</td>
-				      					<td class="entry_nowrap">'.$lead->property_estimate.'</td>
-				      					<td class="entry_nowrap">'.date("M j Y, h:i:a", strtotime($lead->created_at)).'</td>
+					<thead>
+					<tr>
+						<th scope="col" class="manage-column entry_nowrap" style="width: 2.2em;"></th>
+						<th scope="col" class="manage-column entry_nowrap">Name</th>
+						<th scope="col" class="manage-column entry_nowrap">Email</th>
+						<th scope="col" class="manage-column entry_nowrap">Address</th>
+						<th scope="col" class="manage-column entry_nowrap" style="width: 4em;">Unit #</th>
+						<th scope="col" class="manage-column entry_nowrap">Phone</th>
+						<th scope="col" class="manage-column entry_nowrap">Estimated Value</th>
+						<th scope="col" class="manage-column entry_nowrap">Submitted</th>
+					</tr>
+					</thead>
+					<tbody class="user-list">
+					<?php
+					$i = 0;
+					foreach ( $leads as $lead ) {
+						$name = $lead->first_name;
+						if ( $lead->last_name != null )
+							$name .= ' ' . $lead->last_name;
+						if ( $i % 2 === 0
+							? $alternate = ''
+							: $alternate = 'alternate'
+						) ;
+						$i ++;
+
+						echo '<tr class="author-self status-inherit lead_unread ' . $alternate . '" valign="top">
+				      					<td><input type="checkbox" name="delete_lead[]" value="' . $lead->id . '"></td>
+				      					<td class="entry_nowrap">' . $name . '</td>
+				      					<td class="entry_nowrap">' . $lead->email . '</td>
+				      					<td class="entry_nowrap">' . $lead->address . '</td>
+				      					<td class="entry_nowrap">' . $lead->address2 . '</td>
+				      					<td class="entry_nowrap">' . $lead->phone . '</td>
+				      					<td class="entry_nowrap">' . $lead->property_estimate . '</td>
+				      					<td class="entry_nowrap">' . date( "M j Y, h:i:a", strtotime( $lead->created_at ) ) . '</td>
 				      				</tr>';
-			      	}
-			      ?>
-	      	</tbody>
-	      	<tfoot>
-	        	<tr>
-		        	<th scope="col" class="manage-column entry_nowrap"></th>
-		        	<th scope="col" class="manage-column entry_nowrap">Name</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Email</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Address</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Unit #</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Phone</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Estimated Value</th>
-		        	<th scope="col" class="manage-column entry_nowrap">Submitted</th>
-	        	</tr>	
-	      	</tfoot>
+					}
+					?>
+					</tbody>
+					<tfoot>
+					<tr>
+						<th scope="col" class="manage-column entry_nowrap"></th>
+						<th scope="col" class="manage-column entry_nowrap">Name</th>
+						<th scope="col" class="manage-column entry_nowrap">Email</th>
+						<th scope="col" class="manage-column entry_nowrap">Address</th>
+						<th scope="col" class="manage-column entry_nowrap">Unit #</th>
+						<th scope="col" class="manage-column entry_nowrap">Phone</th>
+						<th scope="col" class="manage-column entry_nowrap">Estimated Value</th>
+						<th scope="col" class="manage-column entry_nowrap">Submitted</th>
+					</tr>
+					</tfoot>
 				</table>
 				<input type="submit" class="button" value="Delete Selected Leads">
 			</form>
 		</div>
-		<?php
+	<?php
 	}
 
 }
