@@ -31,7 +31,7 @@ class Valuator {
 		$this->assets_dir    = trailingslashit( $this->dir ) . 'assets';
 		$this->assets_url    = esc_url( trailingslashit( plugins_url( '/assets/', $file ) ) );
 		$this->template_path = trailingslashit( $this->dir ) . 'templates/';
-		$this->home_url      = trailingslashit( home_url() );
+		$this->home_url      = trailingslashit( get_option( 'siteurl' ) );
 		$this->token         = 'pf_valuator';
 		$this->frontdesk     = new FrontDesk();
 		$this->zillow        = new Zillow();
@@ -43,7 +43,7 @@ class Valuator {
 		add_action( 'init', [ $this, 'register_post_type' ] );
 
 		// Use built-in templates for landing pages
-		add_action( 'template_redirect', [ $this, 'page_templates' ], 10 );
+		add_action( 'template_redirect', [ $this, 'page_templates' ], 20 );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
 		// Handle form submissions
@@ -532,13 +532,11 @@ class Valuator {
 	 */
 	public function page_templates()
 	{
-
 		// Single home valuation page template
 		if ( is_single() && get_post_type() == 'pf_valuator' ) {
 			include( $this->template_path . 'single-valuation.php' );
 			exit;
 		}
-
 	}
 
 	/**
@@ -618,9 +616,23 @@ class Valuator {
 		if ( get_post_type( $post_ID ) != 'pf_valuator' )
 			return false;
 
+		global $wpdb;
 		$title     = get_the_title( $post_ID );
 		$permalink = get_permalink( $post_ID );
 
+		// See if we're using domain mapping
+		$wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->dmtable}'" ) == $wpdb->dmtable ) {
+			$blog_id     = get_current_blog_id();
+			$options_table = $wpdb->base_prefix . $blog_id . '_' .  'options';
+			
+			$mapped = $wpdb->get_var( "SELECT domain FROM {$wpdb->dmtable} WHERE blog_id = '{$blog_id}' ORDER BY CHAR_LENGTH(domain) DESC LIMIT 1" );
+			$domain   = $wpdb->get_var( "SELECT option_value FROM {$options_table} WHERE option_name = 'siteurl' LIMIT 1" );
+
+			if ( $mapped )
+				$permalink = str_replace($domain, 'http://' . $mapped, $permalink);
+		}
+		
 		$this->frontdesk->createCampaign( $title, $permalink );
 	}
 
