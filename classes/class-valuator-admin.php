@@ -262,7 +262,7 @@ class Valuator_Admin {
 
 		$option = get_option( 'pf_valuator_frontdesk_key' );
 
-		$data = '';
+		$data = get_option( 'pf_frontdesk_key', '' );
 		if ( $option && strlen( $option ) > 0 && $option != '' ) {
 			$data = $option;
 		}

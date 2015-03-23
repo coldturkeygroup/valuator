@@ -22,7 +22,10 @@ class FrontDesk {
 	 */
 	public function __construct( $api_version = 1 )
 	{
-		$this->api_key     = get_option( 'pf_valuator_frontdesk_key' );
+		if ( get_option( 'pf_frontdesk_key' )
+			? $this->api_key = get_option( 'pf_frontdesk_key' )
+			: $this->api_key = get_option( 'pf_valuator_frontdesk_key' )
+		) ;
 		$this->api_version = $api_version;
 		$this->api_base    = 'https://tryfrontdesk.com/api/v' . $api_version . '/';
 		$this->guzzle      = new Client();
