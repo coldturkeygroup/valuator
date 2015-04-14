@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Valuator
- * Version: 1.7
+ * Version: 1.8
  * Plugin URI: http://www.coldturkeygroup.com/
  * Description: Home Valuation plugin that creates landing pages and allows visitors to get valuation data from Zillow API.
  * Author: Cold Turkey Group
@@ -18,6 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 if ( ! defined( 'VALUATOR_PLUGIN_PATH' ) )
 	define( 'VALUATOR_PLUGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+
+if ( ! defined( 'VALUATOR_PLUGIN_VERSION' ) )
+	define( 'VALUATOR_PLUGIN_VERSION', '1.8' );
 
 require_once( 'classes/class-valuator.php' );
 

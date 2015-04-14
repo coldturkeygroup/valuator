@@ -96,7 +96,7 @@ if ( $hover_setting && strlen( $hover_setting ) > 0 && $hover_setting != '' ) {
 	</head>
 
 <body <?php body_class(); ?>>
-<div id="content" class="valuation-page">
+<div class="valuation-page">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 well well-sm" id="step-one-well" data-model="stepOne">

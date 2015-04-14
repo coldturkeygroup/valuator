@@ -44,7 +44,7 @@ class Valuator {
 
 		// Use built-in templates for landing pages
 		add_action( 'template_redirect', [ $this, 'page_templates' ], 20 );
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ], 900 );
 
 		// Handle form submissions
 		add_action( 'wp_ajax_pf_valuator_step_one', [ $this, 'process_step_one' ] );
@@ -400,8 +400,8 @@ class Valuator {
 	public function enqueue_scripts()
 	{
 		if ( is_singular( 'pf_valuator' ) ) {
-			wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/style.css' ), [ ], '1.2.0' );
-			wp_register_style( 'animate', esc_url( $this->assets_url . 'css/animate.css' ), [ ], '1.2.0' );
+			wp_register_style( 'valuator', esc_url( $this->assets_url . 'css/homevaluator.css' ), [ ], VALUATOR_PLUGIN_VERSION );
+			wp_register_style( 'animate', esc_url( $this->assets_url . 'css/animate.css' ), [ ], VALUATOR_PLUGIN_VERSION );
 			wp_register_style( 'roboto', 'http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300' );
 			wp_register_style( 'robo-slab', 'http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' );
 			wp_enqueue_style( 'valuator' );
@@ -623,16 +623,16 @@ class Valuator {
 		// See if we're using domain mapping
 		$wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->dmtable}'" ) == $wpdb->dmtable ) {
-			$blog_id     = get_current_blog_id();
-			$options_table = $wpdb->base_prefix . $blog_id . '_' .  'options';
-			
+			$blog_id       = get_current_blog_id();
+			$options_table = $wpdb->base_prefix . $blog_id . '_' . 'options';
+
 			$mapped = $wpdb->get_var( "SELECT domain FROM {$wpdb->dmtable} WHERE blog_id = '{$blog_id}' ORDER BY CHAR_LENGTH(domain) DESC LIMIT 1" );
-			$domain   = $wpdb->get_var( "SELECT option_value FROM {$options_table} WHERE option_name = 'siteurl' LIMIT 1" );
+			$domain = $wpdb->get_var( "SELECT option_value FROM {$options_table} WHERE option_name = 'siteurl' LIMIT 1" );
 
 			if ( $mapped )
-				$permalink = str_replace($domain, 'http://' . $mapped, $permalink);
+				$permalink = str_replace( $domain, 'http://' . $mapped, $permalink );
 		}
-		
+
 		$this->frontdesk->createCampaign( $title, $permalink );
 	}
 
