@@ -637,6 +637,31 @@ class Valuator {
 	}
 
 	/**
+	 * Email the quiz results to the website admin
+	 *
+	 * @param $user_id
+	 */
+	protected function emailResultsToAdmin( $user_id )
+	{
+		// Get the prospect data saved previously
+		global $wpdb;
+		$subscriber = $wpdb->get_row( 'SELECT * FROM ' . $this->table_name . ' WHERE id = \'' . $user_id . '\' ORDER BY id DESC LIMIT 0,1' );
+
+		// Format the email and send it
+		$admin_email = get_bloginfo( 'admin_email' );
+		$headers[]   = 'From: Platform <info@platform.marketing>';
+		$headers[]   = 'Content-Type: text/html; charset=UTF-8';
+		$subject     = 'New Home Valuator Submission';
+		// Load template into message
+		ob_start();
+		include $this->template_path . 'single-email.php';
+		$message = ob_get_contents();
+		ob_end_clean();
+
+		wp_mail( $admin_email, $subject, $message, $headers );
+	}
+
+	/**
 	 * Perform the required actions for the first
 	 * step of the Valuator template page.
 	 * Create a DB record for the user, and return the ID.
@@ -655,7 +680,7 @@ class Valuator {
 			$wpdb->query( $wpdb->prepare(
 				'INSERT INTO ' . $this->table_name . '
 				 ( blog_id, address, address2, created_at, updated_at )
-				 VALUES ( %s, %s, %s, NOW(), NOW() )',
+				 VALUES ( %d, %s, %s, NOW(), NOW() )',
 				[
 					$blog_id,
 					$address,
@@ -757,6 +782,9 @@ class Valuator {
 				(string) $zestimate['amount']
 			]
 		) );
+
+		// Email the blog owner the details for the new prospect
+		$this->emailResultsToAdmin( $property_id );
 
 		echo json_encode( $zestimate );
 		die();
