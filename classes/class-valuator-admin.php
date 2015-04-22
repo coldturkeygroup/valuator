@@ -119,7 +119,7 @@ class Valuator_Admin {
 		if ( ( $zillow_key == null || $zillow_key == '' ) && ! $hide_zillow_notice ) {
 			?>
 			<div class="error">
-				<p><?php printf( __( '%1$sHome Valuator%2$s requires you to enter your Zillow API key. Without it, we will be unable to provide values for any homes. Enter the key on the %3$ssettings page%4$s. %5$sHide this notice%6$s', 'pf_valuator' ), '<strong>', '</strong>', '<a href="edit.php?post_type=pf_valuator&page=pf_valuator_settings">', '</a>', '<em><a href="' . add_query_arg( 'pf_valuator_hide_notice', 'zillow' ) . '">', '</a></em>' ); ?></p>
+				<p><?php printf( __( '%1$sHome Valuator%2$s requires you to enter your Zillow API key. Without it, we will be unable to provide values for any homes. Enter the key on the %3$ssettings page%4$s. %5$sHide this notice%6$s', 'pf_valuator' ), '<strong>', '</strong>', '<a href="edit.php?post_type=pf_valuator&page=pf_valuator_settings">', '</a>', '<em><a href="' . esc_url( add_query_arg( 'pf_valuator_hide_notice', 'zillow' ) ) . '">', '</a></em>' ); ?></p>
 			</div>
 		<?php
 		}

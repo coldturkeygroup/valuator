@@ -144,7 +144,7 @@ class FrontDesk {
 	{
 		remove_filter( 'redirect_post_location', [ $this, 'add_success_var' ], 99 );
 
-		return add_query_arg( [ 'pf_valuator_frontdesk_success' => true ], $location );
+		return esc_url( add_query_arg( [ 'pf_valuator_frontdesk_success' => true ], $location ) );
 	}
 
 	/**
@@ -159,7 +159,7 @@ class FrontDesk {
 	{
 		remove_filter( 'redirect_post_location', [ $this, 'add_error_var' ], 99 );
 
-		return add_query_arg( [ 'pf_valuator_frontdesk_error' => true ], $location );
+		return esc_url( add_query_arg( [ 'pf_valuator_frontdesk_error' => true ], $location ) );
 	}
 
 	/**
