@@ -3,7 +3,7 @@ Contributors: Aaron Huisinga
 Tags: zillow, real estate, valuation, home valuation
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.9.5
+Stable tag: 1.10
 
 Simple real estate lead generation through home valuation landing pages powered by Zillow.
 
