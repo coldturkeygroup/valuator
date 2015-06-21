@@ -16,6 +16,33 @@ jQuery('document').ready(function($) {
 		$('.btn-primary').removeAttr('disabled');
 	});
 
+  // Mailcheck
+  $('#email').on('keyup', function () {
+      var input = $(this);
+      if (input.val().length < 10) {
+          return false;
+      }
+
+      delay(function () {
+          input.mailcheck({
+              suggested: function (element, suggestion) {
+                  $('.mailcheck-suggestion').remove();
+                  $(element).after('<div class="mailcheck-suggestion" style="margin-top:5px;">Did you mean <a href="#">' + suggestion.full + '</a>?</div>');
+              },
+              empty: function () {
+                  $('.mailcheck-suggestion').remove();
+              }
+          });
+      }, 500);
+  });
+
+  $('.form-group').on('click', '.mailcheck-suggestion a', function (e) {
+      e.preventDefault();
+
+      $('#email').val($(this).text());
+      $('.mailcheck-suggestion').remove();
+  });
+
 	// Google Places address autocomplete
 	$("#address").geocomplete({
   	map: "#map_canvas",
