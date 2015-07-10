@@ -83,16 +83,18 @@ jQuery('document').ready(function ($) {
         var form = $(this);
         var method = form.find('input[name="_method"]').val() || 'POST';
 
-        $.ajax({
-            type: method,
-            url: Valuator.ajaxurl,
-            data: form.serialize(),
-            dataType: 'json',
-            async: true,
-            success: function (response) {
-                $.publish('ajax.request.success', [form, response]);
-            }
-        });
+        if (stepVerify(form.attr('id')) == 0) {
+            $.ajax({
+                type: method,
+                url: Valuator.ajaxurl,
+                data: form.serialize(),
+                dataType: 'json',
+                async: true,
+                success: function (response) {
+                    $.publish('ajax.request.success', [form, response]);
+                }
+            });
+        }
 
         e.preventDefault();
     };
@@ -247,4 +249,55 @@ jQuery('document').ready(function ($) {
             $('.thank-you').addClass('animated pulse');
         }, 1500);
     };
+
+    function stepVerify(step) {
+        $('.help-block').remove();
+        $('.form-group').removeClass('has-error');
+        var count = 0;
+
+        if (step === 'step-two') {
+            var inputs = ["first_name", "last_name", "email"];
+        }
+
+        if (inputs !== undefined) {
+            jQuery.each(inputs, function (i, id) {
+                if ($("#" + id).val() === '') {
+                    stepError(id, 'You must enter a value.');
+                    count++;
+                }
+            });
+        }
+
+        // Advanced Section Specific Validation
+        var nameregex = /^[a-z ,.'-]+$/i;
+        if (step === 'step-two' && count === 0) {
+            if (!nameregex.test($('#first_name').val())) {
+                stepError('first_name', 'Your first name can only contain letters.');
+                count++;
+            }
+        }
+
+        if (step === 'step-two' && count === 0) {
+            if (!nameregex.test($('#last_name').val())) {
+                stepError('last_name', 'Your last name can only contain letters.');
+                count++;
+            }
+        }
+
+        if (step === 'step-two' && count === 0) {
+            var emailregex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+            if (!emailregex.test($('#email').val())) {
+                stepError('email', 'Email address is not valid.');
+                count++;
+            }
+        }
+
+        function stepError(id, msg) {
+            $("#" + id).parent().addClass('has-error');
+            $("#" + id).after('<p class="help-block">Whoops! ' + msg + '</p>');
+        }
+
+        return count;
+    }
 });
