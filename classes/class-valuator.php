@@ -539,6 +539,9 @@ class Valuator
     {
         // Single home valuation page template
         if (is_single() && get_post_type() == 'pf_valuator') {
+            if (!defined('PLATFORM_FUNNEL'))
+                define('PLATFORM_FUNNEL', 'VALUATOR');
+
             include($this->template_path . 'single-valuation.php');
             exit;
         }
