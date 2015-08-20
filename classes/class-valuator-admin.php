@@ -307,7 +307,7 @@ class Valuator_Admin {
 		}
 
 		echo '<div class="wrap" id="pf_valuator_settings">
-					<h2>' . __( 'Home Valuator Settings', 'pf_valuator' ) . '</h2>
+					<h1>' . __( 'Home Valuator Settings', 'pf_valuator' ) . '</h1>
 					<form method="post" action="options.php" enctype="multipart/form-data">
 						<div class="clear"></div>';
 
@@ -340,7 +340,7 @@ class Valuator_Admin {
 
 		?>
 		<div class="wrap" id="pf_valuator_leads">
-			<h2>Home Valuator Leads</h2>
+			<h1>Home Valuator Leads</h1>
 
 			<?php
 			if ( isset( $_GET['deleted'] ) && $_GET['deleted'] == true )
