@@ -295,7 +295,7 @@ class Valuator
                     $html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr($k) . '">' . $v['name'] . '</label></th><td><textarea style="width:100%" name="' . esc_attr($k) . '" id="media_text" rows="' . $rows . '">' . esc_textarea($data) . '</textarea>' . "\n";
                     $html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
                     $html .= '</td><tr/>' . "\n";
-                } elseif ($k == 'legal_broker' || $k == 'retargeting' || $k == 'conversion' || $k == 'offer' || $k == 'call_to_action' || $k == 'submit_offer') {
+                } elseif ($k == 'legal_broker' || $k == 'retargeting' || $k == 'conversion' || $k == 'offer' || $k == 'call_to_action' || $k == 'submit_offer' || $k == 'email') {
                     $html .= '<tr valign="top"><th scope="row"><label for="' . esc_attr($k) . '">' . $v['name'] . '</label></th><td>';
                     $html .= '<input style="width:100%" name="' . esc_attr($k) . '" id="' . esc_attr($k) . '" placeholder="' . esc_attr($placeholder) . '"  type="text" value="' . esc_attr($data) . '" />';
                     $html .= '<p class="description">' . $v['description'] . '</p>' . "\n";
@@ -468,6 +468,15 @@ class Valuator
             'name' => __('Submit Button', 'pf_valuator'),
             'description' => __('The button users will click to confirm they would like to redeem your offer.', 'pf_valuator'),
             'placeholder' => __('Ex: Yes! Send Me The Report!', 'pf_valuator'),
+            'type' => 'text',
+            'default' => '',
+            'section' => 'info'
+        ];
+
+        $field['email'] = [
+            'name' => __('Notification Email', 'pf_valuator'),
+            'description' => __('This address will be emailed when a user opts-into your ad. If left empty, emails will be sent to the default address for your site.', 'pf_valuator'),
+            'placeholder' => '',
             'type' => 'text',
             'default' => '',
             'section' => 'info'
@@ -654,9 +663,13 @@ class Valuator
         // Get the prospect data saved previously
         global $wpdb;
         $subscriber = $wpdb->get_row('SELECT * FROM ' . $this->table_name . ' WHERE id = \'' . $user_id . '\' ORDER BY id DESC LIMIT 0,1');
+        $email = get_bloginfo('admin_email');
+
+        if (get_post_meta($quiz_id, 'email', true) != null && filter_var(get_post_meta($quiz_id, 'email', true), FILTER_VALIDATE_EMAIL)) {
+            $email = get_post_meta($id, 'email', true);
+        }
 
         // Format the email and send it
-        $admin_email = get_bloginfo('admin_email');
         $headers[] = 'From: Platform <info@platform.marketing>';
         $headers[] = 'Reply-To: ' . $subscriber->email;
         $headers[] = 'Content-Type: text/html; charset=UTF-8';
@@ -667,7 +680,7 @@ class Valuator
         $message = ob_get_contents();
         ob_end_clean();
 
-        wp_mail($admin_email, $subject, $message, $headers);
+        wp_mail($email, $subject, $message, $headers);
     }
 
     /**
