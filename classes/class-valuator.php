@@ -657,16 +657,17 @@ class Valuator
      * Email the quiz results to the website admin
      *
      * @param $user_id
+     * @param $page_id
      */
-    protected function emailResultsToAdmin($user_id)
+    protected function emailResultsToAdmin($user_id, $page_id)
     {
         // Get the prospect data saved previously
         global $wpdb;
         $subscriber = $wpdb->get_row('SELECT * FROM ' . $this->table_name . ' WHERE id = \'' . $user_id . '\' ORDER BY id DESC LIMIT 0,1');
         $email = get_bloginfo('admin_email');
 
-        if (get_post_meta($quiz_id, 'email', true) != null && filter_var(get_post_meta($quiz_id, 'email', true), FILTER_VALIDATE_EMAIL)) {
-            $email = get_post_meta($id, 'email', true);
+        if (get_post_meta($page_id, 'email', true) != null && filter_var(get_post_meta($page_id, 'email', true), FILTER_VALIDATE_EMAIL)) {
+            $email = get_post_meta($page_id, 'email', true);
         }
 
         // Format the email and send it
@@ -818,7 +819,7 @@ class Valuator
         }
 
         // Email the blog owner the details for the new prospect
-        $this->emailResultsToAdmin($property_id);
+        $this->emailResultsToAdmin($property_id, $page_id);
 
         echo json_encode($zestimate);
         die();
