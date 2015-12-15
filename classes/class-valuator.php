@@ -483,8 +483,8 @@ class Valuator
         ];
 
         $fields['retargeting'] = [
-            'name' => __('Retargeting (optional)', 'pf_valuator'),
-            'description' => __('Facebook retargeting pixel to help track performance of your ad (optional).', 'pf_valuator'),
+            'name' => __('Facebook Pixel - Retargeting (optional)', 'pf_valuator'),
+            'description' => __('Facebook Pixel to allow retargeting of people that view this page.', 'pf_valuator'),
             'placeholder' => __('Ex: 4123423454', 'pf_valuator'),
             'type' => 'text',
             'default' => '',
@@ -492,8 +492,8 @@ class Valuator
         ];
 
         $fields['conversion'] = [
-            'name' => __('Conversion Tracking (optional)', 'pf_valuator'),
-            'description' => __('Facebook conversion tracking pixel to help track performance of your ad (optional).', 'pf_valuator'),
+            'name' => __('Facebook Pixel - Conversion (optional)', 'pf_valuator'),
+            'description' => __('Facebook Pixel to allow conversion tracking of people that submit this page.', 'pf_valuator'),
             'placeholder' => __('Ex: 170432123454', 'pf_valuator'),
             'type' => 'text',
             'default' => '',
