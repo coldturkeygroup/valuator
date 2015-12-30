@@ -12,7 +12,7 @@ global $pf_valuator, $wp_query;
 
 $id = get_the_ID();
 $title = get_the_title();
-$permalink = get_permalink();
+$frontdesk_campaign = get_post_meta( $id, 'frontdesk_campaign', true );
 $content = wp_strip_all_tags(apply_filters('the_content', get_the_content()));
 $broker = get_post_meta($id, 'legal_broker', true);
 $retargeting = get_post_meta($id, 'retargeting', true);
@@ -153,7 +153,7 @@ if ($hover_setting && strlen($hover_setting) > 0 && $hover_setting != '') {
                         <input class="form-control" required="required" placeholder="Your Email Address" name="email" type="text" id="email">
                     </div>
                     <input name="page_id" type="hidden" value="<?= $id; ?>">
-                    <input name="permalink" type="hidden" value="<?= $permalink; ?>">
+                    <input name="frontdesk_campaign" type="hidden" value="<?= $frontdesk_campaign ?>">
                     <input name="property_id" id="property_id" type="hidden" value="">
                     <input name="action" type="hidden" value="pf_valuator_step_two">
                     <?php wp_nonce_field('pf_valuator_step_two', 'pf_valuator_nonce'); ?>

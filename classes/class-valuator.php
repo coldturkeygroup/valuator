@@ -633,11 +633,7 @@ class Valuator
         if (get_post_type($post_ID) != 'pf_valuator')
             return false;
 
-        if (($_POST['post_status'] != 'publish') || ($_POST['original_post_status'] == 'publish'))
-            return false;
-
         global $wpdb;
-        $title = get_the_title($post_ID);
         $permalink = get_permalink($post_ID);
 
         // See if we're using domain mapping
@@ -645,7 +641,6 @@ class Valuator
         if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->dmtable}'") == $wpdb->dmtable) {
             $blog_id = get_current_blog_id();
             $options_table = $wpdb->base_prefix . $blog_id . '_' . 'options';
-
             $mapped = $wpdb->get_var("SELECT domain FROM {$wpdb->dmtable} WHERE blog_id = '{$blog_id}' ORDER BY CHAR_LENGTH(domain) DESC LIMIT 1");
             $domain = $wpdb->get_var("SELECT option_value FROM {$options_table} WHERE option_name = 'siteurl' LIMIT 1");
 
@@ -653,7 +648,21 @@ class Valuator
                 $permalink = str_replace($domain, 'http://' . $mapped, $permalink);
         }
 
-        $this->frontdesk->createCampaign($title, $permalink);
+        if (($_POST['post_status'] != 'publish') || ($_POST['original_post_status'] == 'publish')) {
+            $campaign_id = get_post_meta($post_ID, 'frontdesk_campaign', true);
+
+            if ($campaign_id != '' && is_int($campaign_id)) {
+                $this->frontdesk->updateCampaign($campaign_id, get_the_title($post_ID), $permalink);
+            }
+
+            return true;
+        }
+
+        $campaign_id = $this->frontdesk->createCampaign(get_the_title($post_ID), $permalink);
+
+        if (is_int($campaign_id)) {
+            update_post_meta($post_ID, 'frontdesk_campaign', $campaign_id);
+        }
     }
 
     /**
@@ -732,11 +741,11 @@ class Valuator
     {
         global $wpdb;
         $page_id = sanitize_text_field($_POST['page_id']);
+        $frontdesk_campaign = sanitize_text_field($_POST['frontdesk_campaign']);
         $property_id = sanitize_text_field($_POST['property_id']);
         $first_name = sanitize_text_field($_POST['first_name']);
         $last_name = sanitize_text_field($_POST['last_name']);
         $email = sanitize_text_field($_POST['email']);
-        $source = sanitize_text_field($_POST['permalink']);
 
         // Get the property data saved from step one
         $property = $wpdb->get_row('SELECT address, address2 FROM ' . $this->table_name . ' WHERE id = \'' . $property_id . '\' ORDER BY id DESC LIMIT 0,1');
@@ -773,7 +782,7 @@ class Valuator
 
         // Create the prospect on FrontDesk
         $frontdesk_id = $this->frontdesk->createProspect([
-            'source' => $source,
+            'campaign_id' => $frontdesk_campaign,
             'first_name' => $first_name,
             'last_name' => $last_name,
             'email' => $email,
