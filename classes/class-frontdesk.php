@@ -28,7 +28,7 @@ class FrontDesk
             $this->api_key = get_option('pf_frontdesk_key');
         }
         $this->api_version = $api_version;
-        $this->api_base = 'https://tryfrontdesk.com/api/v' . $api_version . '/';
+        $this->api_base = 'https://platformcrm.com/api/v' . $api_version . '/';
         $this->guzzle = new Client();
 
         // Display admin notices when required
@@ -225,12 +225,12 @@ class FrontDesk
     {
         if (isset($_GET['pf_valuator_frontdesk_error']))
             echo '<div class="error">
-	      			<p>A Campaign with this URL already exists. No new FrontDesk Campaign has been created.</p>
+	      			<p>A Campaign with this URL already exists. No new Platform CRM Campaign has been created.</p>
 						</div>';
 
         if (isset($_GET['pf_valuator_frontdesk_success']))
             echo '<div class="updated">
-	      			<p>A Campaign for this Home Valuation has been successfully setup on FrontDesk!</p>
+	      			<p>A Campaign for this Home Valuation has been successfully setup on Platform CRM!</p>
 						</div>';
     }
 
