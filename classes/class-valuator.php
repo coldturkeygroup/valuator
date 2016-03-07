@@ -411,16 +411,20 @@ class Valuator
             wp_enqueue_style('roboto-slab');
 
             wp_register_script('google-places', 'https://maps.googleapis.com/maps/api/js?libraries=places', ['jquery']);
+            wp_register_script('geocoding-js', esc_url($this->assets_url . 'js/geocoding.js'), []);
             wp_register_script('valuator-js', esc_url($this->assets_url . 'js/scripts.js'), []);
-            wp_register_script('mailcheck', esc_url($this->assets_url . 'js/mailcheck.min.js'), [
+            wp_register_script('mailgun-validator', esc_url($this->assets_url . 'js/mailgun-validator.min.js'), [
                 'jquery'
             ], VALUATOR_PLUGIN_VERSION);
-            wp_enqueue_script('mailcheck');
+            wp_enqueue_script('mailgun-validator');
             wp_enqueue_script('google-places');
+            wp_enqueue_script('geocoding-js');
             wp_enqueue_script('valuator-js');
 
             $localize = [
-                'ajaxurl' => admin_url('admin-ajax.php')
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'mailgun' => defined('MAILGUN_PUBLIC') ? MAILGUN_PUBLIC : ''
+
             ];
             wp_localize_script('valuator-js', 'Valuator', $localize);
         }
