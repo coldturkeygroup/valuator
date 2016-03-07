@@ -413,7 +413,7 @@ class Valuator
             wp_register_script('google-places', 'https://maps.googleapis.com/maps/api/js?libraries=places', ['jquery']);
             wp_register_script('geocoding-js', esc_url($this->assets_url . 'js/geocoding.js'), []);
             wp_register_script('valuator-js', esc_url($this->assets_url . 'js/scripts.js'), []);
-            wp_register_script('mailgun-validator', esc_url($this->assets_url . 'js/mailgun-validator.min.js'), [
+            wp_register_script('mailgun-validator', esc_url($this->assets_url . 'js/mailgun-validator.js'), [
                 'jquery'
             ], VALUATOR_PLUGIN_VERSION);
             wp_enqueue_script('mailgun-validator');
