@@ -12,7 +12,7 @@ global $pf_valuator, $wp_query;
 
 $id = get_the_ID();
 $title = get_the_title();
-$frontdesk_campaign = get_post_meta( $id, 'frontdesk_campaign', true );
+$frontdesk_campaign = get_post_meta($id, 'frontdesk_campaign', true);
 $broker = get_post_meta($id, 'legal_broker', true);
 $retargeting = get_post_meta($id, 'retargeting', true);
 $conversion = get_post_meta($id, 'conversion', true);
@@ -20,7 +20,12 @@ $offer = get_post_meta($id, 'offer', true);
 $call_to_action = get_post_meta($id, 'call_to_action', true);
 $submit_offer = get_post_meta($id, 'submit_offer', true);
 $phone = of_get_option('phone_number');
+$hide_phone = get_post_meta($id, 'hide_phone', true);
 $img = '';
+
+if ($hide_phone == '' || $hide_phone == null) {
+    $hide_phone = false;
+}
 
 // Get the background image
 if (has_post_thumbnail($id))
@@ -207,33 +212,46 @@ if ($hover_setting && strlen($hover_setting) > 0 && $hover_setting != '') {
     </div>
 
     <?php
-    if ( $retargeting != null ) {
+    if ($retargeting != null) {
         ?>
         <!-- Facebook Pixel Code -->
         <script>
-        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-        document,'script','//connect.facebook.net/en_US/fbevents.js');
+            !function (f, b, e, v, n, t, s) {
+                if (f.fbq)return;
+                n = f.fbq = function () {
+                    n.callMethod ?
+                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq)f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
+            }(window,
+                document, 'script', '//connect.facebook.net/en_US/fbevents.js');
 
-        fbq('init', '<?= $retargeting ?>');
-        fbq('track', "PageView");</script>
+            fbq('init', '<?= $retargeting ?>');
+            fbq('track', "PageView");</script>
         <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=<?= $retargeting ?>&ev=PageView&noscript=1"
-        /></noscript>
+                       src="https://www.facebook.com/tr?id=<?= $retargeting ?>&ev=PageView&noscript=1"
+            /></noscript>
         <?php
         echo '<input type="hidden" id="retargeting" value="' . $retargeting . '">';
     }
 
-    if ( $conversion != null ) {
+    if ($conversion != null) {
         echo '<input type="hidden" id="conversion" value="' . $conversion . '">';
     }
     ?>
 
     <div class="footer">
         <?php echo $broker;
-        if ($phone != null) {
+        if ($phone != null && $hide_phone != true) {
             echo ' &middot; ' . $phone;
         }
         ?>
