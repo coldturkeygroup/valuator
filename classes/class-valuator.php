@@ -5,9 +5,6 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly.
 // Composer autoloader
 require_once VALUATOR_PLUGIN_PATH . 'assets/vendor/autoload.php';
 
-use ColdTurkey\Valuator\FrontDesk;
-use ColdTurkey\Valuator\Zillow;
-
 class Valuator
 {
     private $dir;
@@ -129,7 +126,7 @@ class Valuator
             'capability_type' => 'post',
             'has_archive' => false,
             'hierarchical' => false,
-            'supports' => ['title', 'editor', 'thumbnail'],
+            'supports' => ['title', 'thumbnail'],
             'menu_position' => 5,
             'menu_icon' => 'dashicons-admin-home'
         ];
@@ -326,7 +323,6 @@ class Valuator
      */
     public function meta_box_save($post_id)
     {
-        // Verify
         if ((get_post_type() != $this->token) || !wp_verify_nonce($_POST['pf_valuator_' . $this->token . '_nonce'], plugin_basename($this->dir))) {
             return $post_id;
         }
@@ -345,9 +341,12 @@ class Valuator
         $fields = array_keys($field_data);
 
         foreach ($fields as $f) {
-
             if (isset($_POST[$f])) {
-                ${$f} = strip_tags(trim($_POST[$f]));
+                ${$f} = $_POST[$f];
+
+                if ($f != 'legal_broker') {
+                    ${$f} = strip_tags(trim($_POST[$f]));
+                }
             }
 
             // Escape the URLs.

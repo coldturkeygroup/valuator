@@ -13,7 +13,6 @@ global $pf_valuator, $wp_query;
 $id = get_the_ID();
 $title = get_the_title();
 $frontdesk_campaign = get_post_meta( $id, 'frontdesk_campaign', true );
-$content = wp_strip_all_tags(apply_filters('the_content', get_the_content()));
 $broker = get_post_meta($id, 'legal_broker', true);
 $retargeting = get_post_meta($id, 'retargeting', true);
 $conversion = get_post_meta($id, 'conversion', true);
@@ -101,8 +100,6 @@ if ($hover_setting && strlen($hover_setting) > 0 && $hover_setting != '') {
         <div class="row">
             <div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 well well-sm" id="step-one-well" data-model="stepOne">
                 <h4 style="text-align: center;" class="landing-title"><?= $title; ?></h4>
-
-                <h3 style="text-align: center;"><?= $content; ?></h3>
 
                 <form id="step-one" data-remote="true" data-remote-on-success="process">
                     <div class="row">
