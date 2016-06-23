@@ -163,8 +163,7 @@ jQuery('document').ready(function ($) {
         if (typeof response.error != 'undefined') {
             $('.valuation-value, .step-three-subtitle').remove();
             $('.valuation-result').append('<h4 style="text-align: center;" class="landing-title">Your Home Value Report Will Be Sent Within 48 Hours!</h4>');
-        }
-        else {
+        } else {
             // Fill in the valuation data
             $('.low').text(response.low);
             $('.estimated-value').text(response.amount);
@@ -192,6 +191,8 @@ jQuery('document').ready(function ($) {
         $('#first_name_3').val($('#first_name').val());
         $('#last_name_3').val($('#last_name').val());
         $('#email_3').val($('#email').val());
+
+        $('.btn-primary').removeAttr('disabled', 'disabled');
 
         // Facebook events
         var retargeting = $('#retargeting').val(),
