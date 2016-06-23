@@ -14,13 +14,13 @@ jQuery('document').ready(function ($) {
             in_progress: function () {
                 $('#email').parent().removeClass('has-warning has-error');
                 $(".mailcheck-suggestion").remove();
-                $("[type=submit]").addClass("disabled").attr("disabled", "disabled");
+                $("#btn-form-submit").addClass("disabled").attr("disabled", "disabled");
             },
             success: function (data) {
                 $('#email').after(get_suggestion_str(data['is_valid'], data['did_you_mean']));
             },
             error: function () {
-                $("[type=submit]").removeClass("disabled").removeAttr("disabled");
+                $("#btn-form-submit").removeClass("disabled").removeAttr("disabled");
             }
         });
     }
@@ -31,7 +31,7 @@ jQuery('document').ready(function ($) {
                 $('#email').parent().addClass('has-warning');
                 return '<div class="mailcheck-suggestion help-block">Did you mean <a href="#">' + alternate + '</a>?</div>';
             }
-            $("[type=submit]").removeClass("disabled").removeAttr("disabled");
+            $("#btn-form-submit").removeClass("disabled").removeAttr("disabled");
             return;
         }
         $('#email').parent().addClass('has-error');
@@ -44,7 +44,7 @@ jQuery('document').ready(function ($) {
     $(".form-group").on("click", ".mailcheck-suggestion a", function (e) {
         e.preventDefault();
         $("#email").val($(this).text());
-        $("[type=submit]").removeClass("disabled").removeAttr("disabled");
+        $("#btn-form-submit").removeClass("disabled").removeAttr("disabled");
         $(".mailcheck-suggestion").remove();
     });
 

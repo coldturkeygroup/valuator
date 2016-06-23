@@ -159,7 +159,7 @@ if ($hover_setting && strlen($hover_setting) > 0 && $hover_setting != '') {
                     <input name="property_id" id="property_id" type="hidden" value="">
                     <input name="action" type="hidden" value="pf_valuator_step_two">
                     <?php wp_nonce_field('pf_valuator_step_two', 'pf_valuator_nonce'); ?>
-                    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Send Me The Report!">
+                    <input class="btn btn-primary btn-lg btn-block" id="btn-form-submit" type="submit" value="Send Me The Report!">
                 </form>
             </div>
 
