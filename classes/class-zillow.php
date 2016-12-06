@@ -1,9 +1,11 @@
-<?php namespace ColdTurkey\Valuator;
+<?php
+
+namespace ColdTurkey\Valuator;
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
 // Composer autoloader
-require_once VALUATOR_PLUGIN_PATH . 'assets/vendor/autoload.php';
+require_once VALUATOR_PLUGIN_PATH . '../vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;

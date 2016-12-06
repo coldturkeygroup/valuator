@@ -1,4 +1,6 @@
-<?php namespace ColdTurkey\Valuator;
+<?php
+
+namespace ColdTurkey\Valuator;
 
 if (!defined('ABSPATH')) exit; // Exit if accessed directly.
 
