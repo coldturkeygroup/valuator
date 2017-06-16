@@ -374,8 +374,8 @@ class Valuator
         if (is_singular('pf_valuator')) {
             wp_register_style('valuator', esc_url($this->assets_url . 'css/homevaluator.css'), [], VALUATOR_PLUGIN_VERSION);
             wp_register_style('animate', esc_url($this->assets_url . 'css/animate.css'), [], VALUATOR_PLUGIN_VERSION);
-            wp_register_style('roboto', 'http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300');
-            wp_register_style('robo-slab', 'http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100');
+            wp_register_style('roboto', 'https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300');
+            wp_register_style('robo-slab', 'https://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100');
             wp_enqueue_style('valuator');
             wp_enqueue_style('animate');
             wp_enqueue_style('roboto');
@@ -620,7 +620,7 @@ class Valuator
             $domain = $wpdb->get_var("SELECT option_value FROM {$options_table} WHERE option_name = 'siteurl' LIMIT 1");
 
             if ($mapped)
-                $permalink = str_replace($domain, 'http://' . $mapped, $permalink);
+                $permalink = str_replace($domain, 'https://' . $mapped, $permalink);
         }
 
         if (($_POST['post_status'] != 'publish') || ($_POST['original_post_status'] == 'publish')) {
