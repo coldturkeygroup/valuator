@@ -395,8 +395,7 @@ class Valuator
             wp_enqueue_script('valuator-js');
 
             $localize = [
-                'ajaxurl'           => admin_url('admin-ajax.php'),
-                'platformvalidator' => defined('MAILGUN_PUBLIC') ? MAILGUN_PUBLIC : ''
+                'ajaxurl' => admin_url('admin-ajax.php'),
 
             ];
             wp_localize_script('valuator-js', 'Valuator', $localize);
